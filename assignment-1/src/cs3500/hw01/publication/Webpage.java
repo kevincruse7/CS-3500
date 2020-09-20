@@ -24,7 +24,7 @@ public class Webpage implements Publication {
 
   @Override
   public String citeApa() {
-    return title + ". Retrieved " + retrieved + ", from " + url;
+    return title + ". Retrieved " + retrieved + ", from " + url + ".";
   }
 
   @Override

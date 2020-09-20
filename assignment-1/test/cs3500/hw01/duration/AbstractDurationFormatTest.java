@@ -3,7 +3,6 @@ package cs3500.hw01.duration;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 /**
  * Tests for the format method of {@link Duration}s. Add your tests to this class to assure that
@@ -53,14 +52,14 @@ public abstract class AbstractDurationFormatTest {
     assertEquals("", sec(0).format(""));
   }
 
-  @Test
+  @Test(expected = IllegalArgumentException.class)
   public void formatNullHMS() {
-    assertNull(hms(0, 0, 0).format(null));
+    hms(0, 0, 0).format(null);
   }
 
-  @Test
+  @Test(expected = IllegalArgumentException.class)
   public void formatNullSec() {
-    assertNull(sec(0).format(null));
+    sec(0).format(null);
   }
 
   @Test(expected = IllegalArgumentException.class)

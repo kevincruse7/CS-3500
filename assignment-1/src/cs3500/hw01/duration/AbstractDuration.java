@@ -128,7 +128,7 @@ abstract class AbstractDuration implements Duration {
   @Override
   public String format(String template) {
     if (template == null) {
-      return null;
+      throw new IllegalArgumentException("template is malformed");
     }
 
     StringBuilder result = new StringBuilder();
@@ -178,7 +178,7 @@ abstract class AbstractDuration implements Duration {
     }
 
     if (prevIndex < template.length()) {
-      result.append(template.substring(prevIndex));
+      result.append(template, prevIndex, template.length());
     }
 
     return result.toString();
