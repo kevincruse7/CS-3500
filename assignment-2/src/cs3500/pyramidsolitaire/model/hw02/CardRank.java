@@ -9,8 +9,8 @@ public enum CardRank {
   Seven(7, "7"), Eight(8, "8"), Nine(9, "9"), Ten(10, "10"), Jack(11, "J"), Queen(12, "Q"),
   King(13, "K");
 
-  private final int value;  //Point value of this card rank
-  private final String display;  //Text display of this card rank
+  private final int value;  // Point value of this card rank
+  private final String display;  // Text display of this card rank
 
   CardRank(int value, String display) {
     this.value = value;

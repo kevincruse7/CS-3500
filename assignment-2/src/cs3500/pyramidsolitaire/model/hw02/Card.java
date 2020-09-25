@@ -5,11 +5,11 @@ package cs3500.pyramidsolitaire.model.hw02;
  */
 public class Card {
 
-  private final CardSuit suit;  //Suit of this playing card
-  private final CardRank rank;  //Rank of this playing card
+  private final CardSuit suit;  // Suit of this playing card
+  private final CardRank rank;  // Rank of this playing card
 
   /**
-   * Instantiates a Card object with the given suit and rank.
+   * Instantiates a {@code Card} object with the given suit and rank.
    *
    * @param suit The suit of the playing card.
    * @param rank The rank of the playing card.

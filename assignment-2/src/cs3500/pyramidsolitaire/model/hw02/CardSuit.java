@@ -6,9 +6,14 @@ package cs3500.pyramidsolitaire.model.hw02;
 public enum CardSuit {
   Clubs("♣"), Diamonds("♦"), Hearts("♥"), Spades("♠");
 
-  private final String display;  //Text display of this suit
+  private final String display;  // Text display of this suit
 
   CardSuit(String display) {
     this.display = display;
+  }
+
+  @Override
+  public String toString() {
+    return this.display;
   }
 }
