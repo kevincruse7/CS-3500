@@ -1,11 +1,22 @@
 package cs3500.pyramidsolitaire.model.hw02;
 
 import java.util.List;
+import java.util.Random;
 
 /**
  * An implementation of Pyramid Solitaire as defined by {@link PyramidSolitaireModel}.
  */
-public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card>{
+public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
+
+  private Random rand;
+
+  public BasicPyramidSolitaire(Random rand) {
+    this.rand = rand;
+  }
+
+  public BasicPyramidSolitaire() {
+    this(new Random());
+  }
 
   @Override
   public List<Card> getDeck() {
