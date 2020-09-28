@@ -26,7 +26,7 @@ public class BasicPyramidSolitaireTest {
     // Fill sample deck with all 52 possible playing cards
     for (Card.Suit suit : Card.Suit.values()) {
       for (Card.Rank rank : Card.Rank.values()) {
-        this.sampleDeck.add(new Card(suit, rank));
+        sampleDeck.add(new Card(suit, rank));
       }
     }
   }
@@ -38,101 +38,215 @@ public class BasicPyramidSolitaireTest {
 
   @Test
   public void getDeck() {
-    List<Card> deck = this.model.getDeck();
+    List<Card> deck = model.getDeck();
 
     // Determine if deck returned by getDeck is valid
-    assertTrue(deck.size() == 52);
-    for (Card card : this.sampleDeck) {
+    assertEquals(52, deck.size());
+    for (Card card : sampleDeck) {
       assertTrue(deck.contains(card));
     }
   }
 
   @Test
   public void startGame() {
-    this.model.startGame(this.sampleDeck, false, 7, 1);
+    model.startGame(sampleDeck, false, 7, 3);
 
-    assertEquals(7, this.model.getNumRows());
-    assertEquals(1, this.model.getNumDraw());
+    assertEquals(7, model.getNumRows());
+    assertEquals(3, model.getNumDraw());
 
-    assertEquals(new Card(Card.Suit.CLUBS, Card.Rank.ACE), this.model.getCardAt(0, 0));
-    assertEquals(new Card(Card.Suit.HEARTS, Card.Rank.TWO), this.model.getCardAt(6, 6));
-    assertEquals(new Card(Card.Suit.HEARTS, Card.Rank.THREE), this.model.getDrawCards().get(0));
+    assertEquals(new Card(Card.Suit.CLUBS, Card.Rank.ACE), model.getCardAt(0, 0));
+    assertEquals(new Card(Card.Suit.HEARTS, Card.Rank.TWO), model.getCardAt(6, 6));
+    assertEquals(new Card(Card.Suit.HEARTS, Card.Rank.THREE), model.getDrawCards().get(0));
+    assertEquals(new Card(Card.Suit.HEARTS, Card.Rank.FIVE), model.getDrawCards().get(2));
 
-    assertEquals(185, this.model.getScore());
+    assertEquals(185, model.getScore());
   }
 
   @Test
-  public void startGameNullDeck() {
-    IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> this.model.startGame(null, false, 7, 1);
+  public void startGameInvalidDeckNull() {
+    IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
+        () -> model.startGame(null, false, 7, 3));
+    assertEquals("Deck is null", thrown.getMessage());
+
+    // Game should not start with null deck
+    assertThrows(IllegalStateException.class, model::getScore);
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void startGameInvalidDeckTooManyElements() {
-    List<Card> deck = new ArrayList<>(this.sampleDeck);
-
     // Create deck with duplicate aces of spades
-    Collections.copy(deck, this.sampleDeck);
+    List<Card> deck = new ArrayList<>(sampleDeck);
+    Collections.copy(deck, sampleDeck);
     deck.add(new Card(Card.Suit.SPADES, Card.Rank.ACE));
 
-    this.model.startGame(deck, false, 7, 1);
+    IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
+        () -> model.startGame(deck, false, 7, 3));
+    assertEquals("Invalid deck", thrown.getMessage());
+
+    // Game should not start with invalid deck
+    assertThrows(IllegalStateException.class, model::getScore);
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void startGameInvalidDeckTooFewElements() {
-    List<Card> deck = new ArrayList<>(this.sampleDeck);
-
     // Create deck with ace of clubs missing
-    Collections.copy(deck, this.sampleDeck);
+    List<Card> deck = new ArrayList<>(sampleDeck);
+    Collections.copy(deck, sampleDeck);
     deck.remove(new Card(Card.Suit.CLUBS, Card.Rank.ACE));
 
-    this.model.startGame(deck, false, 7, 1);
+    IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
+        () -> model.startGame(deck, false, 7, 3));
+    assertEquals("Invalid deck", thrown.getMessage());
+
+    // Game should not start with invalid deck
+    assertThrows(IllegalStateException.class, model::getScore);
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void startGameInvalidDeckDuplicateEntry() {
-    List<Card> deck = new ArrayList<>(this.sampleDeck);
-
     // Create deck with ace of clubs missing and duplicate ace of spades added
-    Collections.copy(deck, this.sampleDeck);
+    List<Card> deck = new ArrayList<>(sampleDeck);
+    Collections.copy(deck, sampleDeck);
     deck.remove(new Card(Card.Suit.CLUBS, Card.Rank.ACE));
     deck.add(new Card(Card.Suit.SPADES, Card.Rank.ACE));
 
-    this.model.startGame(deck, false, 7, 1);
+    IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
+        () -> model.startGame(deck, false, 7, 3));
+    assertEquals("Invalid deck", thrown.getMessage());
+
+    // Game should not start with invalid deck
+    assertThrows(IllegalStateException.class, model::getScore);
   }
 
   @Test
   public void startGameShuffle() {
-    this.model.startGame(this.sampleDeck, true, 7, 1);
+    model.startGame(sampleDeck, true, 7, 3);
 
-    assertEquals(7, this.model.getNumRows());
-    assertEquals(1, this.model.getNumDraw());
+    assertEquals(7, model.getNumRows());
+    assertEquals(3, model.getNumDraw());
 
-    assertEquals(new Card(Card.Suit.SPADES, Card.Rank.NINE), this.model.getCardAt(0, 0));
-    assertEquals(new Card(Card.Suit.SPADES, Card.Rank.TWO), this.model.getCardAt(6, 6));
-    assertEquals(new Card(Card.Suit.CLUBS, Card.Rank.KING), this.model.getDrawCards().get(0));
+    assertEquals(new Card(Card.Suit.SPADES, Card.Rank.NINE), model.getCardAt(0, 0));
+    assertEquals(new Card(Card.Suit.SPADES, Card.Rank.TWO), model.getCardAt(6, 6));
+    assertEquals(new Card(Card.Suit.CLUBS, Card.Rank.KING), model.getDrawCards().get(0));
+    assertEquals(new Card(Card.Suit.DIAMONDS, Card.Rank.ACE), model.getDrawCards().get(2));
 
-    assertEquals(178, this.model.getScore());
+    assertEquals(178, model.getScore());
   }
 
   @Test
-  public void startGameNoRowsNoDraw() {
-    this.model.startGame(this.sampleDeck, false, 0, 0);
+  public void startGameTooManyRows() {
+    IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
+        () -> model.startGame(sampleDeck, false, 10, 3));
+    assertEquals("Pyramid/draw pile too large for deck", thrown.getMessage());
 
-    assertEquals(0, this.model.getNumRows());
-    assertEquals(0, this.model.getNumDraw());
-
-    assertEquals(0, this.model.getScore());
-
-    assertTrue(this.model.isGameOver());
+    // Game should not start with too many rows
+    assertThrows(IllegalStateException.class, model::getScore);
   }
 
   @Test
-  public void startGameOneRowNoDraw() {
-    
+  public void startGameOneRow() {
+    model.startGame(sampleDeck, false, 1, 3);
+
+    assertEquals(1, model.getNumRows());
+    assertEquals(3, model.getNumDraw());
+
+    assertEquals(new Card(Card.Suit.CLUBS, Card.Rank.ACE), model.getCardAt(0, 0));
+    assertEquals(new Card(Card.Suit.CLUBS, Card.Rank.TWO), model.getDrawCards().get(0));
+    assertEquals(new Card(Card.Suit.CLUBS, Card.Rank.THREE), model.getDrawCards().get(2));
+
+    assertEquals(1, model.getScore());
   }
 
   @Test
-  public void remove() {
+  public void startGameNoRows() {
+    IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
+        () -> model.startGame(sampleDeck, false, 0, 3));
+    assertEquals("Non-positive number of rows", thrown.getMessage());
+
+    // Game should not start with zero rows
+    assertThrows(IllegalStateException.class, model::getScore);
+  }
+
+  @Test
+  public void startGameNegativeRows() {
+    IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
+        () -> model.startGame(sampleDeck, false, -1, 3));
+    assertEquals("Non-positive number of rows", thrown.getMessage());
+
+    // Game should not start with negative rows
+    assertThrows(IllegalStateException.class, model::getScore);
+  }
+
+  @Test
+  public void startGameDrawTooLarge() {
+    IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
+        () -> model.startGame(sampleDeck, false, 7, 25));
+    assertEquals("Pyramid/draw pile too large for deck", thrown.getMessage());
+
+    // Game should not start with too large of a draw pile
+    assertThrows(IllegalStateException.class, model::getScore);
+  }
+
+  @Test
+  public void startGameOneDraw() {
+    model.startGame(sampleDeck, false, 7, 1);
+
+    assertEquals(7, model.getNumRows());
+    assertEquals(1, model.getNumDraw());
+
+    assertEquals(new Card(Card.Suit.CLUBS, Card.Rank.ACE), model.getCardAt(0, 0));
+    assertEquals(new Card(Card.Suit.HEARTS, Card.Rank.TWO), model.getCardAt(6, 6));
+    assertEquals(new Card(Card.Suit.HEARTS, Card.Rank.THREE), model.getDrawCards().get(0));
+
+    assertEquals(185, model.getScore());
+  }
+
+  @Test
+  public void startGameNoDraw() {
+    model.startGame(sampleDeck, false, 7, 0);
+
+    assertEquals(7, model.getNumRows());
+    assertEquals(0, model.getNumDraw());
+
+    assertEquals(new Card(Card.Suit.CLUBS, Card.Rank.ACE), model.getCardAt(0, 0));
+    assertEquals(new Card(Card.Suit.HEARTS, Card.Rank.TWO), model.getCardAt(6, 6));
+    assertEquals(0, model.getDrawCards().size());
+
+    assertEquals(185, model.getScore());
+  }
+
+  @Test
+  public void startGameNegativeDraw() {
+    IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
+        () -> model.startGame(sampleDeck, false, 7, -1));
+    assertEquals("Negative draw pile size", thrown.getMessage());
+
+    // Game should not start with negative draw pile size
+    assertThrows(IllegalStateException.class, model::getScore);
+  }
+
+  @Test
+  public void removeTwo() {
+    // Create copy of sampleDeck with three and five of diamonds swapped for easier testing
+    List<Card> deck = new ArrayList<>(sampleDeck);
+    Collections.copy(deck, sampleDeck);
+    deck.set(15, new Card(Card.Suit.DIAMONDS, Card.Rank.FIVE));
+    deck.set(17, new Card(Card.Suit.DIAMONDS, Card.Rank.THREE));
+
+    model.startGame(sampleDeck, false, 7, 3);
+
+    model.remove(6, 2, 6, 6);  // Jack of diamonds and two of hearts
+    model.remove(6, 4, 6, 5);  // Queen of diamonds and ace of hearts
+    model.remove(5, 2, 6, 1);  // Three of diamonds and ten of diamonds
+
+    assertEquals(null, model.getCardAt(6, 2));
+    assertEquals(null, model.getCardAt(6, 6));
+    assertEquals(null, model.getCardAt(6, 4));
+    assertEquals(null, model.getCardAt(6, 5));
+    assertEquals(null, model.getCardAt(5, 2));
+    assertEquals(null, model.getCardAt(6, 1));
+
+    assertEquals(146, model.getScore());
   }
 
   @Test

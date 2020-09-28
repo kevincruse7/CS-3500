@@ -19,7 +19,7 @@ public class Card {
 
     @Override
     public String toString() {
-      return this.display;
+      return display;
     }
   }
 
@@ -46,12 +46,12 @@ public class Card {
      * @return The point value of this rank.
      */
     public int getValue() {
-      return this.value;
+      return value;
     }
 
     @Override
     public String toString() {
-      return this.display;
+      return display;
     }
   }
 
@@ -71,7 +71,7 @@ public class Card {
 
   @Override
   public String toString() {
-    return this.rank.toString() + this.suit.toString();
+    return rank.toString() + suit.toString();
   }
 
   @Override
@@ -81,11 +81,11 @@ public class Card {
     }
 
     Card other = (Card) object;
-    return this.suit.equals(other.suit) && this.rank.equals(other.rank);
+    return suit.equals(other.suit) && rank.equals(other.rank);
   }
 
   @Override
   public int hashCode() {
-    return this.suit.hashCode() + this.rank.hashCode();
+    return suit.hashCode() + rank.hashCode();
   }
 }
