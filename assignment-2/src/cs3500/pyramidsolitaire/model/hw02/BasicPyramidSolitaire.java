@@ -1,5 +1,7 @@
 package cs3500.pyramidsolitaire.model.hw02;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -8,7 +10,7 @@ import java.util.Random;
  */
 public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
 
-  private Random rand;
+  private final Random rand;  // Random object used when shuffling deck
 
   public BasicPyramidSolitaire(Random rand) {
     this.rand = rand;
@@ -20,13 +22,53 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
 
   @Override
   public List<Card> getDeck() {
-    return null;
+    List<Card> sampleDeck = new ArrayList<>(52);
+
+    // Fill sample deck with all 52 possible playing cards
+    for (Card.Suit suit : Card.Suit.values()) {
+      for (Card.Rank rank : Card.Rank.values()) {
+        sampleDeck.add(new Card(suit, rank));
+      }
+    }
+
+    return sampleDeck;
   }
 
   @Override
   public void startGame(List<Card> deck, boolean shuffle, int numRows, int numDraw)
       throws IllegalArgumentException {
+    // Ensure number of rows and size of draw pile are valid
+    if (numRows <= 0) {
+      throw new IllegalArgumentException("Non-positive number of rows");
+    }
+    if (numDraw < 0) {
+      throw new IllegalArgumentException("Negative draw pile size");
+    }
 
+    // Ensure deck exists and is 52 elements long
+    if (deck == null) {
+      throw new IllegalArgumentException("Deck is null");
+    }
+    if (deck.size() != 52) {
+      throw new IllegalArgumentException("Invalid deck");
+    }
+
+    // Ensure pyramid and draw pile are not larger than 52 elements
+    if (numRows * (numRows + 1) / 2 + numDraw > 52) {
+      throw new IllegalArgumentException("Pyramid/draw pile too large for deck");
+    }
+
+    // Ensure deck has all correct cards
+    for (Card card : getDeck()) {
+      if (!deck.contains(card)) {
+        throw new IllegalArgumentException("Invalid deck");
+      }
+    }
+
+    // Shuffle deck if requested
+    if (shuffle) {
+      Collections.shuffle(deck, rand);
+    }
   }
 
   @Override
