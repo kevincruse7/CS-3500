@@ -1,8 +1,7 @@
-package cs3500.pyramidsolitaire.view;
-
 import static org.junit.Assert.*;
 
 import cs3500.pyramidsolitaire.model.hw02.*;
+import cs3500.pyramidsolitaire.view.PyramidSolitaireTextualView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +53,10 @@ public class PyramidSolitaireTextualViewTest {
     );
 
     model.remove(6, 4);
-    model.removeUsingDraw(0, 6, 2);
+    model.removeUsingDraw(0, 6, 1);
+    while (model.getDrawCards().get(0) != null) {
+      model.discardDraw(0);
+    }
 
     assertEquals(
         "            A♣\n" +
@@ -63,7 +65,7 @@ public class PyramidSolitaireTextualViewTest {
             "      7♣  8♣  9♣  10♣\n" +
             "    J♣  Q♣  K♣  A♦  2♦\n" +
             "  3♦  4♦  5♦  6♦  7♦  8♦\n" +
-            "9♦  .  J♦  Q♦  .   A♥  2♥\n" +
+            "9♦  .   J♦  Q♦  .   A♥  2♥\n" +
             "Draw: .  , 4♥, 5♥",
         view.toString()
     );
@@ -77,17 +79,20 @@ public class PyramidSolitaireTextualViewTest {
         "    A♣\n" +
             "  2♣  3♣\n" +
             "4♣  5♣  6♣\n" +
-            "Deck: 7♣, 8♣, 9♣",
+            "Draw: 7♣, 8♣, 9♣",
         view.toString()
     );
 
     model.removeUsingDraw(1, 2, 1);
+    while (model.getDrawCards().get(1) != null) {
+      model.discardDraw(1);
+    }
 
     assertEquals(
         "    A♣\n" +
             "  2♣  3♣\n" +
             "4♣  .   6♣\n" +
-            "Deck: 7♣, .  , 9♣",
+            "Draw: 7♣, .  , 9♣",
         view.toString()
     );
   }

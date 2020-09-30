@@ -127,10 +127,10 @@ public class BasicPyramidSolitaireTest {
 
     assertEquals(new Card(Card.Suit.SPADES, Card.Rank.NINE), model.getCardAt(0, 0));
     assertEquals(new Card(Card.Suit.SPADES, Card.Rank.TWO), model.getCardAt(6, 6));
-    assertEquals(new Card(Card.Suit.CLUBS, Card.Rank.KING), model.getDrawCards().get(0));
-    assertEquals(new Card(Card.Suit.DIAMONDS, Card.Rank.ACE), model.getDrawCards().get(2));
+    assertEquals(new Card(Card.Suit.DIAMONDS, Card.Rank.SEVEN), model.getDrawCards().get(0));
+    assertEquals(new Card(Card.Suit.CLUBS, Card.Rank.SEVEN), model.getDrawCards().get(2));
 
-    assertEquals(178, model.getScore());
+    assertEquals(215, model.getScore());
   }
 
   @Test
@@ -152,7 +152,7 @@ public class BasicPyramidSolitaireTest {
 
     assertEquals(new Card(Card.Suit.CLUBS, Card.Rank.ACE), model.getCardAt(0, 0));
     assertEquals(new Card(Card.Suit.CLUBS, Card.Rank.TWO), model.getDrawCards().get(0));
-    assertEquals(new Card(Card.Suit.CLUBS, Card.Rank.THREE), model.getDrawCards().get(2));
+    assertEquals(new Card(Card.Suit.CLUBS, Card.Rank.FOUR), model.getDrawCards().get(2));
 
     assertEquals(1, model.getScore());
   }
@@ -236,12 +236,12 @@ public class BasicPyramidSolitaireTest {
     model.startGame(deck, false, 7, 3);
 
     model.remove(6, 2, 6, 6);  // Jack of diamonds and two of hearts
-    model.remove(6, 4, 6, 5);  // Queen of diamonds and ace of hearts
+    model.remove(6, 3, 6, 5);  // Queen of diamonds and ace of hearts
     model.remove(5, 2, 6, 1);  // Three of diamonds and ten of diamonds
 
     assertNull(model.getCardAt(6, 2));
     assertNull(model.getCardAt(6, 6));
-    assertNull(model.getCardAt(6, 4));
+    assertNull(model.getCardAt(6, 3));
     assertNull(model.getCardAt(6, 5));
     assertNull(model.getCardAt(5, 2));
     assertNull(model.getCardAt(6, 1));
@@ -442,7 +442,7 @@ public class BasicPyramidSolitaireTest {
 
     IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
         () -> model.removeUsingDraw(0, 6, 1));
-    assertEquals("Card already removed", thrown.getMessage());
+    assertEquals("Card already removed and/or draw index empty", thrown.getMessage());
   }
 
   @Test
@@ -450,13 +450,13 @@ public class BasicPyramidSolitaireTest {
     model.startGame(sampleDeck, false, 7, 3);
 
     // Empty stock and first draw index
-    for (int i = 0; i < 22; i++) {
+    while (model.getDrawCards().get(0) != null) {
       model.discardDraw(0);
     }
 
     IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
         () -> model.removeUsingDraw(0, 6, 1));
-    assertEquals("Draw index empty", thrown.getMessage());
+    assertEquals("Card already removed and/or draw index empty", thrown.getMessage());
   }
 
   @Test
@@ -483,7 +483,7 @@ public class BasicPyramidSolitaireTest {
   public void discardDrawInvalidIndex() {
     model.startGame(sampleDeck, false, 7, 3);
 
-    IllegalStateException thrown = assertThrows(IllegalStateException.class,
+    IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
         () -> model.discardDraw(3));
     assertEquals("Invalid index", thrown.getMessage());
   }
@@ -493,7 +493,7 @@ public class BasicPyramidSolitaireTest {
     model.startGame(sampleDeck, false, 7, 3);
 
     // Empty stock and first draw index
-    for (int i = 0; i < 22; i++) {
+    while (model.getDrawCards().get(0) != null) {
       model.discardDraw(0);
     }
 
@@ -556,7 +556,7 @@ public class BasicPyramidSolitaireTest {
     model.startGame(sampleDeck, false, 1, 3);
 
     // Get queen in draw pile
-    for (int i = 0; i < 8; i++) {
+    while (model.getDrawCards().get(0).getRank() != Card.Rank.QUEEN) {
       model.discardDraw(0);
     }
 
@@ -593,7 +593,7 @@ public class BasicPyramidSolitaireTest {
     model.startGame(sampleDeck, false, 1, 3);
 
     // Get queen in draw pile
-    for (int i = 0; i < 8; i++) {
+    while (model.getDrawCards().get(0).getRank() != Card.Rank.QUEEN) {
       model.discardDraw(0);
     }
 
@@ -627,6 +627,8 @@ public class BasicPyramidSolitaireTest {
 
   @Test
   public void getCardAtInvalidPosition() {
+    model.startGame(sampleDeck, false, 7, 3);
+
     IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
         () -> model.getCardAt(7, -1));
     assertEquals("Invalid position", thrown.getMessage());
@@ -669,6 +671,6 @@ public class BasicPyramidSolitaireTest {
     List<Card> drawCards = model.getDrawCards();
     assertNull(drawCards.get(0));
     assertEquals(new Card(Card.Suit.HEARTS, Card.Rank.FOUR), drawCards.get(1));
-    assertEquals(new Card(Card.Suit.HEARTS, Card.Rank.FIVE), drawCards.get(1));
+    assertEquals(new Card(Card.Suit.HEARTS, Card.Rank.FIVE), drawCards.get(2));
   }
 }

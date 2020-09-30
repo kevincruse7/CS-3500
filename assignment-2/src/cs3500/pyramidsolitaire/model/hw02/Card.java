@@ -69,6 +69,24 @@ public class Card {
     this.rank = rank;
   }
 
+  /**
+   * Returns the suit of this card.
+   *
+   * @return The suit of this card.
+   */
+  public Suit getSuit() {
+    return suit;
+  }
+
+  /**
+   * Returns the rank of this card.
+   *
+   * @return The rank of this card.
+   */
+  public Rank getRank() {
+    return rank;
+  }
+
   @Override
   public String toString() {
     return rank.toString() + suit.toString();

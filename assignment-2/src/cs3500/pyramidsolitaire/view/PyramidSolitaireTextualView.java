@@ -3,7 +3,7 @@ package cs3500.pyramidsolitaire.view;
 import cs3500.pyramidsolitaire.model.hw02.PyramidSolitaireModel;
 
 /**
- * A text-based rendering of a given pyramid solitaire model.
+ * A text-based rendering of a given {@link PyramidSolitaireModel}.
  */
 public class PyramidSolitaireTextualView {
 
@@ -21,6 +21,55 @@ public class PyramidSolitaireTextualView {
 
   @Override
   public String toString() {
-    return null;
+    boolean isGameOver;
+    try {
+      isGameOver = model.isGameOver();
+    } catch (IllegalStateException e) {
+      return "";
+    }
+
+    StringBuilder pyramid = new StringBuilder();
+
+    if (isGameOver) {
+      int score = model.getScore();
+      if (score > 0) {
+        return "Game over. Score: " + score;
+      } else {
+        return "You win!";
+      }
+    } else {
+      for (int row = 0; row < model.getNumRows(); row++) {
+        pyramid.append("  ".repeat(model.getNumRows() - row - 1));
+
+        for (int card = 0; card < model.getRowWidth(row); card++) {
+          String cardStr = model.getCardAt(row, card) == null
+              ? "." : model.getCardAt(row, card).toString();
+
+          if (card < model.getRowWidth(row) - 1) {
+            pyramid.append(String.format("%-3s", cardStr));
+            pyramid.append(' ');
+          } else {
+            pyramid.append(String.format("%-2s", cardStr));
+          }
+        }
+
+        pyramid.append('\n');
+      }
+
+      pyramid.append("Draw:");
+      if (model.getNumDraw() > 0) {
+        String cardStr = model.getDrawCards().get(0) == null
+            ? ".  " : model.getDrawCards().get(0).toString();
+        pyramid.append(' ').append(cardStr);
+
+        for (int card = 1; card < model.getNumDraw(); card++) {
+          cardStr = model.getDrawCards().get(card) == null
+              ? ".  " : model.getDrawCards().get(card).toString();
+          pyramid.append(", ").append(cardStr);
+        }
+      }
+    }
+
+    return pyramid.toString();
   }
 }

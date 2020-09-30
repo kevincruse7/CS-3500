@@ -1,6 +1,6 @@
-package cs3500.pyramidsolitaire.model.hw02;
-
 import static org.junit.Assert.*;
+
+import cs3500.pyramidsolitaire.model.hw02.Card;
 
 import org.junit.Test;
 
@@ -62,6 +62,20 @@ public class CardTest {
   }
 
   @Test
+  public void cardGetSuit() {
+    assertEquals(Card.Suit.SPADES, aceOfSpades.getSuit());
+    assertEquals(Card.Suit.HEARTS, fiveOfHearts.getSuit());
+    assertEquals(Card.Suit.CLUBS, tenOfClubs.getSuit());
+  }
+
+  @Test
+  public void cardGetRank() {
+    assertEquals(Card.Rank.ACE, aceOfSpades.getRank());
+    assertEquals(Card.Rank.FIVE, fiveOfHearts.getRank());
+    assertEquals(Card.Rank.TEN, tenOfClubs.getRank());
+  }
+
+  @Test
   public void cardToString() {
     assertEquals("A♠", aceOfSpades.toString());
     assertEquals("5♥", fiveOfHearts.toString());
@@ -70,23 +84,23 @@ public class CardTest {
 
   @Test
   public void equalsReflexivity() {
-    assertTrue(aceOfSpades.equals(aceOfSpades));
-    assertTrue(fiveOfHearts.equals(fiveOfHearts));
-    assertTrue(tenOfClubs.equals(tenOfClubs));
+    assertEquals(aceOfSpades, aceOfSpades);
+    assertEquals(fiveOfHearts, fiveOfHearts);
+    assertEquals(tenOfClubs, tenOfClubs);
   }
 
   @Test
   public void equalsSymmetryEqualCards() {
     Card fiveOfHearts2 = new Card(Card.Suit.HEARTS, Card.Rank.FIVE);
 
-    assertTrue(fiveOfHearts.equals(fiveOfHearts2));
-    assertTrue(fiveOfHearts2.equals(fiveOfHearts));
+    assertEquals(fiveOfHearts, fiveOfHearts2);
+    assertEquals(fiveOfHearts2, fiveOfHearts);
   }
 
   @Test
   public void equalsSymmetryUnequalCards() {
-    assertFalse(fiveOfHearts.equals(aceOfSpades));
-    assertFalse(aceOfSpades.equals(fiveOfHearts));
+    assertNotEquals(fiveOfHearts, aceOfSpades);
+    assertNotEquals(aceOfSpades, fiveOfHearts);
   }
 
   @Test
@@ -94,41 +108,41 @@ public class CardTest {
     Card tenOfClubs2 = new Card(Card.Suit.CLUBS, Card.Rank.TEN);
     Card tenOfClubs3 = new Card(Card.Suit.CLUBS, Card.Rank.TEN);
 
-    assertTrue(tenOfClubs.equals(tenOfClubs2));
-    assertTrue(tenOfClubs2.equals(tenOfClubs3));
-    assertTrue(tenOfClubs.equals(tenOfClubs3));
+    assertEquals(tenOfClubs, tenOfClubs2);
+    assertEquals(tenOfClubs2, tenOfClubs3);
+    assertEquals(tenOfClubs, tenOfClubs3);
   }
 
   @Test
   public void equalsTransitivityAllCardsUnequal() {
-    assertFalse(tenOfClubs.equals(aceOfSpades));
-    assertFalse(aceOfSpades.equals(fiveOfHearts));
-    assertFalse(tenOfClubs.equals(fiveOfHearts));
+    assertNotEquals(tenOfClubs, aceOfSpades);
+    assertNotEquals(aceOfSpades, fiveOfHearts);
+    assertNotEquals(tenOfClubs, fiveOfHearts);
   }
 
   @Test
   public void equalsTransitivitySomeCardsUnequal() {
     Card tenOfClubs2 = new Card(Card.Suit.CLUBS, Card.Rank.TEN);
 
-    assertTrue(tenOfClubs.equals(tenOfClubs2));
-    assertFalse(tenOfClubs2.equals(aceOfSpades));
-    assertFalse(tenOfClubs.equals(aceOfSpades));
+    assertEquals(tenOfClubs, tenOfClubs2);
+    assertNotEquals(tenOfClubs2, aceOfSpades);
+    assertNotEquals(tenOfClubs, aceOfSpades);
 
-    assertFalse(aceOfSpades.equals(tenOfClubs2));
-    assertTrue(tenOfClubs2.equals(tenOfClubs));
-    assertFalse(aceOfSpades.equals(tenOfClubs));
+    assertNotEquals(aceOfSpades, tenOfClubs2);
+    assertEquals(tenOfClubs2, tenOfClubs);
+    assertNotEquals(aceOfSpades, tenOfClubs);
   }
 
   @Test
   public void testHashCode() {
     if (aceOfSpades.hashCode() != fiveOfHearts.hashCode()) {
-      assertFalse(aceOfSpades.equals(fiveOfHearts));
+      assertNotEquals(aceOfSpades, fiveOfHearts);
     }
     if (fiveOfHearts.hashCode() != tenOfClubs.hashCode()) {
-      assertFalse(fiveOfHearts.equals(tenOfClubs));
+      assertNotEquals(fiveOfHearts, tenOfClubs);
     }
     if (aceOfSpades.hashCode() != tenOfClubs.hashCode()) {
-      assertFalse(aceOfSpades.equals(tenOfClubs));
+      assertNotEquals(aceOfSpades, tenOfClubs);
     }
   }
 }
