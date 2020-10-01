@@ -1,6 +1,9 @@
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-import cs3500.pyramidsolitaire.model.hw02.*;
+import cs3500.pyramidsolitaire.model.hw02.BasicPyramidSolitaire;
+import cs3500.pyramidsolitaire.model.hw02.Card;
+import cs3500.pyramidsolitaire.model.hw02.PyramidSolitaireModel;
+
 import cs3500.pyramidsolitaire.view.PyramidSolitaireTextualView;
 
 import java.util.ArrayList;
@@ -19,6 +22,9 @@ public class PyramidSolitaireTextualViewTest {
   private PyramidSolitaireModel<Card> model;  // Pyramid solitaire model to be tested
   private PyramidSolitaireTextualView view;  // Pyramid solitaire view to be tested
 
+  /**
+   * Instantiates a {@code PyramidSolitaireTextualViewTest} object.
+   */
   public PyramidSolitaireTextualViewTest() {
     this.sampleDeck = new ArrayList<>(52);
 

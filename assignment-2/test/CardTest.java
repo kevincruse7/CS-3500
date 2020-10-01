@@ -1,4 +1,5 @@
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import cs3500.pyramidsolitaire.model.hw02.Card;
 
@@ -13,6 +14,9 @@ public class CardTest {
   private final Card fiveOfHearts;  // Five of hearts playing card
   private final Card tenOfClubs;  // Ten of clubs playing card
 
+  /**
+   * Instantiates a {@code CardTest} object.
+   */
   public CardTest() {
     this.aceOfSpades = new Card(Card.Suit.SPADES, Card.Rank.ACE);
     this.fiveOfHearts = new Card(Card.Suit.HEARTS, Card.Rank.FIVE);

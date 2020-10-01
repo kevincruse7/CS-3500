@@ -1,6 +1,13 @@
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
-import cs3500.pyramidsolitaire.model.hw02.*;
+import cs3500.pyramidsolitaire.model.hw02.BasicPyramidSolitaire;
+import cs3500.pyramidsolitaire.model.hw02.Card;
+import cs3500.pyramidsolitaire.model.hw02.PyramidSolitaireModel;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,6 +27,9 @@ public class BasicPyramidSolitaireTest {
 
   private PyramidSolitaireModel<Card> model;  // Pyramid solitaire model to be tested
 
+  /**
+   * Instantiates a {@code BasicPyramidSolitaireTest} object.
+   */
   public BasicPyramidSolitaireTest() {
     this.sampleDeck = new ArrayList<>(52);
 
@@ -64,12 +74,20 @@ public class BasicPyramidSolitaireTest {
 
   @Test
   public void startGameInvalidDeckNull() {
-    IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
-        () -> model.startGame(null, false, 7, 3));
-    assertEquals("Deck is null", thrown.getMessage());
+    try {
+      model.startGame(null, false, 7, 3);
+      fail("Expected an IllegalArgumentException");
+    } catch (IllegalArgumentException e) {
+      assertEquals("Deck is null", e.getMessage());
+    }
 
     // Game should not start with null deck
-    assertThrows(IllegalStateException.class, model::getScore);
+    try {
+      model.getScore();
+      fail("Expected an IllegalStateException");
+    } catch (IllegalStateException e) {
+      assertEquals("Game has not started", e.getMessage());
+    }
   }
 
   @Test
@@ -79,12 +97,20 @@ public class BasicPyramidSolitaireTest {
     Collections.copy(deck, sampleDeck);
     deck.add(new Card(Card.Suit.SPADES, Card.Rank.ACE));
 
-    IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
-        () -> model.startGame(deck, false, 7, 3));
-    assertEquals("Invalid deck", thrown.getMessage());
+    try {
+      model.startGame(deck, false, 7, 3);
+      fail("Expected an IllegalArgumentException");
+    } catch (IllegalArgumentException e) {
+      assertEquals("Invalid deck", e.getMessage());
+    }
 
     // Game should not start with invalid deck
-    assertThrows(IllegalStateException.class, model::getScore);
+    try {
+      model.getScore();
+      fail("Expected an IllegalStateException");
+    } catch (IllegalStateException e) {
+      assertEquals("Game has not started", e.getMessage());
+    }
   }
 
   @Test
@@ -94,12 +120,20 @@ public class BasicPyramidSolitaireTest {
     Collections.copy(deck, sampleDeck);
     deck.remove(new Card(Card.Suit.CLUBS, Card.Rank.ACE));
 
-    IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
-        () -> model.startGame(deck, false, 7, 3));
-    assertEquals("Invalid deck", thrown.getMessage());
+    try {
+      model.startGame(deck, false, 7, 3);
+      fail("Expected an IllegalArgumentException");
+    } catch (IllegalArgumentException e) {
+      assertEquals("Invalid deck", e.getMessage());
+    }
 
     // Game should not start with invalid deck
-    assertThrows(IllegalStateException.class, model::getScore);
+    try {
+      model.getScore();
+      fail("Expected an IllegalStateException");
+    } catch (IllegalStateException e) {
+      assertEquals("Game has not started", e.getMessage());
+    }
   }
 
   @Test
@@ -110,12 +144,20 @@ public class BasicPyramidSolitaireTest {
     deck.remove(new Card(Card.Suit.CLUBS, Card.Rank.ACE));
     deck.add(new Card(Card.Suit.SPADES, Card.Rank.ACE));
 
-    IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
-        () -> model.startGame(deck, false, 7, 3));
-    assertEquals("Invalid deck", thrown.getMessage());
+    try {
+      model.startGame(deck, false, 7, 3);
+      fail("Expected an IllegalArgumentException");
+    } catch (IllegalArgumentException e) {
+      assertEquals("Invalid deck", e.getMessage());
+    }
 
     // Game should not start with invalid deck
-    assertThrows(IllegalStateException.class, model::getScore);
+    try {
+      model.getScore();
+      fail("Expected an IllegalStateException");
+    } catch (IllegalStateException e) {
+      assertEquals("Game has not started", e.getMessage());
+    }
   }
 
   @Test
@@ -135,12 +177,20 @@ public class BasicPyramidSolitaireTest {
 
   @Test
   public void startGameTooManyRows() {
-    IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
-        () -> model.startGame(sampleDeck, false, 10, 3));
-    assertEquals("Pyramid/draw pile too large for deck", thrown.getMessage());
+    try {
+      model.startGame(sampleDeck, false, 10, 3);
+      fail("Expected an IllegalArgumentException");
+    } catch (IllegalArgumentException e) {
+      assertEquals("Pyramid/draw pile too large for deck", e.getMessage());
+    }
 
     // Game should not start with too many rows
-    assertThrows(IllegalStateException.class, model::getScore);
+    try {
+      model.getScore();
+      fail("Expected an IllegalStateException");
+    } catch (IllegalStateException e) {
+      assertEquals("Game has not started", e.getMessage());
+    }
   }
 
   @Test
@@ -159,32 +209,56 @@ public class BasicPyramidSolitaireTest {
 
   @Test
   public void startGameNoRows() {
-    IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
-        () -> model.startGame(sampleDeck, false, 0, 3));
-    assertEquals("Non-positive number of rows", thrown.getMessage());
+    try {
+      model.startGame(sampleDeck, false, 0, 3);
+      fail("Expected an IllegalArgumentException");
+    } catch (IllegalArgumentException e) {
+      assertEquals("Non-positive number of rows", e.getMessage());
+    }
 
     // Game should not start with zero rows
-    assertThrows(IllegalStateException.class, model::getScore);
+    try {
+      model.getScore();
+      fail("Expected an IllegalStateException");
+    } catch (IllegalStateException e) {
+      assertEquals("Game has not started", e.getMessage());
+    }
   }
 
   @Test
   public void startGameNegativeRows() {
-    IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
-        () -> model.startGame(sampleDeck, false, -1, 3));
-    assertEquals("Non-positive number of rows", thrown.getMessage());
+    try {
+      model.startGame(sampleDeck, false, 0, 3);
+      fail("Expected an IllegalArgumentException");
+    } catch (IllegalArgumentException e) {
+      assertEquals("Non-positive number of rows", e.getMessage());
+    }
 
     // Game should not start with negative rows
-    assertThrows(IllegalStateException.class, model::getScore);
+    try {
+      model.getScore();
+      fail("Expected an IllegalStateException");
+    } catch (IllegalStateException e) {
+      assertEquals("Game has not started", e.getMessage());
+    }
   }
 
   @Test
   public void startGameDrawTooLarge() {
-    IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
-        () -> model.startGame(sampleDeck, false, 7, 25));
-    assertEquals("Pyramid/draw pile too large for deck", thrown.getMessage());
+    try {
+      model.startGame(sampleDeck, false, 7, 25);
+      fail("Expected an IllegalArgumentException");
+    } catch (IllegalArgumentException e) {
+      assertEquals("Pyramid/draw pile too large for deck", e.getMessage());
+    }
 
     // Game should not start with too large of a draw pile
-    assertThrows(IllegalStateException.class, model::getScore);
+    try {
+      model.getScore();
+      fail("Expected an IllegalStateException");
+    } catch (IllegalStateException e) {
+      assertEquals("Game has not started", e.getMessage());
+    }
   }
 
   @Test
@@ -217,12 +291,20 @@ public class BasicPyramidSolitaireTest {
 
   @Test
   public void startGameNegativeDraw() {
-    IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
-        () -> model.startGame(sampleDeck, false, 7, -1));
-    assertEquals("Negative draw pile size", thrown.getMessage());
+    try {
+      model.startGame(sampleDeck, false, 7, -1);
+      fail("Expected an IllegalArgumentException");
+    } catch (IllegalArgumentException e) {
+      assertEquals("Negative draw pile size", e.getMessage());
+    }
 
     // Game should not start with negative draw pile size
-    assertThrows(IllegalStateException.class, model::getScore);
+    try {
+      model.getScore();
+      fail("Expected an IllegalStateException");
+    } catch (IllegalStateException e) {
+      assertEquals("Game has not started", e.getMessage());
+    }
   }
 
   @Test
@@ -258,45 +340,60 @@ public class BasicPyramidSolitaireTest {
 
   @Test
   public void removeTwoNotStarted() {
-    IllegalStateException thrown = assertThrows(IllegalStateException.class,
-        () -> model.remove(0, 0, 1, 0));
-    assertEquals("Game has not started", thrown.getMessage());
+    try {
+      model.remove(0, 0, 1, 0);
+      fail("Expected an IllegalStateException");
+    } catch (IllegalStateException e) {
+      assertEquals("Game has not started", e.getMessage());
+    }
   }
 
   @Test
   public void removeTwoSumNotThirteen() {
     model.startGame(sampleDeck, false, 7, 3);
 
-    IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
-        () -> model.remove(6, 0, 6, 1));
-    assertEquals("Card values do not sum to 13", thrown.getMessage());
+    try {
+      model.remove(6, 0, 6, 1);
+      fail("Expected an IllegalArgumentException");
+    } catch (IllegalArgumentException e) {
+      assertEquals("Card values do not sum to 13", e.getMessage());
+    }
   }
 
   @Test
   public void removeTwoCoveredCard() {
     model.startGame(sampleDeck, false, 7, 3);
 
-    IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
-        () -> model.remove(5, 0, 6, 1));
-    assertEquals("One or both cards covered", thrown.getMessage());
+    try {
+      model.remove(5, 0, 6, 1);
+      fail("Expected an IllegalArgumentException");
+    } catch (IllegalArgumentException e) {
+      assertEquals("One or both cards covered", e.getMessage());
+    }
   }
 
   @Test
   public void removeTwoSameCard() {
     model.startGame(sampleDeck, false, 7, 3);
 
-    IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
-        () -> model.remove(6, 1, 6, 1));
-    assertEquals("Same card", thrown.getMessage());
+    try {
+      model.remove(6, 1, 6, 1);
+      fail("Expected an IllegalArgumentException");
+    } catch (IllegalArgumentException e) {
+      assertEquals("Same card", e.getMessage());
+    }
   }
 
   @Test
   public void removeTwoInvalidPosition() {
     model.startGame(sampleDeck, false, 7, 3);
 
-    IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
-        () -> model.remove(0, 0, 7, -1));
-    assertEquals("One or both positions invalid", thrown.getMessage());
+    try {
+      model.remove(0, 0, 7, -1);
+      fail("Expected an IllegalArgumentException");
+    } catch (IllegalArgumentException e) {
+      assertEquals("One or both positions invalid", e.getMessage());
+    }
   }
 
   @Test
@@ -304,9 +401,12 @@ public class BasicPyramidSolitaireTest {
     model.startGame(sampleDeck, false, 7, 3);
     model.remove(6, 2, 6, 6);
 
-    IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
-        () -> model.remove(0, 0, 6, 2));
-    assertEquals("One or both cards already removed", thrown.getMessage());
+    try {
+      model.remove(0, 0, 6, 2);
+      fail("Expected an IllegalArgumentException");
+    } catch (IllegalArgumentException e) {
+      assertEquals("One or both cards already removed", e.getMessage());
+    }
   }
 
   @Test
@@ -324,36 +424,48 @@ public class BasicPyramidSolitaireTest {
 
   @Test
   public void removeOneNotStarted() {
-    IllegalStateException thrown = assertThrows(IllegalStateException.class,
-        () -> model.remove(0, 0));
-    assertEquals("Game has not started", thrown.getMessage());
+    try {
+      model.remove(0, 0);
+      fail("Expected an IllegalStateException");
+    } catch (IllegalStateException e) {
+      assertEquals("Game has not started", e.getMessage());
+    }
   }
 
   @Test
   public void removeOneNotKing() {
     model.startGame(sampleDeck, false, 7, 3);
 
-    IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
-        () -> model.remove(6, 0));
-    assertEquals("Card does not have value of 13", thrown.getMessage());
+    try {
+      model.remove(6, 0);
+      fail("Expected an IllegalArgumentException");
+    } catch (IllegalArgumentException e) {
+      assertEquals("Card does not have value of 13", e.getMessage());
+    }
   }
 
   @Test
   public void removeOneCoveredCard() {
     model.startGame(sampleDeck, false, 7, 3);
 
-    IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
-        () -> model.remove(5, 0));
-    assertEquals("Card is covered", thrown.getMessage());
+    try {
+      model.remove(5, 0);
+      fail("Expected an IllegalArgumentException");
+    } catch (IllegalArgumentException e) {
+      assertEquals("Card is covered", e.getMessage());
+    }
   }
 
   @Test
   public void removeOneInvalidPosition() {
     model.startGame(sampleDeck, false, 7, 3);
 
-    IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
-        () -> model.remove(7, -1));
-    assertEquals("Invalid position", thrown.getMessage());
+    try {
+      model.remove(7, -1);
+      fail("Expected an IllegalArgumentException");
+    } catch (IllegalArgumentException e) {
+      assertEquals("Invalid position", e.getMessage());
+    }
   }
 
   @Test
@@ -361,9 +473,12 @@ public class BasicPyramidSolitaireTest {
     model.startGame(sampleDeck, false, 7, 3);
     model.remove(6, 4);
 
-    IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
-        () -> model.remove(6, 4));
-    assertEquals("Card already removed", thrown.getMessage());
+    try {
+      model.remove(6, 4);
+      fail("Expected an IllegalArgumentException");
+    } catch (IllegalArgumentException e) {
+      assertEquals("Card already removed", e.getMessage());
+    }
   }
 
   @Test
@@ -385,54 +500,72 @@ public class BasicPyramidSolitaireTest {
 
   @Test
   public void removeUsingDrawNotStarted() {
-    IllegalStateException thrown = assertThrows(IllegalStateException.class,
-        () -> model.removeUsingDraw(0, 6, 1));
-    assertEquals("Game has not started", thrown.getMessage());
+    try {
+      model.removeUsingDraw(0, 6, 1);
+      fail("Expected an IllegalStateException");
+    } catch (IllegalStateException e) {
+      assertEquals("Game has not started", e.getMessage());
+    }
   }
 
   @Test
   public void removeUsingDrawSumNotThirteen() {
     model.startGame(sampleDeck, false, 7, 3);
 
-    IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
-        () -> model.removeUsingDraw(1, 6, 1));
-    assertEquals("Cards do not sum to 13", thrown.getMessage());
+    try {
+      model.removeUsingDraw(1, 6, 1);
+      fail("Expected an IllegalArgumentException");
+    } catch (IllegalArgumentException e) {
+      assertEquals("Cards do not sum to 13", e.getMessage());
+    }
   }
 
   @Test
   public void removeUsingDrawNoDraw() {
     model.startGame(sampleDeck, false, 7, 0);
 
-    IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
-        () -> model.removeUsingDraw(0, 6, 1));
-    assertEquals("Invalid position and/or draw index", thrown.getMessage());
+    try {
+      model.removeUsingDraw(0, 6, 1);
+      fail("Expected an IllegalArgumentException");
+    } catch (IllegalArgumentException e) {
+      assertEquals("Invalid position and/or draw index", e.getMessage());
+    }
   }
 
   @Test
   public void removeUsingDrawCoveredCard() {
     model.startGame(sampleDeck, false, 7, 3);
 
-    IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
-        () -> model.removeUsingDraw(1, 3, 2));
-    assertEquals("Card is covered", thrown.getMessage());
+    try {
+      model.removeUsingDraw(1, 3, 2);
+      fail("Expected an IllegalArgumentException");
+    } catch (IllegalArgumentException e) {
+      assertEquals("Card is covered", e.getMessage());
+    }
   }
 
   @Test
   public void removeUsingDrawInvalidPosition() {
     model.startGame(sampleDeck, false, 7, 3);
 
-    IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
-        () -> model.removeUsingDraw(1, 7, -1));
-    assertEquals("Invalid position and/or draw index", thrown.getMessage());
+    try {
+      model.removeUsingDraw(1, 7, -1);
+      fail("Expected an IllegalArgumentException");
+    } catch (IllegalArgumentException e) {
+      assertEquals("Invalid position and/or draw index", e.getMessage());
+    }
   }
 
   @Test
   public void removeUsingDrawInvalidDrawIndex() {
     model.startGame(sampleDeck, false, 7, 3);
 
-    IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
-        () -> model.removeUsingDraw(3, 0, 0));
-    assertEquals("Invalid position and/or draw index", thrown.getMessage());
+    try {
+      model.removeUsingDraw(3, 0, 0);
+      fail("Expected an IllegalArgumentException");
+    } catch (IllegalArgumentException e) {
+      assertEquals("Invalid position and/or draw index", e.getMessage());
+    }
   }
 
   @Test
@@ -440,9 +573,12 @@ public class BasicPyramidSolitaireTest {
     model.startGame(sampleDeck, false, 7, 3);
     model.removeUsingDraw(0, 6, 1);
 
-    IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
-        () -> model.removeUsingDraw(0, 6, 1));
-    assertEquals("Card already removed and/or draw index empty", thrown.getMessage());
+    try {
+      model.removeUsingDraw(0, 6, 1);
+      fail("Expected an IllegalArgumentException");
+    } catch (IllegalArgumentException e) {
+      assertEquals("Card already removed and/or draw index empty", e.getMessage());
+    }
   }
 
   @Test
@@ -454,9 +590,12 @@ public class BasicPyramidSolitaireTest {
       model.discardDraw(0);
     }
 
-    IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
-        () -> model.removeUsingDraw(0, 6, 1));
-    assertEquals("Card already removed and/or draw index empty", thrown.getMessage());
+    try {
+      model.removeUsingDraw(0, 6, 1);
+      fail("Expected an IllegalArgumentException");
+    } catch (IllegalArgumentException e) {
+      assertEquals("Card already removed and/or draw index empty", e.getMessage());
+    }
   }
 
   @Test
@@ -474,18 +613,24 @@ public class BasicPyramidSolitaireTest {
 
   @Test
   public void discardDrawNotStarted() {
-    IllegalStateException thrown = assertThrows(IllegalStateException.class,
-        () -> model.discardDraw(0));
-    assertEquals("Game has not started", thrown.getMessage());
+    try {
+      model.discardDraw(0);
+      fail("Expected an IllegalStateException");
+    } catch (IllegalStateException e) {
+      assertEquals("Game has not started", e.getMessage());
+    }
   }
 
   @Test
   public void discardDrawInvalidIndex() {
     model.startGame(sampleDeck, false, 7, 3);
 
-    IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
-        () -> model.discardDraw(3));
-    assertEquals("Invalid index", thrown.getMessage());
+    try {
+      model.discardDraw(3);
+      fail("Expected an IllegalArgumentException");
+    } catch (IllegalArgumentException e) {
+      assertEquals("Invalid index", e.getMessage());
+    }
   }
 
   @Test
@@ -497,9 +642,12 @@ public class BasicPyramidSolitaireTest {
       model.discardDraw(0);
     }
 
-    IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
-        () -> model.discardDraw(0));
-    assertEquals("Index empty", thrown.getMessage());
+    try {
+      model.discardDraw(0);
+      fail("Expected an IllegalArgumentException");
+    } catch (IllegalArgumentException e) {
+      assertEquals("Index empty", e.getMessage());
+    }
   }
 
   @Test
@@ -531,18 +679,24 @@ public class BasicPyramidSolitaireTest {
 
   @Test
   public void getRowWidthNotStarted() {
-    IllegalStateException thrown = assertThrows(IllegalStateException.class,
-        () -> model.getRowWidth(0));
-    assertEquals("Game has not started", thrown.getMessage());
+    try {
+      model.getRowWidth(0);
+      fail("Expected an IllegalStateException");
+    } catch (IllegalStateException e) {
+      assertEquals("Game has not started", e.getMessage());
+    }
   }
 
   @Test
   public void getRowWidthInvalidRow() {
     model.startGame(sampleDeck, false, 7, 3);
 
-    IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
-        () -> model.getRowWidth(7));
-    assertEquals("Invalid row", thrown.getMessage());
+    try {
+      model.getRowWidth(7);
+      fail("Expected an IllegalArgumentException");
+    } catch (IllegalArgumentException e) {
+      assertEquals("Invalid row", e.getMessage());
+    }
   }
 
   @Test
@@ -572,8 +726,12 @@ public class BasicPyramidSolitaireTest {
 
   @Test
   public void isGameOverNotStarted() {
-    IllegalStateException thrown = assertThrows(IllegalStateException.class, model::isGameOver);
-    assertEquals("Game has not started", thrown.getMessage());
+    try {
+      model.isGameOver();
+      fail("Expected an IllegalStateException");
+    } catch (IllegalStateException e) {
+      assertEquals("Game has not started", e.getMessage());
+    }
   }
 
   @Test
@@ -603,8 +761,12 @@ public class BasicPyramidSolitaireTest {
 
   @Test
   public void getScoreNotStarted() {
-    IllegalStateException thrown = assertThrows(IllegalStateException.class, model::getScore);
-    assertEquals("Game has not started", thrown.getMessage());
+    try {
+      model.getScore();
+      fail("Expected an IllegalStateException");
+    } catch (IllegalStateException e) {
+      assertEquals("Game has not started", e.getMessage());
+    }
   }
 
   @Test
@@ -620,18 +782,24 @@ public class BasicPyramidSolitaireTest {
 
   @Test
   public void getCardAtNotStarted() {
-    IllegalStateException thrown = assertThrows(IllegalStateException.class,
-        () -> model.getCardAt(0, 0));
-    assertEquals("Game has not started", thrown.getMessage());
+    try {
+      model.getCardAt(0, 0);
+      fail("Expected an IllegalStateException");
+    } catch (IllegalStateException e) {
+      assertEquals("Game has not started", e.getMessage());
+    }
   }
 
   @Test
   public void getCardAtInvalidPosition() {
     model.startGame(sampleDeck, false, 7, 3);
 
-    IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
-        () -> model.getCardAt(7, -1));
-    assertEquals("Invalid position", thrown.getMessage());
+    try {
+      model.getCardAt(7, -1);
+      fail("Expected an IllegalArgumentException");
+    } catch (IllegalArgumentException e) {
+      assertEquals("Invalid position", e.getMessage());
+    }
   }
 
   @Test
@@ -649,8 +817,12 @@ public class BasicPyramidSolitaireTest {
 
   @Test
   public void getDrawCardsNotStarted() {
-    IllegalStateException thrown = assertThrows(IllegalStateException.class, model::getDrawCards);
-    assertEquals("Game has not started", thrown.getMessage());
+    try {
+      model.getDrawCards();
+      fail("Expected an IllegalStateException");
+    } catch (IllegalStateException e) {
+      assertEquals("Game has not started", e.getMessage());
+    }
   }
 
   @Test
