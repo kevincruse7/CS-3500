@@ -59,10 +59,9 @@ public class PyramidSolitaireTextualView {
       if (model.getNumDraw() > 0) {
         String cardStr = model.getDrawCards().get(0) == null
             ? "." : model.getDrawCards().get(0).toString();
+        pyramid.append(' ').append(cardStr);
 
         if (model.getNumDraw() > 1) {
-          pyramid.append(' ').append(cardStr);
-
           // Pad empty draw index with additional spacing
           if (cardStr.equals(".")) {
             pyramid.append("  ");
