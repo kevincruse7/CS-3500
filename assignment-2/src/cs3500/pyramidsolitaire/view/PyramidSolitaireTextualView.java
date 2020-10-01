@@ -46,10 +46,9 @@ public class PyramidSolitaireTextualView {
               ? "." : model.getCardAt(row, card).toString();
 
           if (card < model.getRowWidth(row) - 1) {
-            pyramid.append(String.format("%-3s", cardStr));
-            pyramid.append(' ');
+            pyramid.append(String.format("%-4s", cardStr));
           } else {
-            pyramid.append(String.format("%-2s", cardStr));
+            pyramid.append(cardStr);
           }
         }
 
@@ -59,13 +58,26 @@ public class PyramidSolitaireTextualView {
       pyramid.append("Draw:");
       if (model.getNumDraw() > 0) {
         String cardStr = model.getDrawCards().get(0) == null
-            ? ".  " : model.getDrawCards().get(0).toString();
-        pyramid.append(' ').append(cardStr);
+            ? "." : model.getDrawCards().get(0).toString();
 
-        for (int card = 1; card < model.getNumDraw(); card++) {
-          cardStr = model.getDrawCards().get(card) == null
-              ? ".  " : model.getDrawCards().get(card).toString();
-          pyramid.append(", ").append(cardStr);
+        if (model.getNumDraw() > 1) {
+          pyramid.append(' ').append(cardStr);
+
+          // Pad empty draw index with additional spacing
+          if (cardStr.equals(".")) {
+            pyramid.append("  ");
+          }
+
+          for (int card = 1; card < model.getNumDraw(); card++) {
+            cardStr = model.getDrawCards().get(card) == null
+                ? "." : model.getDrawCards().get(card).toString();
+            pyramid.append(", ").append(cardStr);
+
+            // Pad empty draw index with additional spacing if end of line hasn't been reached
+            if (cardStr.equals(".") && card < model.getNumDraw() - 1) {
+              pyramid.append("  ");
+            }
+          }
         }
       }
     }

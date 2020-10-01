@@ -270,7 +270,7 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
       int rowNullCount = 0;
 
       // Add cards from row to list if the card exists and isn't covered
-      for (int cardIndex = 0; cardIndex < pyramid.get(rowIndex).size(); cardIndex++) {
+      for (int cardIndex = 0; cardIndex < getRowWidth(rowIndex); cardIndex++) {
         Card card = getCardAt(rowIndex, cardIndex);
         if (card != null && !isCovered(rowIndex, cardIndex)) {
           uncoveredCards.add(card);
@@ -279,7 +279,7 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
         }
       }
 
-      // If less than two null cards exist in this row, then there are no more uncovered cards in
+      // If fewer than two null cards exist in this row, then there are no more uncovered cards in
       // pyramid, so break out of loop
       if (rowNullCount < 2) {
         break;
@@ -359,11 +359,11 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
       throw new IllegalStateException("Game has not started");
     }
 
-    if (row >= 0 && row < pyramid.size() && card >= 0 && card < getRowWidth(row)) {
-      return pyramid.get(row).get(card);
+    if (row < 0 || row >= pyramid.size() || card < 0 || card >= getRowWidth(row)) {
+      throw new IllegalArgumentException("Invalid position");
     }
 
-    throw new IllegalArgumentException("Invalid position");
+    return pyramid.get(row).get(card);
   }
 
   @Override
