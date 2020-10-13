@@ -22,7 +22,7 @@ public class PyramidSolitaireTextualView implements PyramidSolitaireView {
    * @throws IllegalArgumentException If either a null model or null appendable is passed.
    */
   public PyramidSolitaireTextualView(PyramidSolitaireModel<?> model, Appendable output)
-      throws IllegalArgumentException{
+      throws IllegalArgumentException {
     if (model == null) {
       throw new IllegalArgumentException("Null model");
     }
@@ -44,6 +44,7 @@ public class PyramidSolitaireTextualView implements PyramidSolitaireView {
     this(model, new StringBuilder());
   }
 
+  // Renders the model pyramid to the given StringBuilder
   private void renderPyramid(StringBuilder pyramid) {
     for (int row = 0; row < model.getNumRows(); row++) {
       pyramid.append("  ".repeat(model.getNumRows() - row - 1));
@@ -63,9 +64,23 @@ public class PyramidSolitaireTextualView implements PyramidSolitaireView {
     }
   }
 
+  // Determines if the model's draw card pile is empty
+  private boolean isDrawEmpty() {
+    if (model.getNumDraw() > 0) {
+      for (Object card : model.getDrawCards()) {
+        if (card != null) {
+          return false;
+        }
+      }
+    }
+
+    return true;
+  }
+
+  // Renders the draw pile to the given StringBuilder
   private void renderDraw(StringBuilder pyramid) {
     pyramid.append("Draw:");
-    if (model.getDrawCards().size() > 0) {
+    if (!isDrawEmpty()) {
       String cardStr = model.getDrawCards().get(0) == null
           ? "." : model.getDrawCards().get(0).toString();
       pyramid.append(' ').append(cardStr);

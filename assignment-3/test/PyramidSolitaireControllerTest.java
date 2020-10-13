@@ -1,4 +1,5 @@
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import cs3500.pyramidsolitaire.controller.PyramidSolitaireController;
@@ -131,7 +132,7 @@ public class PyramidSolitaireControllerTest {
   }
 
   // Test harness for testing playGame method of controller
-  private static <K> void playGameHarness(PyramidSolitaireModel<K> model, List<K> deck,
+  private static <K> boolean playGameHarness(PyramidSolitaireModel<K> model, List<K> deck,
       boolean shuffle, int numRows, int numDraw, Interaction... interactions)
       throws IllegalArgumentException, IllegalStateException {
     StringBuilder fakeUserInput = new StringBuilder();
@@ -148,7 +149,7 @@ public class PyramidSolitaireControllerTest {
         actualOutput);
     controller.playGame(model, deck, shuffle, numRows, numDraw);
 
-    assertEquals(expectedOutput.toString(), actualOutput.toString());
+    return expectedOutput.toString().equals(actualOutput.toString());
   }
 
   // Input interaction generator for testing controller
@@ -197,7 +198,7 @@ public class PyramidSolitaireControllerTest {
 
   @Test
   public void playGame() {
-    playGameHarness(
+    assertTrue(playGameHarness(
         new BasicPyramidSolitaire(), deck, false, 3, 3,
         prints(
             "    A♣",
@@ -248,20 +249,20 @@ public class PyramidSolitaireControllerTest {
         ),
         inputs("rmwd 1 1 1"),
         prints("You win!")
-    );
+    ));
   }
 
   @Test
   public void playGameLost() {
-    playGameHarness(
+    assertTrue(playGameHarness(
         new BasicPyramidSolitaire(), deck, false, 3, 0,
         prints("Game over. Score: 21")
-    );
+    ));
   }
 
   @Test
   public void playGameQuit() {
-    playGameHarness(
+    assertTrue(playGameHarness(
         new BasicPyramidSolitaire(), deck, false, 3, 3,
         prints(
             "    A♣",
@@ -280,9 +281,9 @@ public class PyramidSolitaireControllerTest {
             "Draw: 7♣, 8♣, 9♣",
             "Score: 21"
         )
-    );
+    ));
 
-    playGameHarness(
+    assertTrue(playGameHarness(
         new BasicPyramidSolitaire(), deck, false, 3, 3,
         prints(
             "    A♣",
@@ -301,12 +302,12 @@ public class PyramidSolitaireControllerTest {
             "Draw: 7♣, 8♣, 9♣",
             "Score: 21"
         )
-    );
+    ));
   }
 
   @Test
   public void playGameInvalidInput() {
-    playGameHarness(
+    assertTrue(playGameHarness(
         new BasicPyramidSolitaire(), deck, false, 3, 3,
         prints(
             "    A♣",
@@ -338,7 +339,7 @@ public class PyramidSolitaireControllerTest {
             "Draw: 10♣, 8♣, 9♣",
             "Score: 15"
         )
-    );
+    ));
   }
 
   @Test
@@ -356,6 +357,26 @@ public class PyramidSolitaireControllerTest {
   public void playGameNullModel() {
     try {
       playGameHarness(null, deck, false, 3, 3);
+      fail("Expected an IllegalArgumentException");
+    } catch (IllegalArgumentException e) {
+      assertEquals("Null model", e.getMessage());
+    }
+  }
+
+  @Test
+  public void playGameNullDeck() {
+    try {
+      playGameHarness(new BasicPyramidSolitaire(), null, false, 3, 3);
+      fail("Expected an IllegalArgumentException");
+    } catch (IllegalArgumentException e) {
+      assertEquals("Null deck", e.getMessage());
+    }
+  }
+
+  @Test
+  public void playGameModelAndNullDeck() {
+    try {
+      playGameHarness(null, null, false, 3, 3);
       fail("Expected an IllegalArgumentException");
     } catch (IllegalArgumentException e) {
       assertEquals("Null model", e.getMessage());
@@ -399,7 +420,7 @@ public class PyramidSolitaireControllerTest {
   public void playGameMockModelStartGame() {
     StringBuilder log = new StringBuilder();
 
-    playGameHarness(
+    assertTrue(playGameHarness(
         new MockModel<>(log), deck.subList(0, 3), true, 2, 0,
         prints(
             "Draw:",
@@ -412,7 +433,7 @@ public class PyramidSolitaireControllerTest {
             "Draw:",
             "Score: 0"
         )
-    );
+    ));
 
     assertEquals("deck = [A♣, 2♣, 3♣], shuffle = true, numRows = 2, numDraw = 0\n", log.toString());
   }
@@ -421,7 +442,7 @@ public class PyramidSolitaireControllerTest {
   public void playGameMockModelRemoveOne() {
     StringBuilder log = new StringBuilder();
 
-    playGameHarness(
+    assertTrue(playGameHarness(
         new MockModel<>(log), deck.subList(0, 3), false, 2, 0,
         prints(
             "Draw:",
@@ -439,7 +460,7 @@ public class PyramidSolitaireControllerTest {
             "Draw:",
             "Score: 0"
         )
-    );
+    ));
 
     assertEquals("deck = [A♣, 2♣, 3♣], shuffle = false, numRows = 2, numDraw = 0\n"
         + "row = 0, card = 0\n", log.toString());
@@ -449,7 +470,7 @@ public class PyramidSolitaireControllerTest {
   public void playGameMockModelRemoveTwo() {
     StringBuilder log = new StringBuilder();
 
-    playGameHarness(
+    assertTrue(playGameHarness(
         new MockModel<>(log), deck.subList(0, 3), false, 2, 0,
         prints(
             "Draw:",
@@ -467,7 +488,7 @@ public class PyramidSolitaireControllerTest {
             "Draw:",
             "Score: 0"
         )
-    );
+    ));
 
     assertEquals("deck = [A♣, 2♣, 3♣], shuffle = false, numRows = 2, numDraw = 0\n"
         + "row1 = 0, card1 = 0, row2 = 1, card2 = 1\n", log.toString());
@@ -477,7 +498,7 @@ public class PyramidSolitaireControllerTest {
   public void playGameMockModelRemoveDraw() {
     StringBuilder log = new StringBuilder();
 
-    playGameHarness(
+    assertTrue(playGameHarness(
         new MockModel<>(log), deck.subList(0, 3), false, 2, 0,
         prints(
             "Draw:",
@@ -495,7 +516,7 @@ public class PyramidSolitaireControllerTest {
             "Draw:",
             "Score: 0"
         )
-    );
+    ));
 
     assertEquals("deck = [A♣, 2♣, 3♣], shuffle = false, numRows = 2, numDraw = 0\n"
         + "drawIndex = 0, row = 1, card = 1\n", log.toString());
@@ -505,7 +526,7 @@ public class PyramidSolitaireControllerTest {
   public void playGameMockModelDiscardDraw() {
     StringBuilder log = new StringBuilder();
 
-    playGameHarness(
+    assertTrue(playGameHarness(
         new MockModel<>(log), deck.subList(0, 3), false, 2, 0,
         prints(
             "Draw:",
@@ -523,7 +544,7 @@ public class PyramidSolitaireControllerTest {
             "Draw:",
             "Score: 0"
         )
-    );
+    ));
 
     assertEquals("deck = [A♣, 2♣, 3♣], shuffle = false, numRows = 2, numDraw = 0\n"
         + "drawIndex = 1\n", log.toString());

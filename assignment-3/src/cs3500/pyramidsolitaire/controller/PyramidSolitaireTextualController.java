@@ -42,6 +42,8 @@ public class PyramidSolitaireTextualController implements PyramidSolitaireContro
     this.output = ap;
   }
 
+  // Sends the given message to the output appendable. Throws an IllegalStateException if the
+  // output appendable fails
   private void sendToOutput(String message) throws IllegalStateException {
     try {
       output.append(message);
@@ -50,6 +52,7 @@ public class PyramidSolitaireTextualController implements PyramidSolitaireContro
     }
   }
 
+  // Prints the current game state to the output appendable
   private void printGameState(PyramidSolitaireModel<?> model, PyramidSolitaireView view)
       throws IllegalStateException {
     try {
@@ -64,6 +67,8 @@ public class PyramidSolitaireTextualController implements PyramidSolitaireContro
     }
   }
 
+  // Returns an array of integer arguments of the given size received from the user, or null
+  // if the quit signal was entered
   private static int[] readArguments(Scanner scanner, int numArgs) {
     int[] arguments = new int[numArgs];
 
@@ -75,16 +80,19 @@ public class PyramidSolitaireTextualController implements PyramidSolitaireContro
           arguments[i] = Integer.parseInt(argument) - 1;
           isValidArg = true;
         } catch (NumberFormatException e) {
-          if (argument.toUpperCase().equals("Q")) {
+          if (argument.equalsIgnoreCase("Q")) {
             arguments = null;
           }
         }
-      } while (!isValidArg && arguments != null);
+      }
+      while (!isValidArg && arguments != null);
     }
 
     return arguments;
   }
 
+  // Runs the given model command and prints the changed game state. Throws an IllegalStateException
+  // if the output appendable fails
   private boolean runCommand(Consumer<int[]> command, Scanner scanner, int numArgs,
       PyramidSolitaireModel<?> model, PyramidSolitaireView view) throws IllegalStateException {
     boolean isGameOngoing = true;
@@ -109,6 +117,9 @@ public class PyramidSolitaireTextualController implements PyramidSolitaireContro
       int numRows, int numDraw) {
     if (model == null) {
       throw new IllegalArgumentException("Null model");
+    }
+    if (deck == null) {
+      throw new IllegalArgumentException("Null deck");
     }
 
     try {

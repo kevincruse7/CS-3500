@@ -300,7 +300,7 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
       }
     }
 
-    return false;
+    return uncoveredCards.get(0).getRank().getValue() == 13;
   }
 
   // Determine if the draw pile exists and still has cards left in it
