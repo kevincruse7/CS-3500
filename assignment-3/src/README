@@ -1,0 +1,7 @@
+Changes made from Assignment 2:
+- Added extra check in doPyramidCardsSumToThirteen in BasicPyramidSolitaire to account for case
+  where top level card is a king
+- Decomposed toString in PyramidSolitaireTextualView into several helper methods to improve
+  readability
+- Fixed toString in PyramidSolitaireTextualView so that an empty draw pile is displayed as "Draw:"
+  and not "Draw: .  , .  , ."
