@@ -18,7 +18,6 @@ public class CardTest {
    * Instantiates a {@code CardTest} object.
    */
   public CardTest() {
-    // TODO: Refactor using the @BeforeClass tag.
     this.aceOfSpades = new Card(Card.Suit.SPADES, Card.Rank.ACE);
     this.fiveOfHearts = new Card(Card.Suit.HEARTS, Card.Rank.FIVE);
     this.tenOfClubs = new Card(Card.Suit.CLUBS, Card.Rank.TEN);

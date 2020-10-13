@@ -6,7 +6,6 @@ import cs3500.pyramidsolitaire.model.hw02.BasicPyramidSolitaire;
 import cs3500.pyramidsolitaire.model.hw02.Card;
 import cs3500.pyramidsolitaire.model.hw02.PyramidSolitaireModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
@@ -18,25 +17,11 @@ import org.junit.Test;
  */
 public class PyramidSolitaireTextualViewTest {
 
-  private final List<Card> sampleDeck;  // Valid sample deck of playing cards
+  // Valid sample deck of playing cards
+  private static final List<Card> sampleDeck = new BasicPyramidSolitaire().getDeck();
 
   private PyramidSolitaireModel<Card> model;  // Pyramid solitaire model to be tested
   private PyramidSolitaireTextualView view;  // Pyramid solitaire view to be tested
-
-  /**
-   * Instantiates a {@code PyramidSolitaireTextualViewTest} object.
-   */
-  public PyramidSolitaireTextualViewTest() {
-    // TODO: Refactor using the @BeforeClass tag.
-    this.sampleDeck = new ArrayList<>(52);
-
-    // Fill sample deck with all 52 possible playing cards
-    for (Card.Suit suit : Card.Suit.values()) {
-      for (Card.Rank rank : Card.Rank.values()) {
-        sampleDeck.add(new Card(suit, rank));
-      }
-    }
-  }
 
   @Before
   public void setUp() {

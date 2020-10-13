@@ -56,7 +56,7 @@ public class PyramidSolitaireControllerTest {
     @Override
     public void startGame(List<K> deck, boolean shuffle, int numRows, int numDraw)
         throws IllegalArgumentException {
-      log.append(String.format("deck = %s, boolean = %b, numRows = %d, numDraw = %d\n",
+      log.append(String.format("deck = %s, shuffle = %b, numRows = %d, numDraw = %d\n",
           deck.toString(), shuffle, numRows, numDraw));
     }
 
@@ -130,28 +130,9 @@ public class PyramidSolitaireControllerTest {
     }
   }
 
-  // Mock appendable object for testing playGame error handling
-  private static class MockAppendable implements Appendable {
-
-    @Override
-    public Appendable append(CharSequence charSequence) throws IOException {
-      throw new IOException();
-    }
-
-    @Override
-    public Appendable append(CharSequence charSequence, int i, int i1) throws IOException {
-      throw new IOException();
-    }
-
-    @Override
-    public Appendable append(char c) throws IOException {
-      throw new IOException();
-    }
-  }
-
   // Test harness for testing playGame method of controller
-  private <K> void playGameHarness(PyramidSolitaireModel<K> model, List<K> deck, boolean shuffle,
-      int numRows, int numDraw, Interaction... interactions)
+  private static <K> void playGameHarness(PyramidSolitaireModel<K> model, List<K> deck,
+      boolean shuffle, int numRows, int numDraw, Interaction... interactions)
       throws IllegalArgumentException, IllegalStateException {
     StringBuilder fakeUserInput = new StringBuilder();
     StringBuilder expectedOutput = new StringBuilder();
@@ -171,30 +152,17 @@ public class PyramidSolitaireControllerTest {
   }
 
   // Input interaction generator for testing controller
-  private Interaction inputs(String in) {
-    return (input, output) -> {
-      output.append("Enter a move: ");
-      input.append(in);
-    };
+  private static Interaction inputs(String in) {
+    return (input, output) -> input.append(String.format("%s\n", in));
   }
 
   // Print interaction generator for testing controller
-  private Interaction prints(String... lines) {
+  private static Interaction prints(String... lines) {
     return (input, output) -> {
       for (String line : lines) {
         output.append(line).append('\n');
       }
     };
-  }
-
-  @Test
-  public void constructorNullAppendable() {
-    try {
-      new PyramidSolitaireTextualController(new InputStreamReader(System.in), null);
-      fail("Expected an IllegalArgumentException");
-    } catch (IllegalArgumentException e) {
-      assertEquals("Null appendable", e.getMessage());
-    }
   }
 
   @Test
@@ -208,12 +176,22 @@ public class PyramidSolitaireControllerTest {
   }
 
   @Test
-  public void constructorNullAppendableAndReader() {
+  public void constructorNullAppendable() {
+    try {
+      new PyramidSolitaireTextualController(new InputStreamReader(System.in), null);
+      fail("Expected an IllegalArgumentException");
+    } catch (IllegalArgumentException e) {
+      assertEquals("Null appendable", e.getMessage());
+    }
+  }
+
+  @Test
+  public void constructorNullReaderAndAppendable() {
     try {
       new PyramidSolitaireTextualController(null, null);
       fail("Expected an IllegalArgumentException");
     } catch (IllegalArgumentException e) {
-      assertEquals("Null reader and appendable", e.getMessage());
+      assertEquals("Null reader", e.getMessage());
     }
   }
 
@@ -268,7 +246,7 @@ public class PyramidSolitaireControllerTest {
             "Draw: Q♣, A♦, K♣",
             "Score: 1"
         ),
-        inputs("rmwd 3 1 1"),
+        inputs("rmwd 1 1 1"),
         prints("You win!")
     );
   }
@@ -277,14 +255,7 @@ public class PyramidSolitaireControllerTest {
   public void playGameLost() {
     playGameHarness(
         new BasicPyramidSolitaire(), deck, false, 3, 0,
-        prints(
-            "    A♣",
-            "  2♣  3♣",
-            "4♣  5♣  6♣",
-            "Draw:",
-            "Score: 21",
-            "Game over. Score: 21"
-        )
+        prints("Game over. Score: 21")
     );
   }
 
@@ -346,6 +317,8 @@ public class PyramidSolitaireControllerTest {
         ),
         inputs("rm 1 1"),
         prints("Invalid command. Try again."),
+        prints("Invalid command. Try again."),
+        prints("Invalid command. Try again."),
         inputs("rmwd 1 3 y 3"),
         prints(
             "    A♣",
@@ -366,6 +339,17 @@ public class PyramidSolitaireControllerTest {
             "Score: 15"
         )
     );
+  }
+
+  @Test
+  public void playGameNoStart() {
+    try {
+      playGameHarness(new BasicPyramidSolitaire(), deck, false, 10, 0);
+      fail("Expected an IllegalStateException");
+    } catch (IllegalStateException e) {
+      assertEquals("Game could not be started: Pyramid/draw pile too large for deck",
+          e.getMessage());
+    }
   }
 
   @Test
@@ -407,7 +391,7 @@ public class PyramidSolitaireControllerTest {
           .playGame(new BasicPyramidSolitaire(), deck, false, 3, 3);
       fail("Expected an IllegalStateException");
     } catch (IllegalStateException e) {
-      assertEquals("Bad reader and appendable", e.getMessage());
+      assertEquals("Bad appendable", e.getMessage());
     }
   }
 
@@ -418,6 +402,13 @@ public class PyramidSolitaireControllerTest {
     playGameHarness(
         new MockModel<>(log), deck.subList(0, 3), true, 2, 0,
         prints(
+            "Draw:",
+            "Score: 0"
+        ),
+        inputs("Q"),
+        prints(
+            "Game quit!",
+            "State of game when quit:",
             "Draw:",
             "Score: 0"
         )
@@ -438,6 +429,13 @@ public class PyramidSolitaireControllerTest {
         ),
         inputs("rm1 1 1"),
         prints(
+            "Draw:",
+            "Score: 0"
+        ),
+        inputs("Q"),
+        prints(
+            "Game quit!",
+            "State of game when quit:",
             "Draw:",
             "Score: 0"
         )
@@ -461,6 +459,13 @@ public class PyramidSolitaireControllerTest {
         prints(
             "Draw:",
             "Score: 0"
+        ),
+        inputs("Q"),
+        prints(
+            "Game quit!",
+            "State of game when quit:",
+            "Draw:",
+            "Score: 0"
         )
     );
 
@@ -482,6 +487,13 @@ public class PyramidSolitaireControllerTest {
         prints(
             "Draw:",
             "Score: 0"
+        ),
+        inputs("Q"),
+        prints(
+            "Game quit!",
+            "State of game when quit:",
+            "Draw:",
+            "Score: 0"
         )
     );
 
@@ -501,6 +513,13 @@ public class PyramidSolitaireControllerTest {
         ),
         inputs("dd 2"),
         prints(
+            "Draw:",
+            "Score: 0"
+        ),
+        inputs("Q"),
+        prints(
+            "Game quit!",
+            "State of game when quit:",
             "Draw:",
             "Score: 0"
         )

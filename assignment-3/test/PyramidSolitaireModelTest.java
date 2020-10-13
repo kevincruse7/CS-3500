@@ -31,7 +31,6 @@ public class PyramidSolitaireModelTest {
    * Instantiates a {@code PyramidSolitaireModelTest} object.
    */
   public PyramidSolitaireModelTest() {
-    // TODO: Refactor using the @BeforeClass tag.
     this.sampleDeck = new ArrayList<>(52);
 
     // Fill sample deck with all 52 possible playing cards
