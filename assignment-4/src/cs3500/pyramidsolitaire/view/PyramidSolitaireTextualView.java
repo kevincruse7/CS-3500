@@ -8,7 +8,7 @@ import java.io.IOException;
  * A text-based view of a given {@link PyramidSolitaireModel} as defined by {@link
  * PyramidSolitaireView}.
  */
-public class PyramidSolitaireTextualView implements PyramidSolitaireView {
+public final class PyramidSolitaireTextualView implements PyramidSolitaireView {
 
   private final PyramidSolitaireModel<?> model;  // Pyramid solitaire model to be rendered
   private final Appendable output;  // Appendable output object to write to

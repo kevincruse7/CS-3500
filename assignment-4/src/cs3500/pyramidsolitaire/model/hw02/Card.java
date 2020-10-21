@@ -3,7 +3,7 @@ package cs3500.pyramidsolitaire.model.hw02;
 /**
  * Represents a standard playing card with a suit and rank.
  */
-public class Card {
+public final class Card {
 
   /**
    * Represents the suit of a standard playing card.

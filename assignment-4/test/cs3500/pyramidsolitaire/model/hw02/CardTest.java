@@ -9,7 +9,7 @@ import org.junit.Test;
 /**
  * Tests the functionality of the {@link Card} class.
  */
-public class CardTest {
+public final class CardTest {
 
   private final Card aceOfSpades;  // Ace of spades playing card
   private final Card fiveOfHearts;  // Five of hearts playing card

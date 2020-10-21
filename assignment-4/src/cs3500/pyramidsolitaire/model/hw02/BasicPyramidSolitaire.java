@@ -10,11 +10,11 @@ import java.util.Random;
  */
 public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
 
-  private final Random rand;  // Random object used when shuffling deck
+  protected final Random rand;  // Random object used when shuffling deck
 
-  private List<Card> stock;  // List representation of stock
-  private List<List<Card>> pyramid;  // Two-dimensional list representation of pyramid
-  private List<Card> draw;  // List representation of draw pile
+  protected List<Card> stock;  // List representation of stock
+  protected List<List<Card>> pyramid;  // Two-dimensional list representation of pyramid
+  protected List<Card> draw;  // List representation of draw pile
 
   /**
    * Instantiates a {@code BasicPyramidSolitaire} object with the given {@link Random} object.
@@ -106,7 +106,7 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
   }
 
   // Determines if the card at the given position is covered
-  private boolean isCovered(int row, int card)
+  protected final boolean isCovered(int row, int card)
       throws IllegalArgumentException, IllegalStateException {
     // If card is not in bottom row and has one or two cards below it, card is covered. Otherwise,
     // card is not covered
@@ -154,7 +154,8 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
   }
 
   @Override
-  public void remove(int row, int card) throws IllegalArgumentException, IllegalStateException {
+  public final void remove(int row, int card) throws IllegalArgumentException,
+      IllegalStateException {
     // Retrieve card at given position if game has started and position is valid
     Card cardObj = getCardAt(row, card);
 
@@ -178,7 +179,7 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
   }
 
   @Override
-  public void removeUsingDraw(int drawIndex, int row, int card)
+  public final void removeUsingDraw(int drawIndex, int row, int card)
       throws IllegalArgumentException, IllegalStateException {
     // Retrieve cards at given position and draw index if game has started, position is valid, and
     // draw index is valid
@@ -212,12 +213,13 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
   }
 
   // Determine if this game has started
-  private boolean isNotStarted() {
+  protected final boolean isNotStarted() {
     return pyramid == null;
   }
 
   @Override
-  public void discardDraw(int drawIndex) throws IllegalArgumentException, IllegalStateException {
+  public final void discardDraw(int drawIndex) throws IllegalArgumentException,
+      IllegalStateException {
     // Ensure game has started
     if (isNotStarted()) {
       throw new IllegalStateException("Game has not started");
@@ -238,17 +240,17 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
   }
 
   @Override
-  public int getNumRows() {
+  public final int getNumRows() {
     return isNotStarted() ? -1 : pyramid.size();
   }
 
   @Override
-  public int getNumDraw() {
+  public final int getNumDraw() {
     return isNotStarted() ? -1 : draw.size();
   }
 
   @Override
-  public int getRowWidth(int row) {
+  public final int getRowWidth(int row) {
     // Ensure game has started
     if (isNotStarted()) {
       throw new IllegalStateException("Game has not started");
@@ -290,7 +292,7 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
   }
 
   // Determine if any two uncovered pyramid cards sum to 13
-  private boolean doPyramidCardsSumToThirteen(List<Card> uncoveredCards) {
+  protected final boolean doPyramidCardsSumToThirteen(List<Card> uncoveredCards) {
     for (int cardIndex1 = 0; cardIndex1 < uncoveredCards.size() - 1; cardIndex1++) {
       for (int cardIndex2 = cardIndex1 + 1; cardIndex2 < uncoveredCards.size(); cardIndex2++) {
         if (uncoveredCards.get(cardIndex1).getRank().getValue()
@@ -304,7 +306,7 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
   }
 
   // Determine if the draw pile exists and still has cards left in it
-  private boolean isDrawEmpty() {
+  protected final boolean isDrawEmpty() {
     if (draw.size() > 0) {
       for (Card drawCard : draw) {
         if (drawCard != null) {
@@ -324,7 +326,14 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
     }
 
     // If pyramid is null-filled, game is over, so skip rest of checking process
-    if (getCardAt(0, 0) != null) {
+    boolean cardsRemaining = false;
+    for (int card = 0; card < getRowWidth(0); card++) {
+      if (getCardAt(0, card) != null) {
+        cardsRemaining = true;
+        break;
+      }
+    }
+    if (cardsRemaining) {
       List<Card> uncoveredCards = getUncoveredCards();
 
       // If pyramid cards sum to 13, game is not over
@@ -336,7 +345,7 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
   }
 
   @Override
-  public int getScore() throws IllegalStateException {
+  public final int getScore() throws IllegalStateException {
     if (isNotStarted()) {
       throw new IllegalStateException("Game has not started");
     }
@@ -354,7 +363,8 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
   }
 
   @Override
-  public Card getCardAt(int row, int card) throws IllegalArgumentException, IllegalStateException {
+  public final Card getCardAt(int row, int card) throws IllegalArgumentException,
+      IllegalStateException {
     if (isNotStarted()) {
       throw new IllegalStateException("Game has not started");
     }
@@ -367,7 +377,7 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
   }
 
   @Override
-  public List<Card> getDrawCards() throws IllegalStateException {
+  public final List<Card> getDrawCards() throws IllegalStateException {
     if (isNotStarted()) {
       throw new IllegalStateException("Game has not started");
     }

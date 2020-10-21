@@ -6,6 +6,8 @@ import cs3500.pyramidsolitaire.model.hw02.BasicPyramidSolitaire;
 import cs3500.pyramidsolitaire.model.hw02.Card;
 import cs3500.pyramidsolitaire.model.hw02.PyramidSolitaireModel;
 
+import cs3500.pyramidsolitaire.model.hw04.PyramidSolitaireCreator;
+import cs3500.pyramidsolitaire.model.hw04.PyramidSolitaireCreator.GameType;
 import cs3500.pyramidsolitaire.view.PyramidSolitaireTextualView;
 import cs3500.pyramidsolitaire.view.PyramidSolitaireView;
 
@@ -19,10 +21,13 @@ import org.junit.Test;
  * Tests the functionality of the {@link PyramidSolitaireView} interface as implemented by the
  * {@link PyramidSolitaireTextualView} class.
  */
-public class PyramidSolitaireViewTest {
+public final class PyramidSolitaireViewTest {
 
   // Valid sample deck of playing cards
-  private static final List<Card> sampleDeck = new BasicPyramidSolitaire().getDeck();
+  private static final List<Card> sampleDeck
+      = PyramidSolitaireCreator.create(GameType.BASIC).getDeck();
+  private static final List<Card> doubleDeck
+      = PyramidSolitaireCreator.create(GameType.MULTIPYRAMID).getDeck();
 
   private StringBuilder output;  // Destination of program output
   private PyramidSolitaireModel<Card> model;  // Pyramid solitaire model to be tested
@@ -79,22 +84,94 @@ public class PyramidSolitaireViewTest {
     view.render();
 
     assertEquals(
-        "            A♣\n" +
-            "          2♣  3♣\n" +
-            "        4♣  5♣  6♣\n" +
-            "      7♣  8♣  9♣  10♣\n" +
-            "    J♣  Q♣  K♣  A♦  2♦\n" +
-            "  3♦  4♦  5♦  6♦  7♦  8♦\n" +
-            "9♦  10♦ J♦  Q♦  K♦  A♥  2♥\n" +
-            "Draw: 3♥, 4♥, 5♥\n" +
-            "            A♣\n" +
-            "          2♣  3♣\n" +
-            "        4♣  5♣  6♣\n" +
-            "      7♣  8♣  9♣  10♣\n" +
-            "    J♣  Q♣  K♣  A♦  2♦\n" +
-            "  3♦  4♦  5♦  6♦  7♦  8♦\n" +
-            "9♦  .   J♦  Q♦  .   A♥  2♥\n" +
-            "Draw: .  , 4♥, 5♥",
+        "            A♣\n"
+            + "          2♣  3♣\n"
+            + "        4♣  5♣  6♣\n"
+            + "      7♣  8♣  9♣  10♣\n"
+            + "    J♣  Q♣  K♣  A♦  2♦\n"
+            + "  3♦  4♦  5♦  6♦  7♦  8♦\n"
+            + "9♦  10♦ J♦  Q♦  K♦  A♥  2♥\n"
+            + "Draw: 3♥, 4♥, 5♥\n"
+            + "            A♣\n"
+            + "          2♣  3♣\n"
+            + "        4♣  5♣  6♣\n"
+            + "      7♣  8♣  9♣  10♣\n"
+            + "    J♣  Q♣  K♣  A♦  2♦\n"
+            + "  3♦  4♦  5♦  6♦  7♦  8♦\n"
+            + "9♦  .   J♦  Q♦  .   A♥  2♥\n"
+            + "Draw: .  , 4♥, 5♥",
+        output.toString()
+    );
+  }
+
+  @Test
+  public void renderLargeRelaxedPyramid() throws IOException {
+    model = PyramidSolitaireCreator.create(GameType.RELAXED);
+    view = new PyramidSolitaireTextualView(model, output);
+    model.startGame(sampleDeck, false, 7, 3);
+    view.render();
+
+    model.remove(6, 4);
+    model.removeUsingDraw(0, 6, 1);
+    while (model.getDrawCards().get(0) != null) {
+      model.discardDraw(0);
+    }
+    output.append("\n");
+    view.render();
+
+    assertEquals(
+        "            A♣\n"
+            + "          2♣  3♣\n"
+            + "        4♣  5♣  6♣\n"
+            + "      7♣  8♣  9♣  10♣\n"
+            + "    J♣  Q♣  K♣  A♦  2♦\n"
+            + "  3♦  4♦  5♦  6♦  7♦  8♦\n"
+            + "9♦  10♦ J♦  Q♦  K♦  A♥  2♥\n"
+            + "Draw: 3♥, 4♥, 5♥\n"
+            + "            A♣\n"
+            + "          2♣  3♣\n"
+            + "        4♣  5♣  6♣\n"
+            + "      7♣  8♣  9♣  10♣\n"
+            + "    J♣  Q♣  K♣  A♦  2♦\n"
+            + "  3♦  4♦  5♦  6♦  7♦  8♦\n"
+            + "9♦  .   J♦  Q♦  .   A♥  2♥\n"
+            + "Draw: .  , 4♥, 5♥",
+        output.toString()
+    );
+  }
+
+  @Test
+  public void renderLargeMultiPyramid() throws IOException {
+    model = PyramidSolitaireCreator.create(GameType.MULTIPYRAMID);
+    view = new PyramidSolitaireTextualView(model, output);
+    model.startGame(doubleDeck, false, 7, 3);
+    view.render();
+
+    model.remove(6, 0);
+    model.removeUsingDraw(1, 6, 12);
+    while (model.getDrawCards().get(0) != null) {
+      model.discardDraw(0);
+    }
+    output.append("\n");
+    view.render();
+
+    assertEquals(
+        "            A♣  .   .   2♣  .   .   3♣\n"
+            + "          4♣  5♣  .   6♣  7♣  .   8♣  9♣\n"
+            + "        10♣ J♣  Q♣  K♣  A♦  2♦  3♦  4♦  5♦\n"
+            + "      6♦  7♦  8♦  9♦  10♦ J♦  Q♦  K♦  A♥  2♥\n"
+            + "    3♥  4♥  5♥  6♥  7♥  8♥  9♥  10♥ J♥  Q♥  K♥\n"
+            + "  A♠  2♠  3♠  4♠  5♠  6♠  7♠  8♠  9♠  10♠ J♠  Q♠\n"
+            + "K♠  A♣  2♣  3♣  4♣  5♣  6♣  7♣  8♣  9♣  10♣ J♣  Q♣\n"
+            + "Draw: K♣, A♦, 2♦\n"
+            + "            A♣  .   .   2♣  .   .   3♣\n"
+            + "          4♣  5♣  .   6♣  7♣  .   8♣  9♣\n"
+            + "        10♣ J♣  Q♣  K♣  A♦  2♦  3♦  4♦  5♦\n"
+            + "      6♦  7♦  8♦  9♦  10♦ J♦  Q♦  K♦  A♥  2♥\n"
+            + "    3♥  4♥  5♥  6♥  7♥  8♥  9♥  10♥ J♥  Q♥  K♥\n"
+            + "  A♠  2♠  3♠  4♠  5♠  6♠  7♠  8♠  9♠  10♠ J♠  Q♠\n"
+            + ".   A♣  2♣  3♣  4♣  5♣  6♣  7♣  8♣  9♣  10♣ J♣  .\n"
+            + "Draw: .  , 3♦, 2♦",
         output.toString()
     );
   }
@@ -112,14 +189,68 @@ public class PyramidSolitaireViewTest {
     view.render();
 
     assertEquals(
-        "    A♣\n" +
-            "  2♣  3♣\n" +
-            "4♣  5♣  6♣\n" +
-            "Draw: 7♣, 8♣, 9♣\n" +
-            "    A♣\n" +
-            "  2♣  3♣\n" +
-            "4♣  .   6♣\n" +
-            "Draw: 7♣, .  , 9♣",
+        "    A♣\n"
+            + "  2♣  3♣\n"
+            + "4♣  5♣  6♣\n"
+            + "Draw: 7♣, 8♣, 9♣\n"
+            + "    A♣\n"
+            + "  2♣  3♣\n"
+            + "4♣  .   6♣\n"
+            + "Draw: 7♣, .  , 9♣",
+        output.toString()
+    );
+  }
+
+  @Test
+  public void renderSmallRelaxedPyramid() throws IOException {
+    model = PyramidSolitaireCreator.create(GameType.RELAXED);
+    view = new PyramidSolitaireTextualView(model, output);
+    model.startGame(sampleDeck, false, 3, 3);
+    view.render();
+
+    model.removeUsingDraw(1, 2, 1);
+    while (model.getDrawCards().get(1) != null) {
+      model.discardDraw(1);
+    }
+    output.append("\n");
+    view.render();
+
+    assertEquals(
+        "    A♣\n"
+            + "  2♣  3♣\n"
+            + "4♣  5♣  6♣\n"
+            + "Draw: 7♣, 8♣, 9♣\n"
+            + "    A♣\n"
+            + "  2♣  3♣\n"
+            + "4♣  .   6♣\n"
+            + "Draw: 7♣, .  , 9♣",
+        output.toString()
+    );
+  }
+
+  @Test
+  public void renderSmallMultiPyramid() throws IOException {
+    model = PyramidSolitaireCreator.create(GameType.MULTIPYRAMID);
+    view = new PyramidSolitaireTextualView(model, output);
+    model.startGame(doubleDeck, false, 3, 3);
+    view.render();
+
+    model.removeUsingDraw(1, 2, 4);
+    while (model.getDrawCards().get(1) != null) {
+      model.discardDraw(1);
+    }
+    output.append("\n");
+    view.render();
+
+    assertEquals(
+        "    A♣  2♣  3♣\n"
+            + "  4♣  5♣  6♣  7♣\n"
+            + "8♣  9♣  10♣ J♣  Q♣\n"
+            + "Draw: K♣, A♦, 2♦\n"
+            + "    A♣  2♣  3♣\n"
+            + "  4♣  5♣  6♣  7♣\n"
+            + "8♣  9♣  10♣ J♣  .\n"
+            + "Draw: K♣, .  , 2♦",
         output.toString()
     );
   }

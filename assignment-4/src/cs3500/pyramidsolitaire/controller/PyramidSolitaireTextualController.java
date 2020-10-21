@@ -16,7 +16,7 @@ import java.util.Scanner;
  * Controller for a text-based version of Pyramid Solitaire as defined by {@link
  * PyramidSolitaireController}.
  */
-public class PyramidSolitaireTextualController implements PyramidSolitaireController {
+public final class PyramidSolitaireTextualController implements PyramidSolitaireController {
 
   private final Readable input;  // Source of user input
   private final Appendable output;  // Destination of program output

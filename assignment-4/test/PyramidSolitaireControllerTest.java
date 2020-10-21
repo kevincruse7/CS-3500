@@ -5,9 +5,11 @@ import static org.junit.Assert.fail;
 import cs3500.pyramidsolitaire.controller.PyramidSolitaireController;
 import cs3500.pyramidsolitaire.controller.PyramidSolitaireTextualController;
 
-import cs3500.pyramidsolitaire.model.hw02.BasicPyramidSolitaire;
 import cs3500.pyramidsolitaire.model.hw02.Card;
 import cs3500.pyramidsolitaire.model.hw02.PyramidSolitaireModel;
+
+import cs3500.pyramidsolitaire.model.hw04.PyramidSolitaireCreator;
+import cs3500.pyramidsolitaire.model.hw04.PyramidSolitaireCreator.GameType;
 
 import java.io.InputStreamReader;
 import java.io.IOException;
@@ -24,10 +26,12 @@ import org.junit.Test;
  * Tests the functionality of the {@link PyramidSolitaireController} interface as implemented by the
  * {@link PyramidSolitaireTextualController} class.
  */
-public class PyramidSolitaireControllerTest {
+public final class PyramidSolitaireControllerTest {
 
-  // Sample deck of playing cards for testing controller
-  private static final List<Card> deck = new BasicPyramidSolitaire().getDeck();
+  // Sample decks of playing cards for testing controller
+  private static final List<Card> deck = PyramidSolitaireCreator.create(GameType.BASIC).getDeck();
+  private static final List<Card> doubleDeck =
+      PyramidSolitaireCreator.create(GameType.MULTIPYRAMID).getDeck();
 
   // Represents an interaction with the controller
   private interface Interaction {
@@ -36,7 +40,7 @@ public class PyramidSolitaireControllerTest {
   }
 
   // Mock pyramid solitaire model for testing controller
-  private static class MockModel<K> implements PyramidSolitaireModel<K> {
+  private static final class MockModel<K> implements PyramidSolitaireModel<K> {
 
     private final StringBuilder log;  // Log used to record received arguments from controller
 
@@ -149,6 +153,7 @@ public class PyramidSolitaireControllerTest {
         actualOutput);
     controller.playGame(model, deck, shuffle, numRows, numDraw);
 
+    assertEquals(expectedOutput.toString(), actualOutput.toString());
     return expectedOutput.toString().equals(actualOutput.toString());
   }
 
@@ -199,7 +204,7 @@ public class PyramidSolitaireControllerTest {
   @Test
   public void playGame() {
     assertTrue(playGameHarness(
-        new BasicPyramidSolitaire(), deck, false, 3, 3,
+        PyramidSolitaireCreator.create(GameType.BASIC), deck, false, 3, 3,
         prints(
             "    A♣",
             "  2♣  3♣",
@@ -250,20 +255,130 @@ public class PyramidSolitaireControllerTest {
         inputs("rmwd 1 1 1"),
         prints("You win!")
     ));
+
+    assertTrue(playGameHarness(
+        PyramidSolitaireCreator.create(GameType.RELAXED), deck, false, 3, 3,
+        prints(
+            "    A♣",
+            "  2♣  3♣",
+            "4♣  5♣  6♣",
+            "Draw: 7♣, 8♣, 9♣",
+            "Score: 21"
+        ),
+        inputs("rmwd 2 3 2"),
+        prints(
+            "    A♣",
+            "  2♣  3♣",
+            "4♣  .   6♣",
+            "Draw: 7♣, 10♣, 9♣",
+            "Score: 16"
+        ),
+        inputs("rmwd 3 3 1"),
+        prints(
+            "    A♣",
+            "  2♣  3♣",
+            ".   .   6♣",
+            "Draw: 7♣, 10♣, J♣",
+            "Score: 12"
+        ),
+        inputs("rmwd 1 3 3"),
+        prints(
+            "    A♣",
+            "  2♣  3♣",
+            ".   .   .",
+            "Draw: Q♣, 10♣, J♣",
+            "Score: 6"
+        ),
+        inputs("rmwd 3 2 1"),
+        prints(
+            "    A♣",
+            "  .   3♣",
+            ".   .   .",
+            "Draw: Q♣, 10♣, K♣",
+            "Score: 4"
+        ),
+        inputs("rmwd 2 2 2"),
+        prints(
+            "    A♣",
+            "  .   .",
+            ".   .   .",
+            "Draw: Q♣, A♦, K♣",
+            "Score: 1"
+        ),
+        inputs("rmwd 1 1 1"),
+        prints("You win!")
+    ));
+
+    assertTrue(playGameHarness(
+        PyramidSolitaireCreator.create(GameType.MULTIPYRAMID), doubleDeck, false, 2, 3,
+        prints(
+            "  A♣  2♣  3♣",
+            "4♣  5♣  6♣  7♣",
+            "Draw: 8♣, 9♣, 10♣",
+            "Score: 28"
+        ),
+        inputs("rmwd 1 2 2"),
+        prints(
+            "  A♣  2♣  3♣",
+            "4♣  .   6♣  7♣",
+            "Draw: J♣, 9♣, 10♣",
+            "Score: 23"
+        ),
+        inputs("rmwd 2 2 1"),
+        prints(
+            "  A♣  2♣  3♣",
+            ".   .   6♣  7♣",
+            "Draw: J♣, Q♣, 10♣",
+            "Score: 19"
+        ),
+        inputs("rmwd 2 1 1"),
+        prints(
+            "  .   2♣  3♣",
+            ".   .   6♣  7♣",
+            "Draw: J♣, K♣, 10♣",
+            "Score: 18"
+        ),
+        inputs("rm2 2 3 2 4"),
+        prints(
+            "  .   2♣  3♣",
+            ".   .   .   .",
+            "Draw: J♣, K♣, 10♣",
+            "Score: 5"
+        ),
+        inputs("rmwd 1 1 2"),
+        prints(
+            "  .   .   3♣",
+            ".   .   .   .",
+            "Draw: A♦, K♣, 10♣",
+            "Score: 3"
+        ),
+        inputs("rmwd 3 1 3"),
+        prints("You win!")
+    ));
   }
 
   @Test
   public void playGameLost() {
     assertTrue(playGameHarness(
-        new BasicPyramidSolitaire(), deck, false, 3, 0,
+        PyramidSolitaireCreator.create(GameType.BASIC), deck, false, 3, 0,
         prints("Game over. Score: 21")
+    ));
+
+    assertTrue(playGameHarness(
+        PyramidSolitaireCreator.create(GameType.RELAXED), deck, false, 3, 0,
+        prints("Game over. Score: 21")
+    ));
+
+    assertTrue(playGameHarness(
+        PyramidSolitaireCreator.create(GameType.MULTIPYRAMID), doubleDeck, false, 3, 0,
+        prints("Game over. Score: 78")
     ));
   }
 
   @Test
   public void playGameQuit() {
     assertTrue(playGameHarness(
-        new BasicPyramidSolitaire(), deck, false, 3, 3,
+        PyramidSolitaireCreator.create(GameType.BASIC), deck, false, 3, 3,
         prints(
             "    A♣",
             "  2♣  3♣",
@@ -284,7 +399,7 @@ public class PyramidSolitaireControllerTest {
     ));
 
     assertTrue(playGameHarness(
-        new BasicPyramidSolitaire(), deck, false, 3, 3,
+        PyramidSolitaireCreator.create(GameType.BASIC), deck, false, 3, 3,
         prints(
             "    A♣",
             "  2♣  3♣",
@@ -308,7 +423,7 @@ public class PyramidSolitaireControllerTest {
   @Test
   public void playGameInvalidInput() {
     assertTrue(playGameHarness(
-        new BasicPyramidSolitaire(), deck, false, 3, 3,
+        PyramidSolitaireCreator.create(GameType.BASIC), deck, false, 3, 3,
         prints(
             "    A♣",
             "  2♣  3♣",
@@ -345,7 +460,7 @@ public class PyramidSolitaireControllerTest {
   @Test
   public void playGameNoStart() {
     try {
-      playGameHarness(new BasicPyramidSolitaire(), deck, false, 10, 0);
+      playGameHarness(PyramidSolitaireCreator.create(GameType.BASIC), deck, false, 10, 0);
       fail("Expected an IllegalStateException");
     } catch (IllegalStateException e) {
       assertEquals("Game could not be started: Pyramid/draw pile too large for deck",
@@ -366,7 +481,7 @@ public class PyramidSolitaireControllerTest {
   @Test
   public void playGameNullDeck() {
     try {
-      playGameHarness(new BasicPyramidSolitaire(), null, false, 3, 3);
+      playGameHarness(PyramidSolitaireCreator.create(GameType.BASIC), null, false, 3, 3);
       fail("Expected an IllegalArgumentException");
     } catch (IllegalArgumentException e) {
       assertEquals("Null deck", e.getMessage());
@@ -387,7 +502,7 @@ public class PyramidSolitaireControllerTest {
   public void playGameBadReader() {
     try {
       new PyramidSolitaireTextualController(new MockReader(), System.out)
-          .playGame(new BasicPyramidSolitaire(), deck, false, 3, 3);
+          .playGame(PyramidSolitaireCreator.create(GameType.BASIC), deck, false, 3, 3);
       fail("Expected an IllegalStateException");
     } catch (IllegalStateException e) {
       assertEquals("Bad reader", e.getMessage());
@@ -398,7 +513,7 @@ public class PyramidSolitaireControllerTest {
   public void playGameBadAppendable() {
     try {
       new PyramidSolitaireTextualController(new InputStreamReader(System.in), new MockAppendable())
-          .playGame(new BasicPyramidSolitaire(), deck, false, 3, 3);
+          .playGame(PyramidSolitaireCreator.create(GameType.BASIC), deck, false, 3, 3);
       fail("Expected an IllegalStateException");
     } catch (IllegalStateException e) {
       assertEquals("Bad appendable", e.getMessage());
@@ -409,7 +524,7 @@ public class PyramidSolitaireControllerTest {
   public void playGameBadReaderAndAppendable() {
     try {
       new PyramidSolitaireTextualController(new MockReader(), new MockAppendable())
-          .playGame(new BasicPyramidSolitaire(), deck, false, 3, 3);
+          .playGame(PyramidSolitaireCreator.create(GameType.BASIC), deck, false, 3, 3);
       fail("Expected an IllegalStateException");
     } catch (IllegalStateException e) {
       assertEquals("Bad appendable", e.getMessage());

@@ -15,7 +15,7 @@ import org.junit.Test;
  * Tests the extended functionality of the {@link PyramidSolitaireTextualView} class not defined by
  * the {@link PyramidSolitaireView} interface.
  */
-public class PyramidSolitaireTextualViewTest {
+public final class PyramidSolitaireTextualViewTest {
 
   // Valid sample deck of playing cards
   private static final List<Card> sampleDeck = new BasicPyramidSolitaire().getDeck();
