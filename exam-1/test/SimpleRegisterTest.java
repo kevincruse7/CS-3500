@@ -96,8 +96,13 @@ public final class SimpleRegisterTest
             }
 
         }
+    }
 
-
-
+    @Test(expected = InsufficientCashException.class)
+    public void mutateRetrievedContents() {
+        ICashRegister reg = new SimpleRegister();
+        Map<Integer, Integer> moneyBox = reg.getContents();
+        moneyBox.put(1000, 5);
+        reg.makeChange(10, 0);
     }
 }

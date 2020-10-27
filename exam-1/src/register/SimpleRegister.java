@@ -1,5 +1,6 @@
 package register;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -112,24 +113,26 @@ public final class SimpleRegister implements ICashRegister {
         Map<Integer, Integer> ret = new TreeMap<Integer, Integer>();
         int totalvalue = 100 * dollars + cents;
 
+        // Integers are immutable, so shallow copy is sufficient
+        Map<Integer, Integer> moneyBoxCopy = new HashMap<>(moneyBox);
+
         for (int i = 0; i < denom.length; i++) {
             int num = totalvalue / denom[i];
 
-            if (moneyBox.get(denom[i]) < num) //there aren't enough coins of this value
+            if (moneyBoxCopy.get(denom[i]) < num) //there aren't enough coins of this value
             {
-                num = moneyBox.get(denom[i]);
+                num = moneyBoxCopy.get(denom[i]);
             }
 
             totalvalue = totalvalue - num * denom[i];
             ret.put(denom[i], num);
-            moneyBox.put(denom[i],moneyBox.get(denom[i])-num);
-
+            moneyBoxCopy.put(denom[i],moneyBoxCopy.get(denom[i])-num);
         }
 
         if (totalvalue > 0) {
             throw new InsufficientCashException("Cannot dispense change.");
         }
-
+        moneyBox = moneyBoxCopy;
 
         String auditMessage = String.format("Withdraw: $%.02f\n", dollars + cents / 100.0f);
         log.append(auditMessage);
