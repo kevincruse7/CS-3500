@@ -12,20 +12,20 @@ public interface AnimatedShape2D extends Cloneable {
   /**
    *
    *
-   * @param motions
+   * @param motion
    * @throws NullPointerException
    * @throws IllegalArgumentException
    */
-  void addMotions(Motion2D... motions) throws NullPointerException, IllegalArgumentException;
+  void addMotion(Motion2D motion) throws NullPointerException, IllegalArgumentException;
 
   /**
    *
    *
-   * @param motions
+   * @param motion
    * @throws NullPointerException
    * @throws IllegalArgumentException
    */
-  void removeMotions(Motion2D... motions) throws NullPointerException, IllegalArgumentException;
+  void removeMotion(Motion2D motion) throws NullPointerException, IllegalArgumentException;
 
   /**
    *

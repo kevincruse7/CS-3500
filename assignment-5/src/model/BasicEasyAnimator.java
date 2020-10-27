@@ -5,6 +5,7 @@ import model.shapes.Motion2D;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  *
@@ -25,9 +26,10 @@ public final class BasicEasyAnimator implements EasyAnimatorModel<AnimatedShape2
    *
    * @param shapes
    */
-  public BasicEasyAnimator(List<AnimatedShape2D> shapes) {
+  public BasicEasyAnimator(List<AnimatedShape2D> shapes) throws NullPointerException {
     this();
 
+    Objects.requireNonNull(shapes, "Null shape list");
     for (AnimatedShape2D shape : shapes) {
       this.shapes.add((AnimatedShape2D)shape.clone());
     }

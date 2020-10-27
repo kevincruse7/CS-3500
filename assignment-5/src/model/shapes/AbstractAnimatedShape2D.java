@@ -31,13 +31,13 @@ public abstract class AbstractAnimatedShape2D implements AnimatedShape2D {
   }
 
   @Override
-  public void addMotions(Motion2D... motions)
+  public void addMotion(Motion2D motion)
       throws NullPointerException, IllegalArgumentException {
 
   }
 
   @Override
-  public void removeMotions(Motion2D... motions)
+  public void removeMotion(Motion2D motion)
       throws NullPointerException, IllegalArgumentException {
 
   }
