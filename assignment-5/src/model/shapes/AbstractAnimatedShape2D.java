@@ -8,23 +8,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
+ * Implementation of an animated shape as defined by {@link AnimatedShape2D}.
  */
 public abstract class AbstractAnimatedShape2D implements AnimatedShape2D {
 
-  private final Map<Integer, Motion2D> motions;
+  private final Map<Integer, Motion2D> motions;  // Maps ticks to shape state transitions
 
   /**
+   * Instantiates an {@code AbstractAnimatedShape2D} object with the given transition map.
    *
-   *
-   * @param motions
+   * @param motions Transition map to initialize this {@code AbstractAnimatedShape2D}.
    */
   public AbstractAnimatedShape2D(Map<Integer, Motion2D> motions) {
     this.motions = new HashMap<>(motions);
   }
 
   /**
-   *
+   * Instantiates an {@code AbstractAnimatedShape2D} object with an empty transition map.
    */
   public AbstractAnimatedShape2D() {
     this(new HashMap<>());
