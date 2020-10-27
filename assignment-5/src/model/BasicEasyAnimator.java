@@ -34,24 +34,24 @@ public final class BasicEasyAnimator implements EasyAnimatorModel<AnimatedShape2
   }
 
   @Override
-  public void addShapes(AnimatedShape2D... shapes) throws NullPointerException {
+  public void addShape(AnimatedShape2D shape) throws NullPointerException {
 
   }
 
   @Override
-  public void removeShapes(AnimatedShape2D... shapes)
+  public void removeShape(AnimatedShape2D shape)
       throws NullPointerException, IllegalArgumentException {
 
   }
 
   @Override
-  public void addMotions(AnimatedShape2D shape, Motion2D... motions)
+  public void addMotion(AnimatedShape2D shape, Motion2D motion)
       throws NullPointerException, IllegalArgumentException {
 
   }
 
   @Override
-  public void removeMotions(AnimatedShape2D shape, Motion2D... motions)
+  public void removeMotion(AnimatedShape2D shape, Motion2D motion)
       throws NullPointerException, IllegalArgumentException {
 
   }

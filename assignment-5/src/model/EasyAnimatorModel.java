@@ -13,39 +13,39 @@ public interface EasyAnimatorModel<T, U> {
   /**
    *
    *
-   * @param shapes
+   * @param shape
    * @throws NullPointerException
    */
-  void addShapes(T... shapes) throws NullPointerException;
-
-  /**
-   *
-   *
-   * @param shapes
-   * @throws NullPointerException
-   * @throws IllegalArgumentException
-   */
-  void removeShapes(T... shapes) throws NullPointerException, IllegalArgumentException;
+  void addShape(T shape) throws NullPointerException;
 
   /**
    *
    *
    * @param shape
-   * @param motions
    * @throws NullPointerException
    * @throws IllegalArgumentException
    */
-  void addMotions(T shape, U... motions) throws NullPointerException, IllegalArgumentException;
+  void removeShape(T shape) throws NullPointerException, IllegalArgumentException;
 
   /**
    *
    *
    * @param shape
-   * @param motions
+   * @param motion
    * @throws NullPointerException
    * @throws IllegalArgumentException
    */
-  void removeMotions(T shape, U... motions) throws NullPointerException, IllegalArgumentException;
+  void addMotion(T shape, U motion) throws NullPointerException, IllegalArgumentException;
+
+  /**
+   *
+   *
+   * @param shape
+   * @param motion
+   * @throws NullPointerException
+   * @throws IllegalArgumentException
+   */
+  void removeMotion(T shape, U motion) throws NullPointerException, IllegalArgumentException;
 
   /**
    *
