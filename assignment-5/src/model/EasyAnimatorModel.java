@@ -15,8 +15,9 @@ public interface EasyAnimatorModel<T, U> {
    *
    * @param shape Shape to be added.
    * @throws NullPointerException If given shape is null.
+   * @throws IllegalArgumentException If given shape already exists in this animator.
    */
-  void addShape(T shape) throws NullPointerException;
+  void addShape(T shape) throws NullPointerException, IllegalArgumentException;
 
   /**
    * Removes a given shape from this animator.

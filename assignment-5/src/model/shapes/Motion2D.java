@@ -7,8 +7,8 @@ import java.awt.Point;
 import java.util.Objects;
 
 /**
- * Represents a shape state transition, in that it contains a beginning state, and end state, and
- * a tick duration for how long the transition between the two state takes.
+ * Represents a shape state transition, in that it contains a beginning state, and end state, and a
+ * tick duration for how long the transition between the two state takes.
  */
 public final class Motion2D {
 
@@ -41,7 +41,7 @@ public final class Motion2D {
   }
 
   // Builder class for constructing a Motion2D object
-  private static final class Builder {
+  public static final class Builder {
 
     private Integer startTick;
     private Integer endTick;
@@ -60,7 +60,7 @@ public final class Motion2D {
      *
      * @return {@code Motion2D} object with the parameters given to this builder
      * @throws NullPointerException If starting or ending tick, starting position, starting
-     *   dimensions, or starting color is null
+     *                              dimensions, or starting color is null
      */
     public Motion2D build() throws NullPointerException {
       Objects.requireNonNull(startTick, "Start tick must be specified");

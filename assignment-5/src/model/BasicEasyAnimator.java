@@ -25,6 +25,7 @@ public final class BasicEasyAnimator implements EasyAnimatorModel<AnimatedShape2
    * Instantiates a {@code BasicEasyAnimator} with the given shape list.
    *
    * @param shapes Shape list to initialize this animator.
+   * @throws NullPointerException Shape list is null.
    */
   public BasicEasyAnimator(List<AnimatedShape2D> shapes) throws NullPointerException {
     this();
@@ -37,7 +38,8 @@ public final class BasicEasyAnimator implements EasyAnimatorModel<AnimatedShape2
   }
 
   @Override
-  public void addShape(AnimatedShape2D shape) throws NullPointerException {
+  public void addShape(AnimatedShape2D shape)
+      throws NullPointerException, IllegalArgumentException {
 
   }
 
