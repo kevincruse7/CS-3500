@@ -95,11 +95,11 @@ public final class Motion2DTest {
         assertEquals(Color.black, motionOne.getColor(10));
       } catch (IllegalArgumentException f) {
         // valid ticks
-        assertEquals(Color.black, motionOne.getColor(9));
+        assertEquals(Color.black, motionOne.getColor(8));
         // motionThree's starting color
         assertEquals(Color.white, motionThree.getColor(5));
         // motionThree's ending color
-        assertEquals(Color.black, motionThree.getColor(10));
+        assertEquals(Color.black, motionThree.getColor(9));
       }
     }
 
@@ -121,15 +121,13 @@ public final class Motion2DTest {
         // makes sure that the position of a motion that doesn't move ACTUALLY doesn't move
         assertEquals(new Point(2, 3), motionOne.getPosition(6));
         assertEquals(new Point(2, 3), motionOne.getPosition(8));
-        assertEquals(new Point(2, 3), motionOne.getPosition(9));
 
         // makes sure that a motion that changes position ACTUALLY changes position
         assertEquals(new Point(2, 3), motionThree.getPosition(5));
         assertEquals(new Point(2, 3), motionThree.getPosition(6));
         assertEquals(new Point(2, 3), motionThree.getPosition(7));
         assertEquals(new Point(3, 4), motionThree.getPosition(8));
-        assertEquals(new Point(3, 4), motionThree.getPosition(9));
-        assertEquals(new Point(4, 5), motionThree.getPosition(10));
+        assertEquals(new Point(4, 5), motionThree.getPosition(9));
       }
     }
 
@@ -145,15 +143,13 @@ public final class Motion2DTest {
         // makes sure that the position of a motion that doesn't move ACTUALLY doesn't move
         assertEquals(new Dimension(4, 5), motionOne.getDimensions(6));
         assertEquals(new Dimension(4, 5), motionOne.getDimensions(8));
-        assertEquals(new Dimension(4, 5), motionOne.getDimensions(9));
 
         // makes sure that a motion that changes position ACTUALLY changes position
         assertEquals(new Dimension(4, 5), motionThree.getDimensions(5));
         assertEquals(new Dimension(4, 6), motionThree.getDimensions(6));
         assertEquals(new Dimension(4, 7), motionThree.getDimensions(7));
         assertEquals(new Dimension(5, 8), motionThree.getDimensions(8));
-        assertEquals(new Dimension(5, 9), motionThree.getDimensions(9));
-        assertEquals(new Dimension(6, 10), motionThree.getDimensions(10));
+        assertEquals(new Dimension(6, 10), motionThree.getDimensions(9));
       }
     }
   }
@@ -173,13 +169,24 @@ public final class Motion2DTest {
   public void testEquals() {
 
     // copy of motionOne
-    Motion2D motionOneCopy = motionBuilder.setStartTick(6).setStartColor(Color.black).
+    Motion2D motionOneCopyOne = motionBuilder.setStartTick(6).setStartColor(Color.black).
+        setStartPosition(samplePoint).setEndTick(9).setStartDimensions(sampleDimension).build();
+    // copy of motionOne
+    Motion2D motionOneCopyTwo = motionBuilder.setStartTick(6).setStartColor(Color.black).
         setStartPosition(samplePoint).setEndTick(9).setStartDimensions(sampleDimension).build();
 
+
+    // Symmetry
     assertTrue(motionOne.equals(motionTwo));
+    assertTrue(motionTwo.equals(motionOne));
+
+
     assertFalse(motionOne.equals(motionTwo));
   }
 
-  //TESTING HASHCODE
+  @Test
+  public void testHashcode() {
+    // if hashcodes not equal, then the objects are not the same
+  }
 
 }
