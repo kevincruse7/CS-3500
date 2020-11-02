@@ -28,29 +28,29 @@ public interface AnimatedShape2D extends Cloneable {
   void removeMotion(Motion2D motion) throws NullPointerException, IllegalArgumentException;
 
   /**
-   * Returns the position of this shape at the given tick.
+   * Returns the position of this shape at the given tick or null, if shape has no associated
+   * motion at given tick.
    *
    * @param tick Integer tick to find position at.
    * @return {@code Point} position of shape at given tick.
-   * @throws IllegalArgumentException If given tick is outside bounds.
    */
-  Point getPosition(int tick) throws IllegalArgumentException;
+  Point getPosition(int tick);
 
   /**
-   * Returns the dimensions of this shape at the given tick.
+   * Returns the dimensions of this shape at the given tick, or null, if shape has no associated
+   * motion at given tick.
    *
    * @param tick Integer tick to find dimensions at.
    * @return {@code Dimension} dimensions of shape at given tick.
-   * @throws IllegalArgumentException If given tick is outside bounds.
    */
-  Dimension getDimensions(int tick) throws IllegalArgumentException;
+  Dimension getDimensions(int tick);
 
   /**
-   * Returns the color of this shape at the given tick.
+   * Returns the color of this shape at the given tick or null, if shape has no associated
+   * motion at given tick.
    *
    * @param tick Integer tick to find dimensions at.
    * @return {@code Color} color of shape at given tick.
-   * @throws IllegalArgumentException If given tick is outside bounds.
    */
   Color getColor(int tick) throws IllegalArgumentException;
 

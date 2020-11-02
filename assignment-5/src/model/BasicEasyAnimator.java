@@ -40,34 +40,70 @@ public final class BasicEasyAnimator implements EasyAnimatorModel<AnimatedShape2
   @Override
   public void addShape(AnimatedShape2D shape)
       throws NullPointerException, IllegalArgumentException {
+    Objects.requireNonNull(shape, "Null shape");
 
+    if (shapes.contains(shape)) {
+      throw new IllegalArgumentException("Shape already exists");
+    }
+
+    shapes.add(shape);
   }
 
   @Override
   public void removeShape(AnimatedShape2D shape)
       throws NullPointerException, IllegalArgumentException {
+    Objects.requireNonNull(shape, "Null shape");
 
+    if (!shapes.remove(shape)) {
+      throw new IllegalArgumentException("Shape does not exist");
+    }
   }
 
   @Override
   public void addMotion(AnimatedShape2D shape, Motion2D motion)
       throws NullPointerException, IllegalArgumentException {
+    Objects.requireNonNull(shape, "Null shape");
+    Objects.requireNonNull(motion, "Null motion");
 
+    if (!shapes.contains(shape)) {
+      throw new IllegalArgumentException("Shape does not exist");
+    }
+
+    shapes.get(shapes.indexOf(shape)).addMotion(motion);
   }
 
   @Override
   public void removeMotion(AnimatedShape2D shape, Motion2D motion)
       throws NullPointerException, IllegalArgumentException {
+    Objects.requireNonNull(shape, "Null shape");
+    Objects.requireNonNull(motion, "Null motion");
 
+    if (!shapes.contains(shape)) {
+      throw new IllegalArgumentException("Shape does not exist");
+    }
+
+    shapes.get(shapes.indexOf(shape)).removeMotion(motion);
   }
 
   @Override
   public int getNumTicks() {
-    return 0;
+    int numTicks = 0;
+
+    for (AnimatedShape2D shape : shapes) {
+      numTicks = Math.max(numTicks, shape.getEndTick());
+    }
+
+    return numTicks;
   }
 
   @Override
   public List<AnimatedShape2D> getShapes() {
-    return null;
+    List<AnimatedShape2D> newShapes = new LinkedList<>();
+
+    for (AnimatedShape2D shape : shapes) {
+      newShapes.add((AnimatedShape2D)shape.clone());
+    }
+
+    return newShapes;
   }
 }

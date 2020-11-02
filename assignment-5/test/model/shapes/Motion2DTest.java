@@ -49,27 +49,32 @@ public final class Motion2DTest {
     } catch (NullPointerException a) {
       try {
         // no endTick specified
+        motionBuilder = Motion2D.builder();
         motionBuilder.setStartTick(6).setStartColor(Color.black).setStartPosition(samplePoint).
             setStartDimensions(sampleDimension).build();
       } catch (NullPointerException b) {
         try {
           // no StartColor specified
+          motionBuilder = Motion2D.builder();
           motionBuilder.setStartTick(6).setEndTick(9).setStartPosition(samplePoint).
               setStartDimensions(sampleDimension).build();
         } catch (NullPointerException c) {
           try {
             // no StartPosition specified
+            motionBuilder = Motion2D.builder();
             motionBuilder.setStartTick(6).setStartColor(Color.black).setEndTick(9).
                 setStartDimensions(sampleDimension).build();
           } catch (NullPointerException d) {
             try {
               // no StartDimensions specified
+              motionBuilder = Motion2D.builder();
               motionBuilder.setStartTick(6).setStartColor(Color.black).setStartPosition(samplePoint).
                   setEndTick(9).build();
             } catch (NullPointerException e) {
-              // startTick is less than endTick
-              motionBuilder.setStartTick(6).setStartColor(Color.black).setStartPosition(samplePoint).
-                  setEndTick(9).setStartDimensions(sampleDimension).build();
+              // startTick is greater than endTick
+              motionBuilder = Motion2D.builder();
+              motionBuilder.setStartTick(9).setStartColor(Color.black).setStartPosition(samplePoint).
+                  setEndTick(6).setStartDimensions(sampleDimension).build();
             }
           }
         }

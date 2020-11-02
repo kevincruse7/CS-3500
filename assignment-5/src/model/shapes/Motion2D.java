@@ -18,8 +18,8 @@ public final class Motion2D {
   private final Point startPosition;  // Starting position of the shape
   private final Point endPosition;  // Ending position of the shape
 
-  private final Dimension startDimensions;  // Starting dimensions of the shape
-  private final Dimension endDimensions;  // Ending dimensions of the shape
+  private final Dimension startDimensions;  // Starting dimensions of the shape in pixels
+  private final Dimension endDimensions;  // Ending dimensions of the shape in pixels
 
   private final Color startColor;  // Starting color of the shape
   private final Color endColor;  // Ending color of the shape
@@ -65,6 +65,15 @@ public final class Motion2D {
     public Motion2D build() throws NullPointerException {
       Objects.requireNonNull(startTick, "Start tick must be specified");
       Objects.requireNonNull(endTick, "End tick must be specified");
+      if (startTick < 0) {
+        throw new IllegalArgumentException("Negative start tick");
+      }
+      if (endTick < 0) {
+        throw new IllegalArgumentException("Negative end tick");
+      }
+      if (startTick >= endTick) {
+        throw new IllegalArgumentException("Start tick greater than or equal to end tick");
+      }
 
       this.startPosition = new Point(Objects.requireNonNull(startPosition,
           "Starting position must be specified"));
@@ -84,7 +93,7 @@ public final class Motion2D {
     }
 
     /**
-     * Sets the starting tick to the given value.
+     * Sets the starting tick (inclusive) to the given value.
      *
      * @param startTick Value to set as starting tick.
      * @return Instance of builder with the given starting tick.
@@ -95,7 +104,7 @@ public final class Motion2D {
     }
 
     /**
-     * Sets the ending tick to the given value.
+     * Sets the ending tick (exclusive) to the given value.
      *
      * @param endTick Value to set as ending tick.
      * @return Instance of builder with the given ending tick.
@@ -128,7 +137,7 @@ public final class Motion2D {
     }
 
     /**
-     * Sets the starting dimensions to the given value.
+     * Sets the starting dimensions, in pixels, to the given value.
      *
      * @param startDimensions Value to set as starting dimensions.
      * @return Instance of builder with the given starting dimensions.
@@ -199,6 +208,19 @@ public final class Motion2D {
     return endTick;
   }
 
+  // Throws an exception if the given tick is out of bounds
+  private void checkOutOfBounds(int tick) throws IllegalArgumentException {
+    if (tick < startTick || tick >= endTick) {
+      throw new IllegalArgumentException("Tick out of bounds");
+    }
+  }
+
+  // Returns the linear value at a given tick with the specified start and end values
+  private int linearValueAt(int tick, double startValue, double endValue) {
+    return (int) ((endValue - startValue) / (endTick - startTick)
+        * (tick - startTick) + startValue + 0.5);
+  }
+
   /**
    * Returns the position of the shape at the given tick.
    *
@@ -207,7 +229,12 @@ public final class Motion2D {
    * @throws IllegalArgumentException If given tick is outside bounds.
    */
   public Point getPosition(int tick) throws IllegalArgumentException {
-    return null;
+    checkOutOfBounds(tick);
+
+    int x = linearValueAt(tick, startPosition.getX(), endPosition.getX());
+    int y = linearValueAt(tick, startPosition.getY(), endPosition.getY());
+
+    return new Point(x, y);
   }
 
   /**
@@ -218,7 +245,12 @@ public final class Motion2D {
    * @throws IllegalArgumentException If given tick is outside bounds.
    */
   public Dimension getDimensions(int tick) throws IllegalArgumentException {
-    return null;
+    checkOutOfBounds(tick);
+
+    int width = linearValueAt(tick, startDimensions.getWidth(), endDimensions.getWidth());
+    int height = linearValueAt(tick, startDimensions.getHeight(), endDimensions.getHeight());
+
+    return new Dimension(width, height);
   }
 
   /**
@@ -229,16 +261,38 @@ public final class Motion2D {
    * @throws IllegalArgumentException If given tick is outside bounds.
    */
   public Color getColor(int tick) throws IllegalArgumentException {
-    return null;
+    checkOutOfBounds(tick);
+
+    int red = linearValueAt(tick, startColor.getRed(), endColor.getRed());
+    int blue = linearValueAt(tick, startColor.getBlue(), endColor.getBlue());
+    int green = linearValueAt(tick, startColor.getGreen(), endColor.getGreen());
+
+    return new Color(red, green, blue);
   }
 
   @Override
-  public boolean equals(Object other) {
-    return false;
+  public boolean equals(Object obj) {
+    Motion2D other;
+
+    if (obj instanceof Motion2D) {
+      other = (Motion2D) obj;
+    } else {
+      return false;
+    }
+
+    return startTick == other.startTick
+        && endTick == other.endTick
+        && startPosition.equals(other.startPosition)
+        && endPosition.equals(other.endPosition)
+        && startDimensions.equals(other.startDimensions)
+        && endDimensions.equals(other.endDimensions)
+        && startColor.equals(other.startColor)
+        && endColor.equals(other.endColor);
   }
 
   @Override
   public int hashCode() {
-    return 0;
+    return Objects.hash(startTick, endTick, startPosition, endPosition, startDimensions,
+        endDimensions, startColor, endColor);
   }
 }
