@@ -41,7 +41,7 @@ public final class Motion2D {
   }
 
   // Builder class for constructing a Motion2D object
-  private static final class Builder {
+  public static final class Builder {
 
     private Integer startTick;
     private Integer endTick;
