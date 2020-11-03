@@ -315,7 +315,7 @@ public final class Motion2D implements Comparable<Motion2D> {
   @Override
   public String toString() {
     return String.format(
-        "%-4d%s%s%s  %-4d%s%s%s",
+        "%-4d%-8s%-8s%-12s  %-4d%-8s%-8s%-12s",
         startTick, startPosition.toString(), startDimensions.toString(), startColor.toString(),
         endTick - 1, endPosition.toString(), endDimensions.toString(), endColor.toString()
     );
