@@ -212,10 +212,10 @@ public abstract class AbstractAnimatedShape2D implements AnimatedShape2D {
     Motion2D[] motionsArray = motions.values().toArray(new Motion2D[0]);
     Arrays.sort(motionsArray);
     if (motionsArray.length > 0) {
-      textRep.append(String.format("motion %s", name)).append(motionsArray[0]);
+      textRep.append(String.format("motion %s ", name)).append(motionsArray[0]);
 
       for (int i = 1; i < motionsArray.length; i++) {
-        textRep.append('\n').append(String.format("motion %s", name)).append(motionsArray[i]);
+        textRep.append('\n').append(String.format("motion %s ", name)).append(motionsArray[i]);
       }
     }
 
