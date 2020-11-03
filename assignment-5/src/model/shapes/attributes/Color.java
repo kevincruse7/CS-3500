@@ -69,4 +69,9 @@ public final class Color {
   public int hashCode() {
     return Objects.hash(red, green, blue);
   }
+
+  @Override
+  public String toString() {
+    return String.format("%-3d%-3d%d", red, green, blue);
+  }
 }

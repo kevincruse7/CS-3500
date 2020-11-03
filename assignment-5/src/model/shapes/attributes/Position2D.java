@@ -56,4 +56,9 @@ public final class Position2D {
   public int hashCode() {
     return Objects.hash(x, y);
   }
+
+  @Override
+  public String toString() {
+    return String.format("%-3d%d", (int)(x + 0.5), (int)(y + 0.5));
+  }
 }
