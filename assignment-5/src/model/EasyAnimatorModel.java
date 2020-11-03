@@ -3,62 +3,64 @@ package model;
 import java.util.List;
 
 /**
- * Represents the model for an Easy Animator.
+ * <p>
+ * Model for Easy Animator. Contains a list of animated shapes, each with their own respective
+ * motions. Shapes can be added and removed, and motions can be added and removed from these shapes.
+ * Together, this list of shapes represents a described animation.
+ * </p>
  *
- * @param <T> Shape class used by model.
- * @param <U> Motion class used by model.
+ * <p>
+ * Class invariants:
+ *   <ul>
+ *     <li>No two shapes in the model have the same name.</li>
+ *   </ul>
+ * </p>
+ *
+ * @param <T> Shape class used by model
+ * @param <U> Motion class used by model
  */
 public interface EasyAnimatorModel<T, U> {
 
   /**
-   * Adds a given shape to this animator.
-   *
-   * @param shape Shape to be added.
-   * @throws NullPointerException If given shape is null.
-   * @throws IllegalArgumentException If given shape already exists in this animator.
+   * @param shape Shape to be added
+   * @throws NullPointerException     Shape is null.
+   * @throws IllegalArgumentException Shape already exists in the model.
    */
   void addShape(T shape) throws NullPointerException, IllegalArgumentException;
 
   /**
-   * Removes a given shape from this animator.
-   *
-   * @param shape Shape to be removed.
-   * @throws NullPointerException If given shape is null.
-   * @throws IllegalArgumentException If given shape does not exist in this animator.
+   * @param shapeName Name of shape to be removed
+   * @throws NullPointerException     Shape name is null.
+   * @throws IllegalArgumentException Shape with name does not exist in the model.
    */
-  void removeShape(T shape) throws NullPointerException, IllegalArgumentException;
+  void removeShape(String shapeName) throws NullPointerException, IllegalArgumentException;
 
   /**
-   * Adds a given shape state transition to a given shape in this animator.
-   *
-   * @param shape Shape the transition will be added to.
-   * @param motion Shape transition to be added.
-   * @throws NullPointerException If shape or shape transition is null.
-   * @throws IllegalArgumentException If shape does not exist in this animator.
+   * @param shapeName Name of shape the motion will be added to
+   * @param motion    Motion to be added
+   * @throws NullPointerException     Shape name or motion is null.
+   * @throws IllegalArgumentException Shape with name does not exist in the model or motion overlaps
+   *                                  with existing motion.
    */
-  void addMotion(T shape, U motion) throws NullPointerException, IllegalArgumentException;
+  void addMotion(String shapeName, U motion) throws NullPointerException, IllegalArgumentException;
 
   /**
-   * Removes a given shape state transition from a given shape in this animator.
-   *
-   * @param shape Shape the transition will be remove from.
-   * @param motion Shape transition to be removed.
-   * @throws NullPointerException If shape or shape transition is null.
-   * @throws IllegalArgumentException If shape does not exist in this animator.
+   * @param shapeName Name of shape motion will be removed from
+   * @param motion    Motion to be removed
+   * @throws NullPointerException     Shape name or motion is null.
+   * @throws IllegalArgumentException Shape with name does not exist in the model or motion does not
+   *                                  exist in shape.
    */
-  void removeMotion(T shape, U motion) throws NullPointerException, IllegalArgumentException;
+  void removeMotion(String shapeName, U motion)
+      throws NullPointerException, IllegalArgumentException;
 
   /**
-   * Returns the length of this animation in ticks.
-   *
-   * @return Integer length of this animation in ticks.
+   * @return Tick length of animation represented in the model
    */
   int getNumTicks();
 
   /**
-   * Returns the list of shapes in this animator.
-   *
-   * @return List of shapes in this animator.
+   * @return List of shapes contained in model
    */
   List<T> getShapes();
 }
