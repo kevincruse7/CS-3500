@@ -94,7 +94,7 @@ public abstract class AbstractAnimatedShape2D implements AnimatedShape2D {
 
     // Ensure that at least one motion is present
     if (motionsArray.length > 1) {
-      int lastEndTick = motionsArray[0].getEndTick() - 1;
+      int lastEndTick = motionsArray[0].getEndTick();
       Position2D lastEndPosition = motionsArray[0].getPosition(lastEndTick);
       Dimensions2D lastEndDimension = motionsArray[0].getDimensions(lastEndTick);
       Color lastEndColor = motionsArray[0].getColor(lastEndTick);
@@ -103,7 +103,7 @@ public abstract class AbstractAnimatedShape2D implements AnimatedShape2D {
       for (int i = 1; i < motionsArray.length; i++) {
         int startTick = motionsArray[i].getStartTick();
 
-        if (startTick != lastEndTick + 1) {
+        if (startTick != lastEndTick) {
           throw new IllegalStateException("Motion set contains gaps.");
         }
         if (!lastEndPosition.equals(motionsArray[i].getPosition(startTick))
@@ -112,9 +112,10 @@ public abstract class AbstractAnimatedShape2D implements AnimatedShape2D {
           throw new IllegalStateException("Motion set causes implicit teleportation.");
         }
 
-        lastEndPosition = motionsArray[i].getPosition(motionsArray[i].getEndTick() - 1);
-        lastEndDimension = motionsArray[i].getDimensions(motionsArray[i].getEndTick() - 1);
-        lastEndColor = motionsArray[i].getColor(motionsArray[i].getEndTick() - 1);
+        lastEndTick = motionsArray[i].getEndTick();
+        lastEndPosition = motionsArray[i].getPosition(lastEndTick);
+        lastEndDimension = motionsArray[i].getDimensions(lastEndTick);
+        lastEndColor = motionsArray[i].getColor(lastEndTick);
       }
     } else if (motionsArray.length == 0) {
       throw new IllegalStateException("Motion set is empty.");

@@ -1,5 +1,6 @@
 package model.shapes;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
 import model.shapes.attributes.Color;
@@ -45,8 +46,11 @@ public abstract class AbstractAnimatedShape2DTest {
         .setStartTick(10)
         .setEndTick(20)
         .setStartPosition(new Position2D(10, 10))
+        .setEndPosition(new Position2D(0, 0))
         .setStartDimensions(new Dimensions2D(20, 20))
+        .setEndDimensions(new Dimensions2D(10, 10))
         .setStartColor(new Color(0, 0, 0))
+        .setEndColor(new Color(255, 255, 255))
         .build();
     motion3 = Motion2D.builder()
         .setStartTick(20)
@@ -167,5 +171,20 @@ public abstract class AbstractAnimatedShape2DTest {
   public void removeNonExistentMotionTripleMotionShape() {
     rectangleThreeMotions.removeMotion(motion3);
     rectangleThreeMotions.removeMotion(motion3);
+  }
+
+  @Test
+  public void getName() {
+    assertEquals("E", emptyEllipse.getName());
+    assertEquals("R", emptyRectangle.getName());
+    assertEquals("R1", rectangleOneMotion.getName());
+    assertEquals("R3", rectangleThreeMotions.getName());
+  }
+
+  @Test
+  public void getPosition() {
+    assertEquals(new Position2D(5, 5), rectangleOneMotion.getPosition(5));
+    assertEquals(new Position2D(8, 8), rectangleThreeMotions.getPosition(12));
+    assertEquals(new Position2D(0, 0), rectangleThreeMotions.getPosition(20));
   }
 }

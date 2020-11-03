@@ -11,7 +11,7 @@ import java.util.Objects;
  * Represents a motion, or shape state transition, in that it contains a beginning state, an end
  * state, and a tick duration for how long the transition between the two state takes.
  * </p>
- *
+ * <p>
  * Class invariants:
  * <ul>
  *   <li>Start tick is non-negative and less than the end tick.</li>
@@ -221,15 +221,14 @@ public final class Motion2D implements Comparable<Motion2D> {
 
   // Throws an exception if the given tick is out of bounds
   private void checkOutOfBounds(int tick) throws IllegalArgumentException {
-    if (tick < startTick || tick >= endTick) {
+    if (tick < startTick || tick > endTick) {
       throw new IllegalArgumentException("Tick is outside defined range of motion.");
     }
   }
 
   // Returns the linear value at a given tick with the specified start and end values
-  private int linearValueAt(int tick, double startValue, double endValue) {
-    return (int) ((endValue - startValue) / (endTick - startTick)
-        * (tick - startTick) + startValue + 0.5);
+  private double linearValueAt(int tick, double startValue, double endValue) {
+    return (endValue - startValue) / (endTick - startTick) * (tick - startTick) + startValue;
   }
 
   /**
@@ -242,8 +241,8 @@ public final class Motion2D implements Comparable<Motion2D> {
   public Position2D getPosition(int tick) throws IllegalArgumentException {
     checkOutOfBounds(tick);
 
-    int x = linearValueAt(tick, startPosition.getX(), endPosition.getX());
-    int y = linearValueAt(tick, startPosition.getY(), endPosition.getY());
+    double x = linearValueAt(tick, startPosition.getX(), endPosition.getX());
+    double y = linearValueAt(tick, startPosition.getY(), endPosition.getY());
 
     return new Position2D(x, y);
   }
@@ -258,8 +257,8 @@ public final class Motion2D implements Comparable<Motion2D> {
   public Dimensions2D getDimensions(int tick) throws IllegalArgumentException {
     checkOutOfBounds(tick);
 
-    int width = linearValueAt(tick, startDimensions.getWidth(), endDimensions.getWidth());
-    int height = linearValueAt(tick, startDimensions.getHeight(), endDimensions.getHeight());
+    double width = linearValueAt(tick, startDimensions.getWidth(), endDimensions.getWidth());
+    double height = linearValueAt(tick, startDimensions.getHeight(), endDimensions.getHeight());
 
     return new Dimensions2D(width, height);
   }
@@ -274,9 +273,9 @@ public final class Motion2D implements Comparable<Motion2D> {
   public Color getColor(int tick) throws IllegalArgumentException {
     checkOutOfBounds(tick);
 
-    int red = linearValueAt(tick, startColor.getRed(), endColor.getRed());
-    int blue = linearValueAt(tick, startColor.getBlue(), endColor.getBlue());
-    int green = linearValueAt(tick, startColor.getGreen(), endColor.getGreen());
+    int red = (int) (linearValueAt(tick, startColor.getRed(), endColor.getRed()) + 0.5);
+    int blue = (int) (linearValueAt(tick, startColor.getBlue(), endColor.getBlue()) + 0.5);
+    int green = (int) (linearValueAt(tick, startColor.getGreen(), endColor.getGreen()) + 0.5);
 
     return new Color(red, green, blue);
   }
