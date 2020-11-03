@@ -1,32 +1,45 @@
 package model.shapes;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Point;
+import model.shapes.attributes.Color;
+import model.shapes.attributes.Dimensions2D;
+import model.shapes.attributes.Position2D;
 
 import java.util.Objects;
 
 /**
- * Represents a shape state transition, in that it contains a beginning state, and end state, and a
- * tick duration for how long the transition between the two state takes.
+ * <p>
+ * Represents a motion, or shape state transition, in that it contains a beginning state, an end
+ * state, and a tick duration for how long the transition between the two state takes.
+ * </p>
+ *
+ * <p>
+ * Class invariants:
+ *   <ul>
+ *     <li>Start tick is non-negative and less than the end tick.</li>
+ *     <li>End tick is positive.</li>
+ *     <li>Starting and ending positions are non-null.</li>
+ *     <li>Starting and ending dimensions are non-null.</li>
+ *     <li>Starting and ending colors are non-null.</li>
+ *   </ul>
+ * </p>
  */
-public final class Motion2D {
+public final class Motion2D implements Comparable<Motion2D> {
 
-  private final int startTick;  // Beginning tick of this transition
-  private final int endTick;  // Ending tick of this transition
+  private final int startTick;
+  private final int endTick;
 
-  private final Point startPosition;  // Starting position of the shape
-  private final Point endPosition;  // Ending position of the shape
+  private final Position2D startPosition;
+  private final Position2D endPosition;
 
-  private final Dimension startDimensions;  // Starting dimensions of the shape in pixels
-  private final Dimension endDimensions;  // Ending dimensions of the shape in pixels
+  private final Dimensions2D startDimensions;
+  private final Dimensions2D endDimensions;
 
-  private final Color startColor;  // Starting color of the shape
-  private final Color endColor;  // Ending color of the shape
+  private final Color startColor;
+  private final Color endColor;
 
   // Instantiates a Motion2D object with the given parameters
-  private Motion2D(int startTick, int endTick, Point startPosition, Point endPosition,
-      Dimension startDimensions, Dimension endDimensions, Color startColor, Color endColor) {
+  private Motion2D(int startTick, int endTick, Position2D startPosition, Position2D endPosition,
+      Dimensions2D startDimensions, Dimensions2D endDimensions, Color startColor, Color endColor) {
     this.startTick = startTick;
     this.endTick = endTick;
 
@@ -40,63 +53,63 @@ public final class Motion2D {
     this.endColor = endColor;
   }
 
-  // Builder class for constructing a Motion2D object
+  /**
+   * Builder class for constructing a {@code Motion2D} object.
+   */
   public static final class Builder {
 
     private Integer startTick;
     private Integer endTick;
 
-    private Point startPosition;
-    private Point endPosition;
+    private Position2D startPosition;
+    private Position2D endPosition;
 
-    private Dimension startDimensions;
-    private Dimension endDimensions;
+    private Dimensions2D startDimensions;
+    private Dimensions2D endDimensions;
 
     private Color startColor;
     private Color endColor;
 
     /**
-     * Builds a {@code Motion2D} object with the parameters given to this builder.
+     * Instantiates a {@code Motion2D} object with parameters given to the builder.
      *
-     * @return {@code Motion2D} object with the parameters given to this builder
-     * @throws NullPointerException If starting or ending tick, starting position, starting
-     *                              dimensions, or starting color is null
+     * @return Instantiated {@code Motion2D} object
+     * @throws NullPointerException     Start or end tick, starting position, starting dimensions,
+     *                                  or starting color is null.
+     * @throws IllegalArgumentException Start tick is negative, end tick is non-positive, or start
+     *                                  tick is greater than or equal to end tick.
      */
-    public Motion2D build() throws NullPointerException {
-      Objects.requireNonNull(startTick, "Start tick must be specified");
-      Objects.requireNonNull(endTick, "End tick must be specified");
+    public Motion2D build() throws NullPointerException, IllegalArgumentException {
+      Objects.requireNonNull(startTick, "Start tick is null.");
+      Objects.requireNonNull(endTick, "End tick is null.");
       if (startTick < 0) {
-        throw new IllegalArgumentException("Negative start tick");
+        throw new IllegalArgumentException("Start tick is negative.");
       }
-      if (endTick < 0) {
-        throw new IllegalArgumentException("Negative end tick");
+      if (endTick < 1) {
+        throw new IllegalArgumentException("End tick is non-positive");
       }
       if (startTick >= endTick) {
-        throw new IllegalArgumentException("Start tick greater than or equal to end tick");
+        throw new IllegalArgumentException("Start tick is greater than or equal to end tick.");
       }
 
-      this.startPosition = new Point(Objects.requireNonNull(startPosition,
-          "Starting position must be specified"));
-      this.endPosition = new Point(endPosition == null ? startPosition : endPosition);
+      Objects.requireNonNull(startPosition, "Starting position is null.");
+      this.endPosition = endPosition == null ? startPosition : endPosition;
 
-      this.startDimensions = new Dimension(Objects.requireNonNull(startDimensions,
-          "Starting dimensions must be specified"));
-      this.endDimensions = new Dimension(endDimensions == null ? startDimensions : endDimensions);
+      Objects.requireNonNull(startDimensions, "Starting dimensions are null.");
+      this.endDimensions = endDimensions == null ? startDimensions : endDimensions;
 
-      Objects.requireNonNull(startColor, "Starting color must be specified");
-      if (endColor == null) {
-        this.endColor = startColor;
-      }
+      Objects.requireNonNull(startColor, "Starting color is null.");
+      this.endColor = endColor == null ? startColor : endColor;
 
       return new Motion2D(startTick, endTick, startPosition, endPosition, startDimensions,
           endDimensions, startColor, endColor);
     }
 
     /**
-     * Sets the starting tick (inclusive) to the given value.
+     * Sets the start tick (inclusive) to the given value.
      *
-     * @param startTick Value to set as starting tick.
-     * @return Instance of builder with the given starting tick.
+     * @param startTick Start tick value
+     * @return Instance of builder with the given start tick
      */
     public Builder setStartTick(int startTick) {
       this.startTick = startTick;
@@ -104,10 +117,10 @@ public final class Motion2D {
     }
 
     /**
-     * Sets the ending tick (exclusive) to the given value.
+     * Sets the end tick (exclusive) to the given value.
      *
-     * @param endTick Value to set as ending tick.
-     * @return Instance of builder with the given ending tick.
+     * @param endTick End tick value
+     * @return Instance of builder with the given end tick
      */
     public Builder setEndTick(int endTick) {
       this.endTick = endTick;
@@ -117,10 +130,10 @@ public final class Motion2D {
     /**
      * Sets the starting position to the given value.
      *
-     * @param startPosition Value to set as starting position.
-     * @return Instance of builder with the given starting position.
+     * @param startPosition Starting position value
+     * @return Instance of builder with the given starting position
      */
-    public Builder setStartPosition(Point startPosition) {
+    public Builder setStartPosition(Position2D startPosition) {
       this.startPosition = startPosition;
       return this;
     }
@@ -128,21 +141,21 @@ public final class Motion2D {
     /**
      * Sets the ending position to the given value.
      *
-     * @param endPosition Value to set as ending position.
-     * @return Instance of builder with the given ending position.
+     * @param endPosition Ending position value
+     * @return Instance of builder with the given ending position
      */
-    public Builder setEndPosition(Point endPosition) {
+    public Builder setEndPosition(Position2D endPosition) {
       this.endPosition = endPosition;
       return this;
     }
 
     /**
-     * Sets the starting dimensions, in pixels, to the given value.
+     * Sets the starting dimensions to the given value.
      *
-     * @param startDimensions Value to set as starting dimensions.
-     * @return Instance of builder with the given starting dimensions.
+     * @param startDimensions Starting dimensions value
+     * @return Instance of builder with the given starting dimensions
      */
-    public Builder setStartDimensions(Dimension startDimensions) {
+    public Builder setStartDimensions(Dimensions2D startDimensions) {
       this.startDimensions = startDimensions;
       return this;
     }
@@ -150,10 +163,10 @@ public final class Motion2D {
     /**
      * Sets the ending dimensions to the given value.
      *
-     * @param endDimensions Value to set as ending dimensions.
-     * @return Instance of builder with the given ending dimensions.
+     * @param endDimensions Ending dimensions value
+     * @return Instance of builder with the given ending dimensions
      */
-    public Builder setEndDimensions(Dimension endDimensions) {
+    public Builder setEndDimensions(Dimensions2D endDimensions) {
       this.endDimensions = endDimensions;
       return this;
     }
@@ -161,8 +174,8 @@ public final class Motion2D {
     /**
      * Sets the starting color to the given value.
      *
-     * @param startColor Value to set as starting color.
-     * @return Instance of builder with the given starting color.
+     * @param startColor Starting color value
+     * @return Instance of builder with the given starting color
      */
     public Builder setStartColor(Color startColor) {
       this.startColor = startColor;
@@ -172,8 +185,8 @@ public final class Motion2D {
     /**
      * Sets the ending color to the given value.
      *
-     * @param endColor Value to set as ending color.
-     * @return Instance of builder with the given ending color.
+     * @param endColor Ending color value
+     * @return Instance of builder with the given ending color
      */
     public Builder setEndColor(Color endColor) {
       this.endColor = endColor;
@@ -182,8 +195,6 @@ public final class Motion2D {
   }
 
   /**
-   * Returns a builder for {@code Motion2D}.
-   *
    * @return Builder for {@code Motion2D}.
    */
   public static Builder builder() {
@@ -191,18 +202,14 @@ public final class Motion2D {
   }
 
   /**
-   * Returns the starting tick of this motion.
-   *
-   * @return Integer starting tick of this motion.
+   * @return Start tick of motion
    */
   public int getStartTick() {
     return startTick;
   }
 
   /**
-   * Returns the ending tick of this motion.
-   *
-   * @return Integer ending tick of this motion.
+   * @return End tick of motion
    */
   public int getEndTick() {
     return endTick;
@@ -211,7 +218,7 @@ public final class Motion2D {
   // Throws an exception if the given tick is out of bounds
   private void checkOutOfBounds(int tick) throws IllegalArgumentException {
     if (tick < startTick || tick >= endTick) {
-      throw new IllegalArgumentException("Tick out of bounds");
+      throw new IllegalArgumentException("Tick is outside defined range of motion.");
     }
   }
 
@@ -222,43 +229,37 @@ public final class Motion2D {
   }
 
   /**
-   * Returns the position of the shape at the given tick.
-   *
-   * @param tick Integer tick to find position at.
-   * @return {@code Point} position of shape at given tick.
-   * @throws IllegalArgumentException If given tick is outside bounds.
+   * @param tick Tick to find position at
+   * @return Position of shape at given tick
+   * @throws IllegalArgumentException Tick is outside defined range of motion.
    */
-  public Point getPosition(int tick) throws IllegalArgumentException {
+  public Position2D getPosition(int tick) throws IllegalArgumentException {
     checkOutOfBounds(tick);
 
     int x = linearValueAt(tick, startPosition.getX(), endPosition.getX());
     int y = linearValueAt(tick, startPosition.getY(), endPosition.getY());
 
-    return new Point(x, y);
+    return new Position2D(x, y);
   }
 
   /**
-   * Returns the dimensions of the shape at the given tick.
-   *
-   * @param tick Integer tick to find dimensions at.
-   * @return {@code Dimension} dimensions of shape at given tick.
-   * @throws IllegalArgumentException If given tick is outside bounds.
+   * @param tick Tick to find dimensions at
+   * @return Dimensions of shape at given tick
+   * @throws IllegalArgumentException Tick is outside defined range of motion.
    */
-  public Dimension getDimensions(int tick) throws IllegalArgumentException {
+  public Dimensions2D getDimensions(int tick) throws IllegalArgumentException {
     checkOutOfBounds(tick);
 
     int width = linearValueAt(tick, startDimensions.getWidth(), endDimensions.getWidth());
     int height = linearValueAt(tick, startDimensions.getHeight(), endDimensions.getHeight());
 
-    return new Dimension(width, height);
+    return new Dimensions2D(width, height);
   }
 
   /**
-   * Returns the color of the shape at the given tick.
-   *
-   * @param tick Integer tick to find dimensions at.
-   * @return {@code Color} color of shape at given tick.
-   * @throws IllegalArgumentException If given tick is outside bounds.
+   * @param tick Tick to find color at
+   * @return Color of shape at given tick
+   * @throws IllegalArgumentException Tick is outside defined range of motion.
    */
   public Color getColor(int tick) throws IllegalArgumentException {
     checkOutOfBounds(tick);
@@ -268,6 +269,11 @@ public final class Motion2D {
     int green = linearValueAt(tick, startColor.getGreen(), endColor.getGreen());
 
     return new Color(red, green, blue);
+  }
+
+  @Override
+  public int compareTo(Motion2D other) {
+    return startTick - other.startTick;
   }
 
   @Override

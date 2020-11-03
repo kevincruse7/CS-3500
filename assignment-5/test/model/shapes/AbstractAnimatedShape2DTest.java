@@ -1,10 +1,13 @@
 package model.shapes;
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Before;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
+import org.junit.Test;
 
 /**
  * Tests the functionality of {@link AbstractAnimatedShape2D}, as defined by {@link
@@ -14,19 +17,19 @@ public abstract class AbstractAnimatedShape2DTest {
 
   private AnimatedShape2D emptyEllipse;
   private AnimatedShape2D emptyRectangle;
+  private AnimatedShape2D rectangleOneMotion;
+  private AnimatedShape2D rectangleThreeMotions;
 
   private Motion2D motion1;
   private Motion2D motion2;
   private Motion2D motion3;
 
-  private AnimatedShape2D rectangleOneMotion;
-  private AnimatedShape2D rectangleThreeMotions;
-
   @Before
   public void setUp() {
-    rectangleOneMotion = new AnimatedRectangle();
     emptyEllipse = new AnimatedEllipse();
     emptyRectangle = new AnimatedRectangle();
+    rectangleOneMotion = new AnimatedRectangle();
+    rectangleThreeMotions = new AnimatedRectangle();
 
     motion1 = Motion2D.builder()
         .setStartTick(0)
@@ -58,5 +61,107 @@ public abstract class AbstractAnimatedShape2DTest {
     rectangleThreeMotions.addMotion(motion1);
     rectangleThreeMotions.addMotion(motion2);
     rectangleThreeMotions.addMotion(motion3);
+  }
+
+  @Test
+  public void addMotion() {
+    emptyRectangle.addMotion(motion1);
+    assertEquals(rectangleOneMotion, emptyRectangle);
+
+    emptyRectangle.addMotion(motion2);
+    emptyRectangle.addMotion(motion3);
+    assertEquals(rectangleThreeMotions, emptyRectangle);
+  }
+
+  @Test(expected = NullPointerException.class)
+  public void addNullMotionEmptyShape() {
+    emptyEllipse.addMotion(null);
+  }
+
+  @Test(expected = NullPointerException.class)
+  public void addNullMotionSingleMotionShape() {
+    rectangleOneMotion.addMotion(null);
+  }
+
+  @Test(expected = NullPointerException.class)
+  public void addNullMotionTripleMotionShape() {
+    rectangleThreeMotions.addMotion(null);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void addDuplicateMotionSingleMotionShape() {
+    rectangleOneMotion.addMotion(motion1);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void addDuplicateMotionTripleMotionShape() {
+    rectangleThreeMotions.addMotion(motion2);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void addOverlappingMotionSingleMotionShape() {
+    Motion2D motion = Motion2D.builder()
+        .setStartTick(9)
+        .setEndTick(20)
+        .setStartPosition(new Point(0, 0))
+        .setStartDimensions(new Dimension(10, 10))
+        .setStartColor(new Color(255, 255, 255))
+        .build();
+
+    rectangleOneMotion.addMotion(motion);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void addOverlappingMotionTripleMotionShape() {
+    Motion2D motion = Motion2D.builder()
+        .setStartTick(29)
+        .setEndTick(40)
+        .setStartPosition(new Point(0, 0))
+        .setStartDimensions(new Dimension(10, 10))
+        .setStartColor(new Color(255, 255, 255))
+        .build();
+
+    rectangleThreeMotions.addMotion(motion);
+  }
+
+  @Test
+  public void removeMotion() {
+    rectangleThreeMotions.removeMotion(motion2);
+    rectangleThreeMotions.removeMotion(motion3);
+    assertEquals(rectangleOneMotion, rectangleThreeMotions);
+
+    rectangleThreeMotions.removeMotion(motion1);
+    assertEquals(emptyRectangle, rectangleThreeMotions);
+  }
+
+  @Test(expected = NullPointerException.class)
+  public void removeNullMotionEmptyShape() {
+    emptyEllipse.removeMotion(null);
+  }
+
+  @Test(expected = NullPointerException.class)
+  public void removeNullMotionSingleMotionShape() {
+    rectangleOneMotion.removeMotion(null);
+  }
+
+  @Test(expected = NullPointerException.class)
+  public void removeNullMotionTripleMotionShape() {
+    rectangleThreeMotions.removeMotion(null);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void removeNonExistentMotionEmptyShape() {
+    emptyEllipse.removeMotion(motion1);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void removeNonExistentMotionSingleMotionShape() {
+    rectangleOneMotion.removeMotion(motion2);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void removeNonExistentMotionTripleMotionShape() {
+    rectangleThreeMotions.removeMotion(motion3);
+    rectangleThreeMotions.removeMotion(motion3);
   }
 }

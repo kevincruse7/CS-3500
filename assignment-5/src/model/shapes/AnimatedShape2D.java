@@ -1,77 +1,88 @@
 package model.shapes;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Point;
+import model.shapes.attributes.Color;
+import model.shapes.attributes.Dimensions2D;
+import model.shapes.attributes.Position2D;
 
 /**
- * Represents a shape in motion for Easy Animator.
+ * <p>
+ * Represents an animated 2D shape. A shape has a name and a set of motions, or state transitions. A
+ * shape's state at a certain tick is defined by the motion which corresponds to that tick. State is
+ * defined from the start tick (inclusive) of the first motion (in order of tick range) to the end
+ * tick (exclusive) of the last motion.
+ * </p>
+ *
+ * <p>
+ * Class invariants:
+ *   <ul>
+ *     <li>Motions do not overlap with regards to tick range.</li>
+ *   </ul>
+ * </p>
  */
 public interface AnimatedShape2D extends Cloneable {
 
   /**
-   * Adds the given shape state transition to this shape.
-   *
-   * @param motion Shape state transition to be added.
-   * @throws NullPointerException If given motion is null.
-   * @throws IllegalArgumentException If given motion overlaps with preexisting motion.
+   * @param motion Motion to be added to shape
+   * @throws NullPointerException     Motion is null.
+   * @throws IllegalArgumentException Motion overlaps with existing motion.
    */
   void addMotion(Motion2D motion) throws NullPointerException, IllegalArgumentException;
 
   /**
-   * Removes the given shape state transition from this shape.
-   *
-   * @param motion Shape state transition to be removed.
-   * @throws NullPointerException If given motion is null.
-   * @throws IllegalArgumentException If given motion overlaps with preexisting motion.
+   * @param motion Motion to be removed from shape
+   * @throws NullPointerException     Motion is null.
+   * @throws IllegalArgumentException Motion does not exist in shape.
    */
   void removeMotion(Motion2D motion) throws NullPointerException, IllegalArgumentException;
 
   /**
-   * Returns the position of this shape at the given tick or null, if shape has no associated
-   * motion at given tick.
-   *
-   * @param tick Integer tick to find position at.
-   * @return {@code Point} position of shape at given tick.
+   * @return Name of shape
    */
-  Point getPosition(int tick);
+  String getName();
 
   /**
-   * Returns the dimensions of this shape at the given tick, or null, if shape has no associated
-   * motion at given tick.
-   *
-   * @param tick Integer tick to find dimensions at.
-   * @return {@code Dimension} dimensions of shape at given tick.
+   * @param tick Tick value to find position at
+   * @return Position of shape at the given tick
+   * @throws IllegalStateException    Motion set is empty, contains gaps, or causes implicit
+   *                                  teleportation.
+   * @throws IllegalArgumentException Tick is outside range of defined shape state.
    */
-  Dimension getDimensions(int tick);
+  Position2D getPosition(int tick) throws IllegalStateException, IllegalArgumentException;
 
   /**
-   * Returns the color of this shape at the given tick or null, if shape has no associated
-   * motion at given tick.
-   *
-   * @param tick Integer tick to find dimensions at.
-   * @return {@code Color} color of shape at given tick.
+   * @param tick Tick value to find position at
+   * @return Dimensions of shape at the given tick
+   * @throws IllegalStateException    Motion set is empty, contains gaps, or causes implicit
+   *                                  teleportation.
+   * @throws IllegalArgumentException Tick is outside range of defined shape state.
    */
-  Color getColor(int tick) throws IllegalArgumentException;
+  Dimensions2D getDimensions(int tick) throws IllegalStateException, IllegalArgumentException;
 
   /**
-   * Returns the starting tick of this shape animation.
-   *
-   * @return Integer starting tick of this shape animation.
+   * @param tick Tick value to find position at
+   * @return Color of shape at the given tick
+   * @throws IllegalStateException    Motion set is empty, contains gaps, or causes implicit
+   *                                  teleportation.
+   * @throws IllegalArgumentException Tick is outside range of defined shape state.
    */
-  int getStartTick();
+  Color getColor(int tick) throws IllegalStateException, IllegalArgumentException;
 
   /**
-   * Returns the ending tick of this shape animation.
-   *
-   * @return Integer ending tick of this shape animation.
+   * @return Starting tick (inclusive) of animated shape
+   * @throws IllegalStateException Motion set is empty, contains gaps, or causes implicit
+   *                               teleportation.
    */
-  int getEndTick();
+  int getStartTick() throws IllegalStateException;
 
   /**
-   * Clones this shape.
-   *
-   * @return Clone of this shape.
+   * @return Ending tick (exclusive) of animated shape
+   * @throws IllegalStateException Motion set is empty, contains gaps, or causes implicit
+   *                               teleportation.
+   */
+  int getEndTick() throws IllegalStateException;
+
+  /**
+   * @return Independent clone of shape
    */
   Object clone();
 }
