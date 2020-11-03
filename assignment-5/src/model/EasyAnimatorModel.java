@@ -64,8 +64,9 @@ public interface EasyAnimatorModel<T, U> {
    * Returns the tick length of animation represented in model.
    *
    * @return Tick length of animation represented in the model
+   * @throws IllegalStateException One or more shapes are malformed.
    */
-  int getNumTicks();
+  int getNumTicks() throws IllegalStateException;
 
   /**
    * Returns the list of shapes contained in the model.

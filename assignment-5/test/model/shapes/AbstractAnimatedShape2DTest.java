@@ -1,6 +1,6 @@
 package model.shapes;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import model.shapes.attributes.Color;
 import model.shapes.attributes.Dimensions2D;
@@ -65,12 +65,14 @@ public abstract class AbstractAnimatedShape2DTest {
 
   @Test
   public void addMotion() {
+    AnimatedShape2D emptyRectangleClone = (AnimatedShape2D) emptyRectangle.clone();
     emptyRectangle.addMotion(motion1);
-    assertEquals(rectangleOneMotion, emptyRectangle);
+    assertNotEquals(emptyRectangleClone, emptyRectangle);
 
+    emptyRectangleClone = (AnimatedShape2D) emptyRectangle.clone();
     emptyRectangle.addMotion(motion2);
     emptyRectangle.addMotion(motion3);
-    assertEquals(rectangleThreeMotions, emptyRectangle);
+    assertNotEquals(emptyRectangleClone, emptyRectangle);
   }
 
   @Test(expected = NullPointerException.class)
@@ -126,12 +128,14 @@ public abstract class AbstractAnimatedShape2DTest {
 
   @Test
   public void removeMotion() {
+    AnimatedShape2D rectangleThreeMotionsClone = (AnimatedShape2D) rectangleThreeMotions.clone();
     rectangleThreeMotions.removeMotion(motion2);
     rectangleThreeMotions.removeMotion(motion3);
-    assertEquals(rectangleOneMotion, rectangleThreeMotions);
+    assertNotEquals(rectangleThreeMotionsClone, rectangleThreeMotions);
 
+    rectangleThreeMotionsClone = (AnimatedShape2D) rectangleThreeMotions.clone();
     rectangleThreeMotions.removeMotion(motion1);
-    assertEquals(emptyRectangle, rectangleThreeMotions);
+    assertNotEquals(rectangleThreeMotionsClone, rectangleThreeMotions);
   }
 
   @Test(expected = NullPointerException.class)

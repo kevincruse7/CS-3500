@@ -50,26 +50,53 @@ public final class BasicEasyAnimator implements EasyAnimatorModel<AnimatedShape2
     shapes.add((AnimatedShape2D) shape.clone());
   }
 
+  // Returns shape that has given name. Throws a NullPointerException if shape name is null and an
+  // IllegalArgumentException if shape with given name does not exist in model.
+  private AnimatedShape2D findShape(String shapeName)
+      throws NullPointerException, IllegalArgumentException {
+    Objects.requireNonNull(shapeName, "Shape name is null.");
+
+    AnimatedShape2D matchingShape = null;
+    for (AnimatedShape2D shape : shapes) {
+      if (shapeName.equals(shape.getName())) {
+        matchingShape = shape;
+        break;
+      }
+    }
+
+    if (matchingShape == null) {
+      throw new IllegalArgumentException("Shape with name does not exist in the model.");
+    }
+
+    return matchingShape;
+  }
+
   @Override
   public void removeShape(String shapeName)
       throws NullPointerException, IllegalArgumentException {
-
+    shapes.remove(findShape(shapeName));
   }
 
   @Override
   public void addMotion(String shapeName, Motion2D motion)
       throws NullPointerException, IllegalArgumentException {
+    Objects.requireNonNull(motion, "Motion is null.");
 
+    AnimatedShape2D matchingShape = findShape(shapeName);
+    matchingShape.addMotion(motion);
   }
 
   @Override
   public void removeMotion(String shapeName, Motion2D motion)
       throws NullPointerException, IllegalArgumentException {
+    Objects.requireNonNull(motion, "Motion is null.");
 
+    AnimatedShape2D matchingShape = findShape(shapeName);
+    matchingShape.removeMotion(motion);
   }
 
   @Override
-  public int getNumTicks() {
+  public int getNumTicks() throws IllegalStateException {
     int endTick = 0;
 
     for (AnimatedShape2D shape : shapes) {

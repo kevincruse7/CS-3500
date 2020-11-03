@@ -291,7 +291,6 @@ public final class BasicEasyAnimatorTest {
   @Test
   public void getNumTicks() {
     assertEquals(0, emptyModel.getNumTicks());
-    assertEquals(10, populatedModel.getNumTicks());
 
     Motion2D newMotion = Motion2D.builder()
         .setStartTick(10)
@@ -301,7 +300,13 @@ public final class BasicEasyAnimatorTest {
         .setStartColor(new Color(255, 255, 255))
         .build();
     populatedModel.addMotion("E", newMotion);
+    populatedModel.removeShape("R");
     assertEquals(20, populatedModel.getNumTicks());
+  }
+
+  @Test(expected = IllegalStateException.class)
+  public void getNumTicksMalformedShapes() {
+    populatedModel.getNumTicks();
   }
 
   @Test

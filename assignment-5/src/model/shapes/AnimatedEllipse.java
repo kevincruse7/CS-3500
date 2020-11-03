@@ -31,10 +31,10 @@ public final class AnimatedEllipse extends AbstractAnimatedShape2D {
 
   @Override
   public boolean equals(Object obj) {
-    AnimatedRectangle other;
+    AnimatedEllipse other;
 
-    if (obj instanceof AnimatedRectangle) {
-      other = (AnimatedRectangle) obj;
+    if (obj instanceof AnimatedEllipse) {
+      other = (AnimatedEllipse) obj;
     } else {
       return false;
     }
