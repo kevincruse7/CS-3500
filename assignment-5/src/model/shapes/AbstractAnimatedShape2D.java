@@ -13,6 +13,7 @@ import model.shapes.attributes.Position2D;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 
@@ -87,7 +88,8 @@ public abstract class AbstractAnimatedShape2D implements AnimatedShape2D {
 
   // Ensures that motions are consistent (motions exist, no gaps, no implicit teleportation)
   private void checkMotionIntegrity() throws IllegalStateException {
-    Motion2D[] motionsArray = motions.values().toArray(new Motion2D[0]);
+    // Get map values, convert to set to remove duplicates, and convert to array to be sorted
+    Motion2D[] motionsArray = new HashSet<>(motions.values()).toArray(new Motion2D[0]);
     Arrays.sort(motionsArray);
 
     // Ensure that at least one motion is present
@@ -209,7 +211,8 @@ public abstract class AbstractAnimatedShape2D implements AnimatedShape2D {
   public String toString() {
     StringBuilder textRep = new StringBuilder();
 
-    Motion2D[] motionsArray = motions.values().toArray(new Motion2D[0]);
+    // Get map values, convert to set to remove duplicates, and convert to array to be sorted
+    Motion2D[] motionsArray = new HashSet<>(motions.values()).toArray(new Motion2D[0]);
     Arrays.sort(motionsArray);
     if (motionsArray.length > 0) {
       textRep.append(String.format("motion %s ", name)).append(motionsArray[0]);
