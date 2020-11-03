@@ -84,7 +84,7 @@ public final class BasicEasyAnimator implements EasyAnimatorModel<AnimatedShape2
     List<AnimatedShape2D> newShapes = new LinkedList<>();
 
     for (AnimatedShape2D shape : shapes) {
-      newShapes.add((AnimatedShape2D)shape.clone());
+      newShapes.add((AnimatedShape2D) shape.clone());
     }
 
     return newShapes;

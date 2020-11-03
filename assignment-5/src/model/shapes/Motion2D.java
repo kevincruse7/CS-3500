@@ -12,16 +12,14 @@ import java.util.Objects;
  * state, and a tick duration for how long the transition between the two state takes.
  * </p>
  *
- * <p>
  * Class invariants:
- *   <ul>
- *     <li>Start tick is non-negative and less than the end tick.</li>
- *     <li>End tick is positive.</li>
- *     <li>Starting and ending positions are non-null.</li>
- *     <li>Starting and ending dimensions are non-null.</li>
- *     <li>Starting and ending colors are non-null.</li>
- *   </ul>
- * </p>
+ * <ul>
+ *   <li>Start tick is non-negative and less than the end tick.</li>
+ *   <li>End tick is positive.</li>
+ *   <li>Starting and ending positions are non-null.</li>
+ *   <li>Starting and ending dimensions are non-null.</li>
+ *   <li>Starting and ending colors are non-null.</li>
+ * </ul>
  */
 public final class Motion2D implements Comparable<Motion2D> {
 
@@ -195,6 +193,8 @@ public final class Motion2D implements Comparable<Motion2D> {
   }
 
   /**
+   * Returns a builder for {@code Motion2D}.
+   *
    * @return Builder for {@code Motion2D}.
    */
   public static Builder builder() {
@@ -202,6 +202,8 @@ public final class Motion2D implements Comparable<Motion2D> {
   }
 
   /**
+   * Returns the start tick of motion.
+   *
    * @return Start tick of motion
    */
   public int getStartTick() {
@@ -209,6 +211,8 @@ public final class Motion2D implements Comparable<Motion2D> {
   }
 
   /**
+   * Returns the end tick of motion.
+   *
    * @return End tick of motion
    */
   public int getEndTick() {
@@ -229,6 +233,8 @@ public final class Motion2D implements Comparable<Motion2D> {
   }
 
   /**
+   * Retrieves position of shape at given tick.
+   *
    * @param tick Tick to find position at
    * @return Position of shape at given tick
    * @throws IllegalArgumentException Tick is outside defined range of motion.
@@ -243,6 +249,8 @@ public final class Motion2D implements Comparable<Motion2D> {
   }
 
   /**
+   * Retrieves dimensions of shape at given tick.
+   *
    * @param tick Tick to find dimensions at
    * @return Dimensions of shape at given tick
    * @throws IllegalArgumentException Tick is outside defined range of motion.
@@ -257,6 +265,8 @@ public final class Motion2D implements Comparable<Motion2D> {
   }
 
   /**
+   * Retrieves color of shape at given tick.
+   *
    * @param tick Tick to find color at
    * @return Color of shape at given tick
    * @throws IllegalArgumentException Tick is outside defined range of motion.
@@ -302,13 +312,10 @@ public final class Motion2D implements Comparable<Motion2D> {
         endDimensions, startColor, endColor);
   }
 
-  /**
-   * @return Textual representation of motion
-   */
   @Override
   public String toString() {
     return String.format(
-        "%-3d%s%s%s  %-3d%s%s%s",
+        "%-4d%s%s%s  %-4d%s%s%s",
         startTick, startPosition.toString(), startDimensions.toString(), startColor.toString(),
         endTick - 1, endPosition.toString(), endDimensions.toString(), endColor.toString()
     );

@@ -16,7 +16,7 @@ public final class Dimensions2D {
   /**
    * Instantiates a {@code Dimensions2D} object with the given width and height.
    *
-   * @param width Width value of shape
+   * @param width  Width value of shape
    * @param height Height value of shape
    * @throws IllegalArgumentException Width or height is negative.
    */
@@ -30,6 +30,8 @@ public final class Dimensions2D {
   }
 
   /**
+   * Returns width value of shape.
+   *
    * @return Width value of shape
    */
   public double getWidth() {
@@ -37,6 +39,8 @@ public final class Dimensions2D {
   }
 
   /**
+   * Returns height value of shape.
+   *
    * @return Height value of shape
    */
   public double getHeight() {
@@ -64,6 +68,6 @@ public final class Dimensions2D {
 
   @Override
   public String toString() {
-    return String.format("%-3d%d", (int)(width + 0.5), (int)(height + 0.5));
+    return String.format("%-4d%d", (int) (width + 0.5), (int) (height + 0.5));
   }
 }

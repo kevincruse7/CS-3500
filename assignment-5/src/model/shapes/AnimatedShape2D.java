@@ -12,16 +12,16 @@ import model.shapes.attributes.Position2D;
  * tick (exclusive) of the last motion.
  * </p>
  *
- * <p>
  * Class invariants:
- *   <ul>
- *     <li>Motions do not overlap with regards to tick range.</li>
- *   </ul>
- * </p>
+ * <ul>
+ *   <li>Motions do not overlap with regards to tick range.</li>
+ * </ul>
  */
 public interface AnimatedShape2D extends Cloneable {
 
   /**
+   * Adds the given motion to shape.
+   *
    * @param motion Motion to be added to shape
    * @throws NullPointerException     Motion is null.
    * @throws IllegalArgumentException Motion overlaps with existing motion.
@@ -29,6 +29,8 @@ public interface AnimatedShape2D extends Cloneable {
   void addMotion(Motion2D motion) throws NullPointerException, IllegalArgumentException;
 
   /**
+   * Removes the given motion from shape.
+   *
    * @param motion Motion to be removed from shape
    * @throws NullPointerException     Motion is null.
    * @throws IllegalArgumentException Motion does not exist in shape.
@@ -36,11 +38,15 @@ public interface AnimatedShape2D extends Cloneable {
   void removeMotion(Motion2D motion) throws NullPointerException, IllegalArgumentException;
 
   /**
+   * Returns the name of shape.
+   *
    * @return Name of shape
    */
   String getName();
 
   /**
+   * Retrieves position of shape at the given tick.
+   *
    * @param tick Tick value to find position at
    * @return Position of shape at the given tick
    * @throws IllegalStateException    Motion set is empty, contains gaps, or causes implicit
@@ -50,6 +56,8 @@ public interface AnimatedShape2D extends Cloneable {
   Position2D getPosition(int tick) throws IllegalStateException, IllegalArgumentException;
 
   /**
+   * Retrieves dimensions of shape at the given tick.
+   *
    * @param tick Tick value to find position at
    * @return Dimensions of shape at the given tick
    * @throws IllegalStateException    Motion set is empty, contains gaps, or causes implicit
@@ -59,6 +67,8 @@ public interface AnimatedShape2D extends Cloneable {
   Dimensions2D getDimensions(int tick) throws IllegalStateException, IllegalArgumentException;
 
   /**
+   * Retrieves color of shape at the given tick.
+   *
    * @param tick Tick value to find position at
    * @return Color of shape at the given tick
    * @throws IllegalStateException    Motion set is empty, contains gaps, or causes implicit
@@ -68,6 +78,8 @@ public interface AnimatedShape2D extends Cloneable {
   Color getColor(int tick) throws IllegalStateException, IllegalArgumentException;
 
   /**
+   * Returns the starting tick (inclusive) of animated shape.
+   *
    * @return Starting tick (inclusive) of animated shape
    * @throws IllegalStateException Motion set is empty, contains gaps, or causes implicit
    *                               teleportation.
@@ -75,6 +87,8 @@ public interface AnimatedShape2D extends Cloneable {
   int getStartTick() throws IllegalStateException;
 
   /**
+   * Returns the ending tick (exclusive) of animated shape.
+   *
    * @return Ending tick (exclusive) of animated shape
    * @throws IllegalStateException Motion set is empty, contains gaps, or causes implicit
    *                               teleportation.
@@ -82,6 +96,8 @@ public interface AnimatedShape2D extends Cloneable {
   int getEndTick() throws IllegalStateException;
 
   /**
+   * Returns an independent clone of shape.
+   *
    * @return Independent clone of shape
    */
   Object clone();

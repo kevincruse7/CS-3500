@@ -25,6 +25,8 @@ public final class Position2D {
   }
 
   /**
+   * Returns <i>x</i>-coordinate of shape.
+   *
    * @return <i>x</i>-coordinate of shape
    */
   public double getX() {
@@ -32,6 +34,8 @@ public final class Position2D {
   }
 
   /**
+   * Returns <i>y</i>-coordinate of shape.
+   *
    * @return <i>y</i>-coordinate of shape
    */
   public double getY() {
@@ -59,6 +63,6 @@ public final class Position2D {
 
   @Override
   public String toString() {
-    return String.format("%-3d%d", (int)(x + 0.5), (int)(y + 0.5));
+    return String.format("%-4d%d", (int) (x + 0.5), (int) (y + 0.5));
   }
 }

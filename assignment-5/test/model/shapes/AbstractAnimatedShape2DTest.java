@@ -2,11 +2,11 @@ package model.shapes;
 
 import static org.junit.Assert.assertEquals;
 
-import org.junit.Before;
+import model.shapes.attributes.Color;
+import model.shapes.attributes.Dimensions2D;
+import model.shapes.attributes.Position2D;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Point;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -26,33 +26,33 @@ public abstract class AbstractAnimatedShape2DTest {
 
   @Before
   public void setUp() {
-    emptyEllipse = new AnimatedEllipse();
-    emptyRectangle = new AnimatedRectangle();
-    rectangleOneMotion = new AnimatedRectangle();
-    rectangleThreeMotions = new AnimatedRectangle();
+    emptyEllipse = new AnimatedEllipse("E");
+    emptyRectangle = new AnimatedRectangle("R");
+    rectangleOneMotion = new AnimatedRectangle("R1");
+    rectangleThreeMotions = new AnimatedRectangle("R3");
 
     motion1 = Motion2D.builder()
         .setStartTick(0)
         .setEndTick(10)
-        .setStartPosition(new Point(0, 0))
-        .setEndPosition(new Point(10, 10))
-        .setStartDimensions(new Dimension(10, 10))
-        .setEndDimensions(new Dimension(20, 20))
+        .setStartPosition(new Position2D(0, 0))
+        .setEndPosition(new Position2D(10, 10))
+        .setStartDimensions(new Dimensions2D(10, 10))
+        .setEndDimensions(new Dimensions2D(20, 20))
         .setStartColor(new Color(255, 255, 255))
         .setEndColor(new Color(0, 0, 0))
         .build();
     motion2 = Motion2D.builder()
         .setStartTick(10)
         .setEndTick(20)
-        .setStartPosition(new Point(10, 10))
-        .setStartDimensions(new Dimension(20, 20))
+        .setStartPosition(new Position2D(10, 10))
+        .setStartDimensions(new Dimensions2D(20, 20))
         .setStartColor(new Color(0, 0, 0))
         .build();
     motion3 = Motion2D.builder()
         .setStartTick(20)
         .setEndTick(30)
-        .setStartPosition(new Point(0, 0))
-        .setStartDimensions(new Dimension(10, 10))
+        .setStartPosition(new Position2D(0, 0))
+        .setStartDimensions(new Dimensions2D(10, 10))
         .setStartColor(new Color(255, 255, 255))
         .build();
 
@@ -103,8 +103,8 @@ public abstract class AbstractAnimatedShape2DTest {
     Motion2D motion = Motion2D.builder()
         .setStartTick(9)
         .setEndTick(20)
-        .setStartPosition(new Point(0, 0))
-        .setStartDimensions(new Dimension(10, 10))
+        .setStartPosition(new Position2D(0, 0))
+        .setStartDimensions(new Dimensions2D(10, 10))
         .setStartColor(new Color(255, 255, 255))
         .build();
 
@@ -116,8 +116,8 @@ public abstract class AbstractAnimatedShape2DTest {
     Motion2D motion = Motion2D.builder()
         .setStartTick(29)
         .setEndTick(40)
-        .setStartPosition(new Point(0, 0))
-        .setStartDimensions(new Dimension(10, 10))
+        .setStartPosition(new Position2D(0, 0))
+        .setStartDimensions(new Dimensions2D(10, 10))
         .setStartColor(new Color(255, 255, 255))
         .build();
 

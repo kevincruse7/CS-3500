@@ -30,6 +30,8 @@ public final class Color {
   }
 
   /**
+   * Returns red component of color, from 0-255.
+   *
    * @return Red component of color, from 0-255
    */
   public int getRed() {
@@ -37,6 +39,8 @@ public final class Color {
   }
 
   /**
+   * Returns blue component of color, from 0-255.
+   *
    * @return Blue component of color, from 0-255
    */
   public int getBlue() {
@@ -44,6 +48,8 @@ public final class Color {
   }
 
   /**
+   * Returns green component of color, from 0-255.
+   *
    * @return Green component of color, from 0-255
    */
   public int getGreen() {
@@ -72,6 +78,6 @@ public final class Color {
 
   @Override
   public String toString() {
-    return String.format("%-3d%-3d%d", red, green, blue);
+    return String.format("%-4d%-4d%d", red, green, blue);
   }
 }

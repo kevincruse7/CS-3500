@@ -8,8 +8,7 @@ import java.util.Map;
 public final class AnimatedEllipse extends AbstractAnimatedShape2D {
 
   /**
-   * Instantiates an {@code AnimatedEllipse} object with the given name and tick-motion
-   * map.
+   * Instantiates an {@code AnimatedEllipse} object with the given name and tick-motion map.
    *
    * @param name    Name of shape
    * @param motions Initial tick-motion map

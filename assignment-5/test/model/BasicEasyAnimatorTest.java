@@ -7,12 +7,12 @@ import model.shapes.AnimatedRectangle;
 import model.shapes.AnimatedShape2D;
 import model.shapes.Motion2D;
 
+import model.shapes.attributes.Color;
+import model.shapes.attributes.Dimensions2D;
+import model.shapes.attributes.Position2D;
+
 import org.junit.Before;
 import org.junit.Test;
-
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Point;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -35,15 +35,15 @@ public final class BasicEasyAnimatorTest {
 
   @Before
   public void setUp() {
-    populatedRectangle = new AnimatedRectangle();
-    emptyEllipse = new AnimatedEllipse();
-    emptyRectangle = new AnimatedRectangle();
+    populatedRectangle = new AnimatedRectangle("PR");
+    emptyEllipse = new AnimatedEllipse("E");
+    emptyRectangle = new AnimatedRectangle("R");
 
     motion = Motion2D.builder()
         .setStartTick(0)
         .setEndTick(10)
-        .setStartPosition(new Point(0, 0))
-        .setStartDimensions(new Dimension(10, 10))
+        .setStartPosition(new Position2D(0, 0))
+        .setStartDimensions(new Dimensions2D(10, 10))
         .setStartColor(new Color(255, 255, 255))
         .build();
     populatedRectangle.addMotion(motion);
@@ -83,7 +83,7 @@ public final class BasicEasyAnimatorTest {
 
   @Test
   public void addShapePopulatedModel() {
-    populatedModel.removeShape(emptyRectangle);
+    populatedModel.removeShape("R");
     populatedModel.addShape(emptyRectangle);
     assertEquals(shapes, populatedModel.getShapes());
   }
@@ -106,30 +106,30 @@ public final class BasicEasyAnimatorTest {
   @Test
   public void removeFirstShape() {
     shapes.remove(0);
-    populatedModel.removeShape(populatedRectangle);
+    populatedModel.removeShape("PR");
     assertEquals(shapes, populatedModel.getShapes());
   }
 
   @Test
   public void removeLastShape() {
     shapes.remove(shapes.size() - 1);
-    populatedModel.removeShape(emptyRectangle);
+    populatedModel.removeShape("R");
     assertEquals(shapes, populatedModel.getShapes());
   }
 
   @Test
   public void removeMiddleShape() {
     shapes.remove(emptyEllipse);
-    populatedModel.removeShape(emptyEllipse);
+    populatedModel.removeShape("E");
     assertEquals(shapes, populatedModel.getShapes());
   }
 
   @Test
   public void removeAllShapes() {
     shapes.clear();
-    populatedModel.removeShape(populatedRectangle);
-    populatedModel.removeShape(emptyEllipse);
-    populatedModel.removeShape(emptyRectangle);
+    populatedModel.removeShape("PR");
+    populatedModel.removeShape("E");
+    populatedModel.removeShape("R");
     assertEquals(shapes, populatedModel.getShapes());
   }
 
@@ -145,36 +145,36 @@ public final class BasicEasyAnimatorTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void removeNonExistentShapeEmptyModel() {
-    emptyModel.removeShape(populatedRectangle);
+    emptyModel.removeShape("PR");
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void removeNonExistentShapePopulatedModel() {
-    populatedModel.removeShape(emptyEllipse);
-    populatedModel.removeShape(emptyEllipse);
+    populatedModel.removeShape("E");
+    populatedModel.removeShape("E");
   }
 
   @Test
   public void addMotionFirstShape() {
     // Can't add same motion to a shape twice, so remove populated rectangle for this test
     shapes.remove(populatedRectangle);
-    populatedModel.removeShape(populatedRectangle);
+    populatedModel.removeShape("PR");
 
-    populatedModel.addMotion(emptyEllipse, motion);
+    populatedModel.addMotion("E", motion);
     emptyEllipse.addMotion(motion);
     assertEquals(shapes, populatedModel.getShapes());
   }
 
   @Test
   public void addMotionLastShape() {
-    populatedModel.addMotion(emptyRectangle, motion);
+    populatedModel.addMotion("R", motion);
     emptyRectangle.addMotion(motion);
     assertEquals(shapes, populatedModel.getShapes());
   }
 
   @Test
   public void addMotionMiddleShape() {
-    populatedModel.addMotion(emptyEllipse, motion);
+    populatedModel.addMotion("E", motion);
     emptyEllipse.addMotion(motion);
     assertEquals(shapes, populatedModel.getShapes());
   }
@@ -191,33 +191,33 @@ public final class BasicEasyAnimatorTest {
 
   @Test(expected = NullPointerException.class)
   public void addNullMotionEmptyModel() {
-    emptyModel.addMotion(emptyEllipse, null);
+    emptyModel.addMotion("E", null);
   }
 
   @Test(expected = NullPointerException.class)
   public void addNullMotionPopulatedModel() {
-    populatedModel.addMotion(emptyEllipse, null);
+    populatedModel.addMotion("E", null);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void addMotionNonExistentShapeEmptyModel() {
-    emptyModel.addMotion(emptyEllipse, motion);
+    emptyModel.addMotion("E", motion);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void addMotionNonExistentShapePopulatedModel() {
-    populatedModel.removeShape(emptyEllipse);
-    populatedModel.addMotion(emptyEllipse, motion);
+    populatedModel.removeShape("E");
+    populatedModel.addMotion("E", motion);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void addDuplicateMotion() {
-    populatedModel.addMotion(populatedRectangle, motion);
+    populatedModel.addMotion("PR", motion);
   }
 
   @Test
   public void removeMotionFirstShape() {
-    populatedModel.removeMotion(populatedRectangle, motion);
+    populatedModel.removeMotion("PR", motion);
     populatedRectangle.removeMotion(motion);
     assertEquals(shapes, populatedModel.getShapes());
   }
@@ -225,12 +225,12 @@ public final class BasicEasyAnimatorTest {
   @Test
   public void removeMotionLastShape() {
     // Move populated rectangle to end of list
-    populatedModel.removeShape(populatedRectangle);
+    populatedModel.removeShape("PR");
     shapes.remove(populatedRectangle);
     populatedModel.addShape(populatedRectangle);
     shapes.add(populatedRectangle);
 
-    populatedModel.removeMotion(populatedRectangle, motion);
+    populatedModel.removeMotion("PR", motion);
     populatedRectangle.removeMotion(motion);
     assertEquals(shapes, populatedModel.getShapes());
   }
@@ -238,16 +238,16 @@ public final class BasicEasyAnimatorTest {
   @Test
   public void removeMotionMiddleShape() {
     // Move populated rectangle to middle of list
-    populatedModel.removeShape(populatedRectangle);
+    populatedModel.removeShape("PR");
     shapes.remove(populatedRectangle);
-    populatedModel.removeShape(emptyEllipse);
+    populatedModel.removeShape("E");
     shapes.remove(emptyEllipse);
     populatedModel.addShape(populatedRectangle);
     shapes.add(populatedRectangle);
     populatedModel.addShape(emptyEllipse);
     shapes.add(emptyEllipse);
 
-    populatedModel.removeMotion(populatedRectangle, motion);
+    populatedModel.removeMotion("PR", motion);
     populatedRectangle.removeMotion(motion);
     assertEquals(shapes, populatedModel.getShapes());
   }
@@ -264,28 +264,28 @@ public final class BasicEasyAnimatorTest {
 
   @Test(expected = NullPointerException.class)
   public void removeNullMotionEmptyModel() {
-    emptyModel.removeMotion(populatedRectangle, null);
+    emptyModel.removeMotion("PR", null);
   }
 
   @Test(expected = NullPointerException.class)
   public void removeNullMotionPopulatedModel() {
-    populatedModel.removeMotion(populatedRectangle, null);
+    populatedModel.removeMotion("PR", null);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void removeMotionNonExistentShapeEmptyModel() {
-    emptyModel.removeMotion(populatedRectangle, motion);
+    emptyModel.removeMotion("PR", motion);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void removeMotionNonExistentShapePopulatedModel() {
-    populatedModel.removeShape(populatedRectangle);
-    populatedModel.removeMotion(populatedRectangle, motion);
+    populatedModel.removeShape("PR");
+    populatedModel.removeMotion("PR", motion);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void removeNonExistentMotion() {
-    populatedModel.removeMotion(emptyEllipse, motion);
+    populatedModel.removeMotion("E", motion);
   }
 
   @Test
@@ -296,11 +296,11 @@ public final class BasicEasyAnimatorTest {
     Motion2D newMotion = Motion2D.builder()
         .setStartTick(10)
         .setEndTick(20)
-        .setStartPosition(new Point(0, 0))
-        .setStartDimensions(new Dimension(10, 10))
+        .setStartPosition(new Position2D(0, 0))
+        .setStartDimensions(new Dimensions2D(10, 10))
         .setStartColor(new Color(255, 255, 255))
         .build();
-    populatedModel.addMotion(emptyEllipse, newMotion);
+    populatedModel.addMotion("E", newMotion);
     assertEquals(20, populatedModel.getNumTicks());
   }
 

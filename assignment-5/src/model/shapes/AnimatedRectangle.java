@@ -8,8 +8,7 @@ import java.util.Map;
 public final class AnimatedRectangle extends AbstractAnimatedShape2D {
 
   /**
-   * Instantiates an {@code AnimatedRectangle} object with the given name and tick-motion
-   * map.
+   * Instantiates an {@code AnimatedRectangle} object with the given name and tick-motion map.
    *
    * @param name    Name of shape
    * @param motions Initial tick-motion map
