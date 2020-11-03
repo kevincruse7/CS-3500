@@ -43,4 +43,9 @@ public final class AnimatedEllipse extends AbstractAnimatedShape2D {
     return name.equals(other.name)
         && motions.equals(other.motions);
   }
+
+  @Override
+  public String toString() {
+    return "shape " + name + " ellipse\n" + super.toString();
+  }
 }

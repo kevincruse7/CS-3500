@@ -61,4 +61,9 @@ public final class Dimensions2D {
   public int hashCode() {
     return Objects.hash(width, height);
   }
+
+  @Override
+  public String toString() {
+    return String.format("%-3d%d", (int)(width + 0.5), (int)(height + 0.5));
+  }
 }

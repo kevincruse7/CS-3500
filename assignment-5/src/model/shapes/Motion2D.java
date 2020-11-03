@@ -301,4 +301,16 @@ public final class Motion2D implements Comparable<Motion2D> {
     return Objects.hash(startTick, endTick, startPosition, endPosition, startDimensions,
         endDimensions, startColor, endColor);
   }
+
+  /**
+   * @return Textual representation of motion
+   */
+  @Override
+  public String toString() {
+    return String.format(
+        "%-3d%s%s%s  %-3d%s%s%s",
+        startTick, startPosition.toString(), startDimensions.toString(), startColor.toString(),
+        endTick - 1, endPosition.toString(), endDimensions.toString(), endColor.toString()
+    );
+  }
 }

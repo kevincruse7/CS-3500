@@ -1,5 +1,12 @@
 package model.shapes;
 
+// (Piazza @1300)
+//
+// "Professor Shesh, can we just use Color, Dimension, and Point from java.awt?"
+// "No, we have those classes at home."
+//
+// Classes at home:
+
 import model.shapes.attributes.Color;
 import model.shapes.attributes.Dimensions2D;
 import model.shapes.attributes.Position2D;
@@ -79,25 +86,27 @@ public abstract class AbstractAnimatedShape2D implements AnimatedShape2D {
   }
 
   // Ensures that motions are consistent (motions exist, no gaps, no implicit teleportation)
-  // TODO: check for gaps
   private void checkMotionIntegrity() throws IllegalStateException {
     Motion2D[] motionsArray = motions.values().toArray(new Motion2D[0]);
     Arrays.sort(motionsArray);
 
     // Ensure that at least one motion is present
     if (motionsArray.length > 1) {
-      Position2D lastEndPosition = motionsArray[0].getPosition(
-          motionsArray[0].getEndTick() - 1);
-      Dimensions2D lastEndDimension = motionsArray[0].getDimensions(
-          motionsArray[0].getEndTick() - 1);
-      Color lastEndColor = motionsArray[0].getColor(motionsArray[0].getEndTick() - 1);
+      int lastEndTick = motionsArray[0].getEndTick() - 1;
+      Position2D lastEndPosition = motionsArray[0].getPosition(lastEndTick);
+      Dimensions2D lastEndDimension = motionsArray[0].getDimensions(lastEndTick);
+      Color lastEndColor = motionsArray[0].getColor(lastEndTick);
 
       // Ensure that ending values of one motion match starting values of next
       for (int i = 1; i < motionsArray.length; i++) {
-        if (!lastEndPosition.equals(motionsArray[i].getPosition(motionsArray[i].getStartTick()))
-            || !lastEndDimension.equals(
-            motionsArray[i].getDimensions(motionsArray[i].getStartTick()))
-            || !lastEndColor.equals(motionsArray[i].getColor(motionsArray[i].getStartTick()))) {
+        int startTick = motionsArray[i].getStartTick();
+
+        if (startTick != lastEndTick + 1) {
+          throw new IllegalStateException("Motion set contains gaps.");
+        }
+        if (!lastEndPosition.equals(motionsArray[i].getPosition(startTick))
+            || !lastEndDimension.equals(motionsArray[i].getDimensions(startTick))
+            || !lastEndColor.equals(motionsArray[i].getColor(startTick))) {
           throw new IllegalStateException("Motion set causes implicit teleportation.");
         }
 
@@ -194,5 +203,22 @@ public abstract class AbstractAnimatedShape2D implements AnimatedShape2D {
     }
 
     return clone;
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder textRep = new StringBuilder();
+
+    Motion2D[] motionsArray = motions.values().toArray(new Motion2D[0]);
+    Arrays.sort(motionsArray);
+    if (motionsArray.length > 0) {
+      textRep.append(String.format("motion %s ", name)).append(motionsArray[0]);
+
+      for (int i = 1; i < motionsArray.length; i++) {
+        textRep.append('\n').append(String.format("motion %s ", name)).append(motionsArray[i]);
+      }
+    }
+
+    return textRep.toString();
   }
 }

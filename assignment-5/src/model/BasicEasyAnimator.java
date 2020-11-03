@@ -1,5 +1,6 @@
 package model;
 
+import java.util.Iterator;
 import model.shapes.AnimatedShape2D;
 import model.shapes.Motion2D;
 
@@ -87,5 +88,21 @@ public final class BasicEasyAnimator implements EasyAnimatorModel<AnimatedShape2
     }
 
     return newShapes;
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder textRep = new StringBuilder();
+
+    Iterator<AnimatedShape2D> shapeIter = shapes.iterator();
+    if (shapeIter.hasNext()) {
+      textRep.append(shapeIter.next());
+
+      while (shapeIter.hasNext()) {
+        textRep.append("\n\n").append(shapeIter.next());
+      }
+    }
+
+    return textRep.toString();
   }
 }

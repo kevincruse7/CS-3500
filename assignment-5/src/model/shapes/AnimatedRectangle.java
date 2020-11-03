@@ -43,4 +43,9 @@ public final class AnimatedRectangle extends AbstractAnimatedShape2D {
     return name.equals(other.name)
         && motions.equals(other.motions);
   }
+
+  @Override
+  public String toString() {
+    return "shape " + name + " rectangle\n" + super.toString();
+  }
 }
