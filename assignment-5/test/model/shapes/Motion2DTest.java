@@ -1,4 +1,5 @@
 package model.shapes;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
@@ -31,7 +32,7 @@ public final class Motion2DTest {
     Position2D samplePointTwo = new Position2D(4, 5);
     sampleDimension = new Dimensions2D(4, 5);
     Dimensions2D sampleDimensionTwo = new Dimensions2D(6, 10);
-    black = new Color(0,0,0);
+    black = new Color(0, 0, 0);
     white = new Color(255, 255, 255);
     motionBuilder = Motion2D.builder();
 
@@ -40,10 +41,12 @@ public final class Motion2DTest {
     motionOne = motionBuilder.setStartTick(6).setStartColor(black).
         setStartPosition(samplePoint).setEndTick(9).setStartDimensions(sampleDimension).build();
 
+    motionBuilder = new Motion2D.Builder();
     motionTwo = motionBuilder.setStartTick(4).
         setStartColor(white).setStartPosition(samplePointTwo).setEndTick(20).
         setStartDimensions(sampleDimensionTwo).build();
 
+    motionBuilder = new Motion2D.Builder();
     motionThree = motionBuilder.setStartTick(5).
         setStartColor(white).setEndColor(black).setStartPosition(samplePoint).
         setEndPosition(samplePointTwo).setEndTick(10).setStartDimensions(sampleDimension).
@@ -51,14 +54,15 @@ public final class Motion2DTest {
   }
 
   // these are cases where something is not specified, so null is passed in their place
-  @Test (expected = NullPointerException.class)
+  @Test(expected = NullPointerException.class)
   public void testNoStartTick() {
     // no startTick specified
+    motionBuilder = new Motion2D.Builder();
     motionBuilder.setEndTick(6).setStartColor(black).setStartPosition(samplePoint).
         setStartDimensions(sampleDimension).build();
   }
 
-  @Test (expected = NullPointerException.class)
+  @Test(expected = NullPointerException.class)
   public void testNoEndTick() {
     // no endTick specified
     motionBuilder = new Motion2D.Builder();
@@ -66,7 +70,7 @@ public final class Motion2DTest {
         setStartDimensions(sampleDimension).build();
   }
 
-  @Test (expected = NullPointerException.class)
+  @Test(expected = NullPointerException.class)
   public void testNoStartColor() {
     // no startColor specified
     motionBuilder = new Motion2D.Builder();
@@ -74,7 +78,7 @@ public final class Motion2DTest {
         setStartDimensions(sampleDimension).build();
   }
 
-  @Test (expected = NullPointerException.class)
+  @Test(expected = NullPointerException.class)
   public void testNoStartPosition() {
     // no startPosition specified
     motionBuilder = new Motion2D.Builder();
@@ -82,7 +86,7 @@ public final class Motion2DTest {
         setStartDimensions(sampleDimension).build();
   }
 
-  @Test (expected = NullPointerException.class)
+  @Test(expected = NullPointerException.class)
   public void testNoStartDimensions() {
     // no startDimensions specified
     motionBuilder = new Motion2D.Builder();
@@ -90,7 +94,7 @@ public final class Motion2DTest {
         setEndTick(9).build();
   }
 
-  @Test (expected = IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void testStartMoreThanEnd() {
     // case when startTick is greater than endTick
     motionBuilder = new Motion2D.Builder();
@@ -101,19 +105,19 @@ public final class Motion2DTest {
   // tests for making sure the proper values are set when creating a Motion2D, including cases
   // where the optional variables both are and are not included (this test also tests for
   // the getter methods when they receive valid input)
-  @Test (expected = IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void testColorTickLow() {
     // tick is out of bounds (low)
     assertEquals(black, motionOne.getColor(0));
   }
 
-  @Test (expected = IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void testColorTickHigh() {
     // tick is out of bounds (high)
     assertEquals(black, motionOne.getColor(10));
   }
 
-  @Test (expected = IllegalArgumentException.class)
+  @Test
   public void testColorValidTicks() {
     // valid ticks
     // motionOne's color
@@ -121,24 +125,24 @@ public final class Motion2DTest {
     // motionThree's starting color
     assertEquals(white, motionThree.getColor(5));
     // motionThree's middle color
-    assertEquals(white, motionThree.getColor(7));
+    assertEquals(new Color(153, 153, 153), motionThree.getColor(7));
     // motionThree's ending color
-    assertEquals(black, motionThree.getColor(9));
+    assertEquals(black, motionThree.getColor(10));
   }
 
-  @Test (expected = IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void testPositionTickLow() {
     // tick is out of bounds (low)
     motionOne.getPosition(5);
   }
 
-  @Test (expected = IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void testPositionTickHigh() {
     // tick is out of bounds (high)
     motionOne.getPosition(11);
   }
 
-  @Test (expected = IllegalArgumentException.class)
+  @Test
   public void testPositionValidTicks() {
     // valid ticks
     // makes sure that the position of a motion that doesn't move ACTUALLY doesn't move
@@ -147,25 +151,39 @@ public final class Motion2DTest {
 
     // makes sure that a motion that changes position ACTUALLY changes position
     assertEquals(new Position2D(2, 3), motionThree.getPosition(5));
-    assertEquals(new Position2D(2, 3), motionThree.getPosition(6));
-    assertEquals(new Position2D(2, 3), motionThree.getPosition(7));
-    assertEquals(new Position2D(3, 4), motionThree.getPosition(8));
-    assertEquals(new Position2D(4, 5), motionThree.getPosition(9));
+
+    // to make sure position is changing correctly, we check the X and Y values over time
+    assertEquals(new Position2D(2.4, 3).getX(), motionThree.getPosition(6).getX(),
+        0.001);
+    assertEquals(new Position2D(2, 3.4).getY(), motionThree.getPosition(6).getY(),
+        0.001);
+
+    assertEquals(new Position2D(2.8, 3).getX(), motionThree.getPosition(7).getX(),
+        0.001);
+    assertEquals(new Position2D(2, 3.8).getY(), motionThree.getPosition(7).getY(),
+        0.001);
+
+    assertEquals(new Position2D(3.2, 4).getX(), motionThree.getPosition(8).getX(),
+        0.001);
+    assertEquals(new Position2D(3, 4.2).getY(), motionThree.getPosition(8).getY(),
+        0.001);
+
+    assertEquals(new Position2D(4, 5), motionThree.getPosition(10));
   }
 
-  @Test (expected = IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void testDimensionsTickLow() {
     // tick is out of bounds (low)
     motionOne.getDimensions(5);
   }
 
-  @Test (expected = IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void testDimensionsTickHigh() {
     // tick is out of bounds (high)
     motionOne.getDimensions(11);
   }
 
-  @Test (expected = IllegalArgumentException.class)
+  @Test
   public void testDimensionsValidTicks() {
     // valid ticks
     // makes sure that the dimensions of a motion that doesn't move ACTUALLY doesn't move
@@ -174,10 +192,24 @@ public final class Motion2DTest {
 
     // makes sure that a motion that changes dimensions ACTUALLY changes dimensions
     assertEquals(new Dimensions2D(4, 5), motionThree.getDimensions(5));
-    assertEquals(new Dimensions2D(4, 6), motionThree.getDimensions(6));
-    assertEquals(new Dimensions2D(4, 7), motionThree.getDimensions(7));
-    assertEquals(new Dimensions2D(5, 8), motionThree.getDimensions(8));
-    assertEquals(new Dimensions2D(6, 10), motionThree.getDimensions(9));
+
+    // to make sure position is changing correctly, we check the Width and Height values over time
+    assertEquals(new Dimensions2D(4.4, 6).getWidth(), motionThree.getDimensions(6).
+        getWidth(), 0.001);
+    assertEquals(new Dimensions2D(4, 6).getHeight(), motionThree.getDimensions(6).
+        getHeight(), 0.001);
+
+    assertEquals(new Dimensions2D(4.8, 7).getWidth(), motionThree.getDimensions(7).
+        getWidth(), 0.001);
+    assertEquals(new Dimensions2D(4, 7).getHeight(), motionThree.getDimensions(7).
+        getHeight(), 0.001);
+
+    assertEquals(new Dimensions2D(5.2, 8).getWidth(), motionThree.getDimensions(8).
+        getWidth(), 0.001);
+    assertEquals(new Dimensions2D(5, 8).getHeight(), motionThree.getDimensions(8).
+        getHeight(), 0.001);
+
+    assertEquals(new Dimensions2D(6, 10), motionThree.getDimensions(10));
   }
 
   @Test
@@ -200,7 +232,6 @@ public final class Motion2DTest {
     motionBuilder = new Motion2D.Builder();
     Motion2D motionOneCopyTwo = motionBuilder.setStartTick(6).setStartColor(black).
         setStartPosition(samplePoint).setEndTick(9).setStartDimensions(sampleDimension).build();
-
 
     // Reflexive
     assertEquals(motionOne, motionOne);
@@ -233,7 +264,7 @@ public final class Motion2DTest {
     int hashTwo = motionTwo.hashCode();
     int hashThree = motionOneCopyOne.hashCode();
 
-    if(!(hashOne == hashTwo)) {
+    if (!(hashOne == hashTwo)) {
       assertNotEquals(motionOne, motionTwo);
     }
 
@@ -244,8 +275,10 @@ public final class Motion2DTest {
 
   @Test
   public void testToString() {
-    assertEquals("", motionOne.toString());
-    assertEquals("", motionTwo.toString());
+    assertEquals("6   2   3   4   5   0   0   0     8   2   3   4   5   0   0   0   ",
+        motionOne.toString());
+    assertEquals("4   4   5   6   10  255 255 255   19  4   5   6   10  255 255 255 ",
+        motionTwo.toString());
   }
 
 }

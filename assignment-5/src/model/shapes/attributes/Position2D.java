@@ -52,8 +52,8 @@ public final class Position2D {
       return false;
     }
 
-    return x - other.x < delta
-        && y - other.y < delta;
+    return Math.abs(x - other.x) < delta
+        && Math.abs(y - other.y) < delta;
   }
 
   @Override

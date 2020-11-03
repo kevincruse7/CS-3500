@@ -57,8 +57,8 @@ public final class Dimensions2D {
       return false;
     }
 
-    return width - other.width < delta
-        && height - other.height < delta;
+    return Math.abs(width - other.width) < delta
+        && Math.abs(height - other.height) < delta;
   }
 
   @Override

@@ -61,6 +61,32 @@ public final class Position2DTest {
     // a = c
     assertEquals(posOne, posOneCopyTwo);
 
-    assertNotEquals(posThree, posTwo);
+    assertNotEquals(posTwo, posThree);
+  }
+
+  @Test
+  public void testHashcode() {
+    // copy of posThree
+    Position2D posThreeCopy = new Position2D(300, -98.8);
+
+    // if hashcode not equal, then the objects are not the same
+    int hashOne = posThree.hashCode();
+    int hashTwo = posThreeCopy.hashCode();
+    int hashThree = posOne.hashCode();
+
+    if(!(hashOne == hashThree)) {
+      assertNotEquals(posThree, posOne);
+    }
+
+    assertEquals(posThree, posThreeCopy);
+    // since the two motions are equal, they should have the same hashCodes
+    assertEquals(hashOne, hashTwo);
+  }
+
+  @Test
+  public void testToString() {
+    assertEquals("1   2", posOne.toString());
+    assertEquals("-6  5", posTwo.toString());
+    assertEquals("300 -98", posThree.toString());
   }
 }

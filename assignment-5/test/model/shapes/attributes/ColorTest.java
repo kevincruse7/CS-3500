@@ -1,4 +1,5 @@
 package model.shapes.attributes;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
@@ -21,37 +22,37 @@ public final class ColorTest {
     random = new Color(123, 244, 10);
   }
 
-  @Test (expected = IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void testInvalidRedLow() {
     // red value is too low
     Color bad = new Color(-1, 3, 4);
   }
 
-  @Test (expected = IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void testInvalidGreenLow() {
     // green value is too low
     Color bad = new Color(1, -3, 4);
   }
 
-  @Test (expected = IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void testInvalidBlueLow() {
     // blue value is too low
     Color bad = new Color(1, 3, -4);
   }
 
-  @Test (expected = IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void testInvalidRedHigh() {
     // red value is too high
     Color bad = new Color(256, 3, 4);
   }
 
-  @Test (expected = IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void testInvalidGreenHigh() {
     // red value is too high
     Color bad = new Color(255, 300, 4);
   }
 
-  @Test (expected = IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void testInvalidBlueHigh() {
     // red value is too high
     Color bad = new Color(255, 3, 400);
@@ -72,9 +73,9 @@ public final class ColorTest {
     assertEquals(244, random.getGreen());
 
     // getBlue:
-    assertEquals(255, white.getRed());
-    assertEquals(0, black.getRed());
-    assertEquals(10, random.getRed());
+    assertEquals(255, white.getBlue());
+    assertEquals(0, black.getBlue());
+    assertEquals(10, random.getBlue());
   }
 
   @Test
@@ -114,7 +115,7 @@ public final class ColorTest {
     int hashTwo = randomOne.hashCode();
     int hashThree = white.hashCode();
 
-    if(!(hashOne == hashThree)) {
+    if (!(hashOne == hashThree)) {
       assertNotEquals(random, white);
     }
 
@@ -125,7 +126,8 @@ public final class ColorTest {
 
   @Test
   public void testToString() {
-    assertEquals("", black.toString());
-    assertEquals("", random.toString());
+    assertEquals("0   0   0", black.toString());
+    assertEquals("255 255 255", white.toString());
+    assertEquals("123 244 10", random.toString());
   }
 }
