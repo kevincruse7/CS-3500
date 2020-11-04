@@ -44,6 +44,11 @@ public final class AnimatedRectangle extends AbstractAnimatedShape2D {
   }
 
   @Override
+  public int hashCode() {
+    return super.hashCode();
+  }
+
+  @Override
   public String toString() {
     return "shape " + name + " rectangle\n" + super.toString();
   }

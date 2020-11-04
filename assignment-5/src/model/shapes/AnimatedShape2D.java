@@ -9,10 +9,12 @@ import model.shapes.attributes.Position2D;
  * Represents an animated 2D shape. A shape has a name and a set of motions, or state transitions. A
  * shape's state at a certain tick is defined by the motion which corresponds to that tick. State is
  * defined from the start tick (inclusive) of the first motion (in order of tick range) to the end
- * tick (exclusive) of the last motion.
+ * tick (inclusive) of the last motion.
  * </p>
  *
+ * <p>
  * Class invariants:
+ * </p>
  * <ul>
  *   <li>Motions do not overlap with regards to tick range.</li>
  * </ul>

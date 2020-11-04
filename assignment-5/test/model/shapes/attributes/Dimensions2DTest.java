@@ -51,9 +51,9 @@ public final class Dimensions2DTest {
   public void testEquals() {
 
     // copy of dimThree
-    Dimensions2D dimThreeCopyOne = new Dimensions2D(300,98.8);
+    Dimensions2D dimThreeCopyOne = new Dimensions2D(300, 98.8);
     // copy of dimThree
-    Dimensions2D dimThreeCopyTwo = new Dimensions2D(300,98.8);
+    Dimensions2D dimThreeCopyTwo = new Dimensions2D(300, 98.8);
 
     // Reflexive
     assertEquals(dimOne, dimOne);
@@ -84,7 +84,7 @@ public final class Dimensions2DTest {
     int hashTwo = dimThreeCopy.hashCode();
     int hashThree = dimOne.hashCode();
 
-    if(!(hashOne == hashThree)) {
+    if (hashOne != hashThree) {
       assertNotEquals(dimThree, dimOne);
     }
 

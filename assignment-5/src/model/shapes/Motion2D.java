@@ -11,8 +11,10 @@ import java.util.Objects;
  * Represents a motion, or shape state transition, in that it contains a beginning state, an end
  * state, and a tick duration for how long the transition between the two state takes.
  * </p>
+ *
  * <p>
  * Class invariants:
+ * </p>
  * <ul>
  *   <li>Start tick is non-negative and less than the end tick.</li>
  *   <li>End tick is positive.</li>
@@ -115,7 +117,7 @@ public final class Motion2D implements Comparable<Motion2D> {
     }
 
     /**
-     * Sets the end tick (exclusive) to the given value.
+     * Sets the end tick (inclusive) to the given value.
      *
      * @param endTick End tick value
      * @return Instance of builder with the given end tick
@@ -314,9 +316,9 @@ public final class Motion2D implements Comparable<Motion2D> {
   @Override
   public String toString() {
     return String.format(
-        "%-4d%-8s%-8s%-12s  %-4d%-8s%-8s%-12s",
+        "%-4d%-8s%-8s%-12s  %-4d%-8s%-8s%s",
         startTick, startPosition.toString(), startDimensions.toString(), startColor.toString(),
-        endTick - 1, endPosition.toString(), endDimensions.toString(), endColor.toString()
+        endTick, endPosition.toString(), endDimensions.toString(), endColor.toString()
     );
   }
 }

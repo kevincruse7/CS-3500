@@ -9,7 +9,9 @@ import java.util.List;
  * Together, this list of shapes represents a described animation.
  * </p>
  *
+ * <p>
  * Class invariants:
+ * </p>
  * <ul>
  *   <li>No two shapes in the model have the same name.</li>
  * </ul>

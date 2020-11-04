@@ -44,6 +44,11 @@ public final class AnimatedEllipse extends AbstractAnimatedShape2D {
   }
 
   @Override
+  public int hashCode() {
+    return super.hashCode();
+  }
+
+  @Override
   public String toString() {
     return "shape " + name + " ellipse\n" + super.toString();
   }

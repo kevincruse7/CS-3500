@@ -43,6 +43,7 @@ public final class BasicEasyAnimator implements EasyAnimatorModel<AnimatedShape2
       throws NullPointerException, IllegalArgumentException {
     Objects.requireNonNull(shape, "Null shape");
 
+    // FIXME: Shapes with same name shouldn't be able to coexist.
     if (shapes.contains(shape)) {
       throw new IllegalArgumentException("Shape already exists");
     }

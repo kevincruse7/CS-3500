@@ -58,7 +58,7 @@ public abstract class AbstractAnimatedShape2D implements AnimatedShape2D {
     Objects.requireNonNull(motion, "Motion is null.");
 
     // Ensure that given motion does not overlap with any pre-existing motion
-    for (int i = motion.getStartTick(); i < motion.getEndTick(); i++) {
+    for (int i = motion.getStartTick() + 1; i < motion.getEndTick(); i++) {
       if (motions.get(i) != null) {
         throw new IllegalArgumentException("Motion overlaps with existing motion.");
       }
@@ -68,6 +68,7 @@ public abstract class AbstractAnimatedShape2D implements AnimatedShape2D {
     for (int i = motion.getStartTick(); i < motion.getEndTick(); i++) {
       motions.put(i, motion);
     }
+    motions.putIfAbsent(motion.getEndTick(), motion);
   }
 
   @Override
@@ -84,6 +85,7 @@ public abstract class AbstractAnimatedShape2D implements AnimatedShape2D {
     for (int i = motion.getStartTick(); i < motion.getEndTick(); i++) {
       motions.remove(i);
     }
+    motions.remove(motion.getEndTick(), motion);
   }
 
   // Ensures that motions are consistent (motions exist, no gaps, no implicit teleportation)

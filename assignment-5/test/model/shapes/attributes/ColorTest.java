@@ -115,7 +115,7 @@ public final class ColorTest {
     int hashTwo = randomOne.hashCode();
     int hashThree = white.hashCode();
 
-    if (!(hashOne == hashThree)) {
+    if (hashOne != hashThree) {
       assertNotEquals(random, white);
     }
 

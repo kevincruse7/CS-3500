@@ -17,7 +17,7 @@ public final class Position2DTest {
 
   @Before
   public void setup() {
-    posOne = new Position2D(1.2,2);
+    posOne = new Position2D(1.2, 2);
     posTwo = new Position2D(-6.7, 5);
     posThree = new Position2D(300, -98.8);
   }
@@ -41,9 +41,9 @@ public final class Position2DTest {
   public void testEquals() {
 
     // copy of random
-    Position2D posOneCopyOne = new Position2D(1.2,2);
+    Position2D posOneCopyOne = new Position2D(1.2, 2);
     // copy of random
-    Position2D posOneCopyTwo = new Position2D(1.2,2);
+    Position2D posOneCopyTwo = new Position2D(1.2, 2);
 
     // Reflexive
     assertEquals(posOne, posOne);
@@ -74,7 +74,7 @@ public final class Position2DTest {
     int hashTwo = posThreeCopy.hashCode();
     int hashThree = posOne.hashCode();
 
-    if(!(hashOne == hashThree)) {
+    if (hashOne != hashThree) {
       assertNotEquals(posThree, posOne);
     }
 

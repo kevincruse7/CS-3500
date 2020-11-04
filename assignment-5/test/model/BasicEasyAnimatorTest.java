@@ -301,7 +301,7 @@ public final class BasicEasyAnimatorTest {
         .build();
     populatedModel.addMotion("E", newMotion);
     populatedModel.removeShape("R");
-    assertEquals(20, populatedModel.getNumTicks());
+    assertEquals(21, populatedModel.getNumTicks());
   }
 
   @Test(expected = IllegalStateException.class)
@@ -318,4 +318,6 @@ public final class BasicEasyAnimatorTest {
     modelShapes.remove(populatedRectangle);
     assertEquals(shapes, populatedModel.getShapes());
   }
+
+  // TODO: Write tests for toString.
 }

@@ -7,7 +7,7 @@ import java.util.Objects;
  */
 public final class Dimensions2D {
 
-  // Allowed double error tolerance when comparing two positions
+  // Allowed double error tolerance when comparing two dimensions
   private static final double delta = 0.001;
 
   private final double width;
