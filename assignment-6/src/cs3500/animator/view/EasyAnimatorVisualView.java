@@ -1,0 +1,33 @@
+package cs3500.animator.view;
+
+import cs3500.animator.model.EasyAnimatorModel;
+
+import java.io.IOException;
+
+/**
+ * Textual view for Easy Animator as defined by {@link EasyAnimatorView}. Allows users to render
+ * animations using Java Swing at a specified tick rate.
+ */
+public final class EasyAnimatorVisualView implements EasyAnimatorView {
+
+  /**
+   * Instantiates an {@code EasyAnimatorVisualView} object with the given model.
+   *
+   * @param model     Easy Animator model to be rendered
+   * @param leftmostX Relative position of 0 <i>x</i>-coordinate on canvas
+   * @param topmostY  Relative position of 0 <i>y</i>-coordinate on canvas
+   * @param width     Width of canvas
+   * @param height    Height of canvas
+   * @throws NullPointerException     Model is null.
+   * @throws IllegalArgumentException Width or height is non-positive.
+   */
+  public EasyAnimatorVisualView(EasyAnimatorModel<?, ?> model, int leftmostX, int topmostY,
+      int width, int height) throws NullPointerException, IllegalArgumentException {
+
+  }
+
+  @Override
+  public void render(int tickRate) throws IllegalArgumentException, IOException {
+
+  }
+}
