@@ -8,11 +8,11 @@ import java.io.IOException;
 public interface EasyAnimatorView {
 
   /**
-   * Renders the animation represented by the stored model at the given tick rate.
+   * Renders the animation represented by the stored model with the given tick delay.
    *
-   * @param tickRate Rate at which ticks are rendered in ticks per second
-   * @throws IllegalArgumentException Tick rate is non-positive.
+   * @param tickDelay Delay between ticks in milliseconds
+   * @throws IllegalArgumentException Tick delay is non-positive.
    * @throws IOException              View is unable to render the model.
    */
-  void render(int tickRate) throws IllegalArgumentException, IOException;
+  void render(int tickDelay) throws IllegalArgumentException, IOException;
 }

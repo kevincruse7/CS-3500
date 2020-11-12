@@ -1,6 +1,6 @@
 package cs3500.animator.model;
 
-import java.util.List;
+import cs3500.animator.model.shapes.VisitableShape;
 
 /**
  * <p>
@@ -10,16 +10,16 @@ import java.util.List;
  * </p>
  *
  * <p>
- * Class invariants:
+ * Required class invariants:
  * </p>
  * <ul>
  *   <li>No two shapes in the model have the same name.</li>
  * </ul>
  *
- * @param <T> Shape class used by model
- * @param <U> Motion class used by model
+ * @param <Shape>  Shape class used by model
+ * @param <Motion> Motion class used by model
  */
-public interface EasyAnimatorModel<T, U> {
+public interface EasyAnimatorModel<Shape, Motion> extends EasyAnimatorImmutableModel<Shape> {
 
   /**
    * Adds the given shape to model.
@@ -28,7 +28,7 @@ public interface EasyAnimatorModel<T, U> {
    * @throws NullPointerException     Shape is null.
    * @throws IllegalArgumentException Shape already exists in the model.
    */
-  void addShape(T shape) throws NullPointerException, IllegalArgumentException;
+  void addShape(Shape shape) throws NullPointerException, IllegalArgumentException;
 
   /**
    * Removes the shape with the given name from model.
@@ -48,7 +48,8 @@ public interface EasyAnimatorModel<T, U> {
    * @throws IllegalArgumentException Shape with name does not exist in the model or motion overlaps
    *                                  with existing motion.
    */
-  void addMotion(String shapeName, U motion) throws NullPointerException, IllegalArgumentException;
+  void addMotion(String shapeName, Motion motion)
+      throws NullPointerException, IllegalArgumentException;
 
   /**
    * Removes the given motion from the shape with the given name in model.
@@ -59,21 +60,6 @@ public interface EasyAnimatorModel<T, U> {
    * @throws IllegalArgumentException Shape with name does not exist in the model or motion does not
    *                                  exist in shape.
    */
-  void removeMotion(String shapeName, U motion)
+  void removeMotion(String shapeName, Motion motion)
       throws NullPointerException, IllegalArgumentException;
-
-  /**
-   * Returns the tick length of animation represented in model.
-   *
-   * @return Tick length of animation represented in the model
-   * @throws IllegalStateException One or more shapes are malformed.
-   */
-  int getNumTicks() throws IllegalStateException;
-
-  /**
-   * Returns the list of shapes contained in the model.
-   *
-   * @return List of shapes contained in model
-   */
-  List<T> getShapes();
 }

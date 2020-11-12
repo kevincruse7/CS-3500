@@ -5,42 +5,48 @@ import cs3500.animator.model.EasyAnimatorImmutableModel;
 import cs3500.animator.model.shapes.ShapeVisitor;
 import cs3500.animator.model.shapes.VisitableShape;
 
-import java.io.IOException;
+import java.awt.Dimension;
+import java.awt.Graphics;
+
+import javax.swing.JPanel;
 
 /**
- * Textual view for Easy Animator as defined by {@link EasyAnimatorView}. Allows users to render
- * animations to SVG format at a specified tick rate.
+ * Specialized Easy Animator JPanel for rendering shapes using the Swing framework.
  *
  * @param <Rectangle> Rectangle class used by implementation
  * @param <Ellipse>   Ellipse class used by implementation
  */
-public class EasyAnimatorSVGView<Rectangle, Ellipse> implements EasyAnimatorView {
+public class EasyAnimatorVisualViewPanel<Rectangle, Ellipse> extends JPanel {
 
   /**
-   * Instantiates an {@code EasyAnimatorSVGView} object with the given model. output appendable and
-   * shape renderer.
+   * Instantiates an {@code EasyAnimatorVisualViewPanel} object with the given model and shape
+   * renderer.
    *
    * @param model         Easy Animator model to be rendered
-   * @param shapeRenderer Shape visitor for rendering shapes to SVG entries
-   * @param output        Appendable to send SVG output to
+   * @param shapeRenderer Shape visitor for rendering shapes using Swing framework
    * @param leftmostX     Relative position of 0 <i>x</i>-coordinate on canvas
    * @param topmostY      Relative position of 0 <i>y</i>-coordinate on canvas
    * @param width         Width of canvas
    * @param height        Height of canvas
-   * @throws NullPointerException     Model, renderer, or appendable is null.
+   * @throws NullPointerException     Model or renderer is null.
    * @throws IllegalArgumentException Width or height is non-positive.
    */
-  public EasyAnimatorSVGView(
+  public EasyAnimatorVisualViewPanel(
       EasyAnimatorImmutableModel<? extends VisitableShape<Rectangle, Ellipse>> model,
       ShapeVisitor<Rectangle, Ellipse> shapeRenderer,
-      Appendable output,
       int leftmostX, int topmostY,
-      int width, int height) throws NullPointerException, IllegalArgumentException {
+      int width, int height
+  ) throws NullPointerException, IllegalArgumentException {
 
   }
 
   @Override
-  public void render(int tickDelay) throws IllegalArgumentException, IOException {
+  public Dimension getPreferredSize() {
+    return null;
+  }
+
+  @Override
+  public void paintComponent(Graphics graphics) {
 
   }
 }

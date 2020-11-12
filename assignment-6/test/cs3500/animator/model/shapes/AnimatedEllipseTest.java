@@ -6,9 +6,9 @@ import static org.junit.Assert.assertNotEquals;
 import org.junit.Test;
 
 /**
- * Tests the functionality of {@link AnimatedEllipse}, as defined by {@link AnimatedShape2D}.
+ * Tests the functionality of {@link AnimatedEllipse} as defined by {@link AnimatedShape2D}.
  */
-public final class AnimatedEllipseTest extends AbstractAnimatedShape2DTest {
+public class AnimatedEllipseTest extends AbstractAnimatedShape2DTest {
 
   @Test
   public void testEqualsReflexivity() {

@@ -3,65 +3,62 @@ package cs3500.animator.model.shapes;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
-import cs3500.animator.model.shapes.attributes.Color;
-import cs3500.animator.model.shapes.attributes.Dimensions2D;
-import cs3500.animator.model.shapes.attributes.Position2D;
+import cs3500.animator.model.motions.Motion2D;
+import cs3500.animator.model.attributes.Color;
+import cs3500.animator.model.attributes.Dimensions2D;
+import cs3500.animator.model.attributes.Position2D;
 
 import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Tests the functionality of {@link AbstractAnimatedShape2D}, as defined by {@link
+ * Tests the functionality of {@link AbstractAnimatedShape2D} as defined by {@link
  * AnimatedShape2D}.
  */
 public abstract class AbstractAnimatedShape2DTest {
+
+  protected final Motion2D motion1 = Motion2D.builder()
+      .setStartTick(0)
+      .setEndTick(10)
+      .setStartPosition(new Position2D(0, 0))
+      .setEndPosition(new Position2D(10, 10))
+      .setStartDimensions(new Dimensions2D(10, 10))
+      .setEndDimensions(new Dimensions2D(20, 20))
+      .setStartColor(new Color(255, 255, 255))
+      .setEndColor(new Color(0, 0, 0))
+      .build();
+  protected final Motion2D motion2 = Motion2D.builder()
+      .setStartTick(10)
+      .setEndTick(20)
+      .setStartPosition(new Position2D(10, 10))
+      .setEndPosition(new Position2D(0, 0))
+      .setStartDimensions(new Dimensions2D(20, 20))
+      .setEndDimensions(new Dimensions2D(10, 10))
+      .setStartColor(new Color(0, 0, 0))
+      .setEndColor(new Color(255, 255, 255))
+      .build();
+  protected final Motion2D motion3 = Motion2D.builder()
+      .setStartTick(20)
+      .setEndTick(30)
+      .setStartPosition(new Position2D(0, 0))
+      .setStartDimensions(new Dimensions2D(10, 10))
+      .setStartColor(new Color(255, 255, 255))
+      .build();
 
   protected AnimatedShape2D emptyEllipse;
   protected AnimatedShape2D emptyRectangle;
   protected AnimatedShape2D rectangleOneMotion;
   protected AnimatedShape2D rectangleThreeMotions;
 
-  protected Motion2D motion1;
-  protected Motion2D motion2;
-  protected Motion2D motion3;
-
   @Before
   public void setUp() {
     emptyEllipse = new AnimatedEllipse("E");
     emptyRectangle = new AnimatedRectangle("R");
+
     rectangleOneMotion = new AnimatedRectangle("R1");
-    rectangleThreeMotions = new AnimatedRectangle("R3");
-
-    motion1 = Motion2D.builder()
-        .setStartTick(0)
-        .setEndTick(10)
-        .setStartPosition(new Position2D(0, 0))
-        .setEndPosition(new Position2D(10, 10))
-        .setStartDimensions(new Dimensions2D(10, 10))
-        .setEndDimensions(new Dimensions2D(20, 20))
-        .setStartColor(new Color(255, 255, 255))
-        .setEndColor(new Color(0, 0, 0))
-        .build();
-    motion2 = Motion2D.builder()
-        .setStartTick(10)
-        .setEndTick(20)
-        .setStartPosition(new Position2D(10, 10))
-        .setEndPosition(new Position2D(0, 0))
-        .setStartDimensions(new Dimensions2D(20, 20))
-        .setEndDimensions(new Dimensions2D(10, 10))
-        .setStartColor(new Color(0, 0, 0))
-        .setEndColor(new Color(255, 255, 255))
-        .build();
-    motion3 = Motion2D.builder()
-        .setStartTick(20)
-        .setEndTick(30)
-        .setStartPosition(new Position2D(0, 0))
-        .setStartDimensions(new Dimensions2D(10, 10))
-        .setStartColor(new Color(255, 255, 255))
-        .build();
-
     rectangleOneMotion.addMotion(motion1);
 
+    rectangleThreeMotions = new AnimatedRectangle("R3");
     rectangleThreeMotions.addMotion(motion1);
     rectangleThreeMotions.addMotion(motion2);
     rectangleThreeMotions.addMotion(motion3);

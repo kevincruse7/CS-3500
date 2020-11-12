@@ -1,104 +1,78 @@
-package cs3500.animator.model.shapes;
+package cs3500.animator.model.motions;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
-import cs3500.animator.model.shapes.Motion2D.Builder;
-import cs3500.animator.model.shapes.attributes.Color;
-import cs3500.animator.model.shapes.attributes.Dimensions2D;
-import cs3500.animator.model.shapes.attributes.Position2D;
-import org.junit.Before;
+import cs3500.animator.model.attributes.Color;
+import cs3500.animator.model.attributes.Dimensions2D;
+import cs3500.animator.model.attributes.Position2D;
+
 import org.junit.Test;
 
 /**
  * Tests for the {@link Motion2D} class.
  */
-public final class Motion2DTest {
+public class Motion2DTest {
 
-  private Position2D samplePoint;
-  private Dimensions2D sampleDimension;
-  private Color black;
-  private Color white;
-  private Builder motionBuilder;
+  private final Position2D samplePoint = new Position2D(2, 3);
+  private final Position2D samplePointTwo = new Position2D(4, 5);
+  private final Dimensions2D sampleDimension = new Dimensions2D(4, 5);
+  private final Dimensions2D sampleDimensionTwo = new Dimensions2D(6, 10);
+  private final Color black = new Color(0, 0, 0);
+  private final Color white = new Color(255, 255, 255);
 
-  private Motion2D motionOne;
-  private Motion2D motionTwo;
-  private Motion2D motionThree;
-
-
-  @Before
-  public void setup() {
-    samplePoint = new Position2D(2, 3);
-    Position2D samplePointTwo = new Position2D(4, 5);
-    sampleDimension = new Dimensions2D(4, 5);
-    Dimensions2D sampleDimensionTwo = new Dimensions2D(6, 10);
-    black = new Color(0, 0, 0);
-    white = new Color(255, 255, 255);
-    motionBuilder = Motion2D.builder();
-
-    // this tests the setter methods; if the getter methods get the value that the setter methods
-    // set, then both the getter and the setter methods work
-    motionOne = motionBuilder.setStartTick(6).setStartColor(black).
-        setStartPosition(samplePoint).setEndTick(9).setStartDimensions(sampleDimension).build();
-
-    motionBuilder = new Motion2D.Builder();
-    motionTwo = motionBuilder.setStartTick(4)
-        .setStartColor(white).setStartPosition(samplePointTwo).setEndTick(20)
-        .setStartDimensions(sampleDimensionTwo).build();
-
-    motionBuilder = new Motion2D.Builder();
-    motionThree = motionBuilder.setStartTick(5)
-        .setStartColor(white).setEndColor(black).setStartPosition(samplePoint)
-        .setEndPosition(samplePointTwo).setEndTick(10).setStartDimensions(sampleDimension)
-        .setEndDimensions(sampleDimensionTwo).build();
-  }
+  // this tests the setter methods; if the getter methods get the value that the setter methods
+  // set, then both the getter and the setter methods work
+  private final Motion2D motionOne = Motion2D.builder().setStartTick(6).setStartColor(black)
+      .setStartPosition(samplePoint).setEndTick(9).setStartDimensions(sampleDimension).build();
+  private final Motion2D motionTwo = Motion2D.builder().setStartTick(4).setStartColor(white)
+      .setStartPosition(samplePointTwo).setEndTick(20).setStartDimensions(sampleDimensionTwo)
+      .build();
+  private final Motion2D motionThree = Motion2D.builder().setStartTick(5).setStartColor(white)
+      .setEndColor(black).setStartPosition(samplePoint).setEndPosition(samplePointTwo)
+      .setEndTick(10).setStartDimensions(sampleDimension).setEndDimensions(sampleDimensionTwo)
+      .build();
 
   // these are cases where something is not specified, so null is passed in their place
   @Test(expected = NullPointerException.class)
   public void testNoStartTick() {
     // no startTick specified
-    motionBuilder = new Motion2D.Builder();
-    motionBuilder.setEndTick(6).setStartColor(black).setStartPosition(samplePoint)
+    Motion2D.builder().setEndTick(6).setStartColor(black).setStartPosition(samplePoint)
         .setStartDimensions(sampleDimension).build();
   }
 
   @Test(expected = NullPointerException.class)
   public void testNoEndTick() {
     // no endTick specified
-    motionBuilder = new Motion2D.Builder();
-    motionBuilder.setStartTick(6).setStartColor(black).setStartPosition(samplePoint)
+    Motion2D.builder().setStartTick(6).setStartColor(black).setStartPosition(samplePoint)
         .setStartDimensions(sampleDimension).build();
   }
 
   @Test(expected = NullPointerException.class)
   public void testNoStartColor() {
     // no startColor specified
-    motionBuilder = new Motion2D.Builder();
-    motionBuilder.setStartTick(6).setEndTick(9).setStartPosition(samplePoint)
+    Motion2D.builder().setStartTick(6).setEndTick(9).setStartPosition(samplePoint)
         .setStartDimensions(sampleDimension).build();
   }
 
   @Test(expected = NullPointerException.class)
   public void testNoStartPosition() {
     // no startPosition specified
-    motionBuilder = new Motion2D.Builder();
-    motionBuilder.setStartTick(6).setStartColor(black).setEndTick(9)
+    Motion2D.builder().setStartTick(6).setStartColor(black).setEndTick(9)
         .setStartDimensions(sampleDimension).build();
   }
 
   @Test(expected = NullPointerException.class)
   public void testNoStartDimensions() {
     // no startDimensions specified
-    motionBuilder = new Motion2D.Builder();
-    motionBuilder.setStartTick(6).setStartColor(black).setStartPosition(samplePoint)
+    Motion2D.builder().setStartTick(6).setStartColor(black).setStartPosition(samplePoint)
         .setEndTick(9).build();
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testStartMoreThanEnd() {
     // case when startTick is greater than endTick
-    motionBuilder = new Motion2D.Builder();
-    motionBuilder.setStartTick(9).setStartColor(black).setStartPosition(samplePoint)
+    Motion2D.builder().setStartTick(9).setStartColor(black).setStartPosition(samplePoint)
         .setEndTick(6).setStartDimensions(sampleDimension).build();
   }
 
@@ -225,12 +199,10 @@ public final class Motion2DTest {
   public void testEquals() {
 
     // copy of motionOne
-    motionBuilder = new Motion2D.Builder();
-    Motion2D motionOneCopyOne = motionBuilder.setStartTick(6).setStartColor(black)
+    Motion2D motionOneCopyOne = Motion2D.builder().setStartTick(6).setStartColor(black)
         .setStartPosition(samplePoint).setEndTick(9).setStartDimensions(sampleDimension).build();
     // copy of motionOne
-    motionBuilder = new Motion2D.Builder();
-    Motion2D motionOneCopyTwo = motionBuilder.setStartTick(6).setStartColor(black)
+    Motion2D motionOneCopyTwo = Motion2D.builder().setStartTick(6).setStartColor(black)
         .setStartPosition(samplePoint).setEndTick(9).setStartDimensions(sampleDimension).build();
 
     // Reflexive
@@ -255,8 +227,7 @@ public final class Motion2DTest {
   @Test
   public void testHashcode() {
     // copy of motionOne
-    motionBuilder = new Motion2D.Builder();
-    Motion2D motionOneCopyOne = motionBuilder.setStartTick(6).setStartColor(black)
+    Motion2D motionOneCopyOne = Motion2D.builder().setStartTick(6).setStartColor(black)
         .setStartPosition(samplePoint).setEndTick(9).setStartDimensions(sampleDimension).build();
 
     // if hashcode not equal, then the objects are not the same

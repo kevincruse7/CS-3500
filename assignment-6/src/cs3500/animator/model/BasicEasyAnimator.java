@@ -1,7 +1,7 @@
 package cs3500.animator.model;
 
 import cs3500.animator.model.shapes.AnimatedShape2D;
-import cs3500.animator.model.shapes.Motion2D;
+import cs3500.animator.model.motions.Motion2D;
 
 import cs3500.animator.util.AnimationBuilder;
 
@@ -11,9 +11,9 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Basic implementation of an Easy Animator model, as defined by {@link EasyAnimatorModel}.
+ * Basic implementation of an Easy Animator model as defined by {@link EasyAnimatorModel}.
  */
-public final class BasicEasyAnimator implements EasyAnimatorModel<AnimatedShape2D, Motion2D> {
+public class BasicEasyAnimator implements EasyAnimatorModel<AnimatedShape2D, Motion2D> {
 
   private final List<AnimatedShape2D> shapes;  // List of shapes present in this animator
 
@@ -41,7 +41,7 @@ public final class BasicEasyAnimator implements EasyAnimatorModel<AnimatedShape2
   }
 
   /**
-   * Builder class for {@code BasicEasyAnimator}.
+   * Builder class for constructing a {@code BasicEasyAnimator} object.
    */
   public static final class Builder
       implements AnimationBuilder<EasyAnimatorModel<AnimatedShape2D, Motion2D>> {
@@ -71,17 +71,13 @@ public final class BasicEasyAnimator implements EasyAnimatorModel<AnimatedShape2
     }
   }
 
-  @Override
-  public void addShape(AnimatedShape2D shape)
-      throws NullPointerException, IllegalArgumentException {
-    Objects.requireNonNull(shape, "Null shape");
-
-    // FIXME: Shapes with same name shouldn't be able to coexist.
-    if (shapes.contains(shape)) {
-      throw new IllegalArgumentException("Shape already exists");
-    }
-
-    shapes.add((AnimatedShape2D) shape.clone());
+  /**
+   * Returns a builder object for {@code BasicEasyAnimator}.
+   *
+   * @return Builder object for {@code BasicEasyAnimator}
+   */
+  public static Builder builder() {
+    return new Builder();
   }
 
   // Returns shape that has given name. Throws a NullPointerException if shape name is null and an
@@ -103,6 +99,23 @@ public final class BasicEasyAnimator implements EasyAnimatorModel<AnimatedShape2
     }
 
     return matchingShape;
+  }
+
+  @Override
+  public void addShape(AnimatedShape2D shape)
+      throws NullPointerException, IllegalArgumentException {
+    Objects.requireNonNull(shape, "Null shape");
+
+    AnimatedShape2D foundShape = null;
+    try {
+      foundShape = findShape(shape.getName());
+    } catch (IllegalArgumentException e) {
+      shapes.add((AnimatedShape2D) shape.clone());
+    }
+
+    if (foundShape != null) {
+      throw new IllegalArgumentException("Shape already exists");
+    }
   }
 
   @Override

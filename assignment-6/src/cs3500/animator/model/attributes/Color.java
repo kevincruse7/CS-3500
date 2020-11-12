@@ -1,11 +1,11 @@
-package cs3500.animator.model.shapes.attributes;
+package cs3500.animator.model.attributes;
 
 import java.util.Objects;
 
 /**
  * Represents a color defined by an RGB value.
  */
-public final class Color {
+public class Color {
 
   private final int red;
   private final int green;
@@ -57,6 +57,11 @@ public final class Color {
   }
 
   @Override
+  public String toString() {
+    return String.format("%-4d%-4d%d", red, green, blue);
+  }
+
+  @Override
   public boolean equals(Object obj) {
     Color other;
 
@@ -74,10 +79,5 @@ public final class Color {
   @Override
   public int hashCode() {
     return Objects.hash(red, green, blue);
-  }
-
-  @Override
-  public String toString() {
-    return String.format("%-4d%-4d%d", red, green, blue);
   }
 }

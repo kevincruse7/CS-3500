@@ -1,8 +1,10 @@
 package cs3500.animator.model.shapes;
 
-import cs3500.animator.model.shapes.attributes.Color;
-import cs3500.animator.model.shapes.attributes.Dimensions2D;
-import cs3500.animator.model.shapes.attributes.Position2D;
+import cs3500.animator.model.attributes.Color;
+import cs3500.animator.model.attributes.Dimensions2D;
+import cs3500.animator.model.attributes.Position2D;
+
+import cs3500.animator.model.motions.Motion2D;
 
 /**
  * <p>
@@ -19,7 +21,8 @@ import cs3500.animator.model.shapes.attributes.Position2D;
  *   <li>Motions do not overlap with regards to tick range.</li>
  * </ul>
  */
-public interface AnimatedShape2D extends Cloneable {
+public interface AnimatedShape2D
+    extends VisitableShape<AnimatedRectangle, AnimatedEllipse>, Cloneable {
 
   /**
    * Adds the given motion to shape.

@@ -1,15 +1,10 @@
 package cs3500.animator.model.shapes;
 
-// (Piazza @1300)
-//
-// "Professor Shesh, can we just use Color, Dimension, and Point from java.awt?"
-// "No, we have those classes at home."
-//
-// Classes at home:
+import cs3500.animator.model.attributes.Color;
+import cs3500.animator.model.attributes.Dimensions2D;
+import cs3500.animator.model.attributes.Position2D;
 
-import cs3500.animator.model.shapes.attributes.Color;
-import cs3500.animator.model.shapes.attributes.Dimensions2D;
-import cs3500.animator.model.shapes.attributes.Position2D;
+import cs3500.animator.model.motions.Motion2D;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -18,7 +13,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * Represents a general animated 2D shape, as defined by {@link AnimatedShape2D}.
+ * Represents a general animated 2D shape as defined by {@link AnimatedShape2D}.
  */
 public abstract class AbstractAnimatedShape2D implements AnimatedShape2D {
 
@@ -190,12 +185,17 @@ public abstract class AbstractAnimatedShape2D implements AnimatedShape2D {
     return endTick;
   }
 
-  @Override
-  public abstract boolean equals(Object obj);
+  // Double dispatch implementation of shape equality
+  protected abstract boolean sameShape(AbstractAnimatedShape2D other);
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(name, motions);
+  // Double dispatch implementation of rectangle equality
+  protected boolean sameRectangle(AnimatedRectangle other) {
+    return false;
+  }
+
+  // Double dispatch implementation of ellipse equality
+  protected boolean sameEllipse(AnimatedEllipse other) {
+    return false;
   }
 
   @Override
@@ -226,5 +226,18 @@ public abstract class AbstractAnimatedShape2D implements AnimatedShape2D {
     }
 
     return textRep.toString();
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj instanceof AbstractAnimatedShape2D) {
+      return sameShape((AbstractAnimatedShape2D) obj);
+    }
+    return false;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(name, motions);
   }
 }

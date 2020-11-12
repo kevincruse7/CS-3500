@@ -1,14 +1,16 @@
-package cs3500.animator.model.shapes.attributes;
+package cs3500.animator.model.attributes;
 
 import java.util.Objects;
 
 /**
  * Represents the Cartesian position of a 2D shape.
  */
-public final class Position2D {
+public class Position2D {
 
-  // Allowed double error tolerance when comparing two positions
-  private static final double delta = 0.001;
+  /**
+   * Allowed double error tolerance when comparing two positions
+   */
+  public static final double delta = 0.001;
 
   private final double x;
   private final double y;
@@ -43,6 +45,11 @@ public final class Position2D {
   }
 
   @Override
+  public String toString() {
+    return String.format("%-4d%d", (int) (x + 0.5), (int) (y + 0.5));
+  }
+
+  @Override
   public boolean equals(Object obj) {
     Position2D other;
 
@@ -59,10 +66,5 @@ public final class Position2D {
   @Override
   public int hashCode() {
     return Objects.hash(x, y);
-  }
-
-  @Override
-  public String toString() {
-    return String.format("%-4d%d", (int) (x + 0.5), (int) (y + 0.5));
   }
 }

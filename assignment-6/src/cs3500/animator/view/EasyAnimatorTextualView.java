@@ -1,6 +1,6 @@
 package cs3500.animator.view;
 
-import cs3500.animator.model.EasyAnimatorModel;
+import cs3500.animator.model.EasyAnimatorImmutableModel;
 
 import java.io.IOException;
 
@@ -8,7 +8,7 @@ import java.io.IOException;
  * Textual view for Easy Animator as defined by {@link EasyAnimatorView}. Allows users to render
  * animations to textual descriptions at a specified tick rate.
  */
-public final class EasyAnimatorTextualView implements EasyAnimatorView {
+public class EasyAnimatorTextualView implements EasyAnimatorView {
 
   /**
    * Instantiates an {@code EasyAnimatorTextualView} object with the given model and output
@@ -23,13 +23,14 @@ public final class EasyAnimatorTextualView implements EasyAnimatorView {
    * @throws NullPointerException     Model or appendable is null.
    * @throws IllegalArgumentException Width or height is non-positive.
    */
-  public EasyAnimatorTextualView(EasyAnimatorModel<?, ?> model, Appendable output, int leftmostX,
-      int topmostY, int width, int height) throws NullPointerException, IllegalArgumentException {
+  public EasyAnimatorTextualView(EasyAnimatorImmutableModel<?> model, Appendable output,
+      int leftmostX, int topmostY, int width, int height)
+      throws NullPointerException, IllegalArgumentException {
 
   }
 
   @Override
-  public void render(int tickRate) throws IllegalArgumentException, IOException {
+  public void render(int tickDelay) throws IllegalArgumentException, IOException {
 
   }
 }

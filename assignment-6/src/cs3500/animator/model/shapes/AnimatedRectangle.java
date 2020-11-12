@@ -1,11 +1,14 @@
 package cs3500.animator.model.shapes;
 
+import cs3500.animator.model.motions.Motion2D;
+
 import java.util.Map;
+import java.util.Objects;
 
 /**
- * Represents an animated rectangle, as defined by {@link AnimatedShape2D}.
+ * Represents an animated rectangle as defined by {@link AnimatedShape2D}.
  */
-public final class AnimatedRectangle extends AbstractAnimatedShape2D {
+public class AnimatedRectangle extends AbstractAnimatedShape2D {
 
   /**
    * Instantiates an {@code AnimatedRectangle} object with the given name and tick-motion map.
@@ -30,22 +33,20 @@ public final class AnimatedRectangle extends AbstractAnimatedShape2D {
   }
 
   @Override
-  public boolean equals(Object obj) {
-    AnimatedRectangle other;
-
-    if (obj instanceof AnimatedRectangle) {
-      other = (AnimatedRectangle) obj;
-    } else {
-      return false;
-    }
-
-    return name.equals(other.name)
-        && motions.equals(other.motions);
+  public void accept(ShapeVisitor<AnimatedRectangle, AnimatedEllipse> visitor)
+      throws NullPointerException {
+    Objects.requireNonNull(visitor, "Visitor is null.").visitRectangle(this);
   }
 
   @Override
-  public int hashCode() {
-    return super.hashCode();
+  protected boolean sameShape(AbstractAnimatedShape2D other) {
+    return other.sameRectangle(this);
+  }
+
+  @Override
+  protected boolean sameRectangle(AnimatedRectangle other) {
+    return name.equals(other.name)
+        && motions.equals(other.motions);
   }
 
   @Override

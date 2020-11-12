@@ -1,14 +1,16 @@
-package cs3500.animator.model.shapes.attributes;
+package cs3500.animator.model.attributes;
 
 import java.util.Objects;
 
 /**
  * Represents the dimensions of a 2D shape.
  */
-public final class Dimensions2D {
+public class Dimensions2D {
 
-  // Allowed double error tolerance when comparing two dimensions
-  private static final double delta = 0.001;
+  /**
+   * Allowed double error tolerance when comparing two dimensions
+   */
+  public static final double delta = 0.001;
 
   private final double width;
   private final double height;
@@ -48,6 +50,11 @@ public final class Dimensions2D {
   }
 
   @Override
+  public String toString() {
+    return String.format("%-4d%d", (int) (width + 0.5), (int) (height + 0.5));
+  }
+
+  @Override
   public boolean equals(Object obj) {
     Dimensions2D other;
 
@@ -64,10 +71,5 @@ public final class Dimensions2D {
   @Override
   public int hashCode() {
     return Objects.hash(width, height);
-  }
-
-  @Override
-  public String toString() {
-    return String.format("%-4d%d", (int) (width + 0.5), (int) (height + 0.5));
   }
 }

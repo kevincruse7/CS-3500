@@ -1,61 +1,53 @@
-package cs3500.animator.model.shapes.attributes;
+package cs3500.animator.model.attributes;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
-import org.junit.Before;
 import org.junit.Test;
 
 /**
  * Tests the functionality of the {@link Color} class.
  */
-public final class ColorTest {
+public class ColorTest {
 
-  Color white;
-  Color black;
-  Color random;
-
-  @Before
-  public void setup() {
-    white = new Color(255, 255, 255);
-    black = new Color(0, 0, 0);
-    random = new Color(123, 244, 10);
-  }
+  private final Color white = new Color(255, 255, 255);
+  private final Color black = new Color(0, 0, 0);
+  private final Color random = new Color(123, 244, 10);
 
   @Test(expected = IllegalArgumentException.class)
   public void testInvalidRedLow() {
     // red value is too low
-    Color bad = new Color(-1, 3, 4);
+    new Color(-1, 3, 4);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testInvalidGreenLow() {
     // green value is too low
-    Color bad = new Color(1, -3, 4);
+    new Color(1, -3, 4);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testInvalidBlueLow() {
     // blue value is too low
-    Color bad = new Color(1, 3, -4);
+    new Color(1, 3, -4);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testInvalidRedHigh() {
     // red value is too high
-    Color bad = new Color(256, 3, 4);
+    new Color(256, 3, 4);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testInvalidGreenHigh() {
     // red value is too high
-    Color bad = new Color(255, 300, 4);
+    new Color(255, 300, 4);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testInvalidBlueHigh() {
     // red value is too high
-    Color bad = new Color(255, 3, 400);
+    new Color(255, 3, 400);
   }
 
   @Test

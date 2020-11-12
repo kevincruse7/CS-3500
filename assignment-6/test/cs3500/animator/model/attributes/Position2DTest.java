@@ -1,26 +1,18 @@
-package cs3500.animator.model.shapes.attributes;
+package cs3500.animator.model.attributes;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
-import org.junit.Before;
 import org.junit.Test;
 
 /**
  * Tests the functionality of the {@link Position2D} class.
  */
-public final class Position2DTest {
+public class Position2DTest {
 
-  Position2D posOne;
-  Position2D posTwo;
-  Position2D posThree;
-
-  @Before
-  public void setup() {
-    posOne = new Position2D(1.2, 2);
-    posTwo = new Position2D(-6.7, 5);
-    posThree = new Position2D(300, -98.8);
-  }
+  private final Position2D posOne = new Position2D(1.2, 2);
+  private final Position2D posTwo = new Position2D(-6.7, 5);
+  private final Position2D posThree = new Position2D(300, -98.8);
 
   @Test
   public void testGetters() {

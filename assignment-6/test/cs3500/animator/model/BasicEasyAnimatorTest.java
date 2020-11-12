@@ -5,11 +5,11 @@ import static org.junit.Assert.assertEquals;
 import cs3500.animator.model.shapes.AnimatedEllipse;
 import cs3500.animator.model.shapes.AnimatedRectangle;
 import cs3500.animator.model.shapes.AnimatedShape2D;
-import cs3500.animator.model.shapes.Motion2D;
+import cs3500.animator.model.motions.Motion2D;
 
-import cs3500.animator.model.shapes.attributes.Color;
-import cs3500.animator.model.shapes.attributes.Dimensions2D;
-import cs3500.animator.model.shapes.attributes.Position2D;
+import cs3500.animator.model.attributes.Color;
+import cs3500.animator.model.attributes.Dimensions2D;
+import cs3500.animator.model.attributes.Position2D;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -20,13 +20,19 @@ import java.util.List;
 /**
  * Tester class for {@link BasicEasyAnimator}.
  */
-public final class BasicEasyAnimatorTest {
+public class BasicEasyAnimatorTest {
+
+  private final Motion2D motion = Motion2D.builder()
+      .setStartTick(0)
+      .setEndTick(10)
+      .setStartPosition(new Position2D(0, 0))
+      .setStartDimensions(new Dimensions2D(10, 10))
+      .setStartColor(new Color(255, 255, 255))
+      .build();
 
   private AnimatedShape2D populatedRectangle;
   private AnimatedShape2D emptyEllipse;
   private AnimatedShape2D emptyRectangle;
-
-  private Motion2D motion;
 
   private List<AnimatedShape2D> shapes;
 
@@ -36,17 +42,10 @@ public final class BasicEasyAnimatorTest {
   @Before
   public void setUp() {
     populatedRectangle = new AnimatedRectangle("PR");
+    populatedRectangle.addMotion(motion);
+
     emptyEllipse = new AnimatedEllipse("E");
     emptyRectangle = new AnimatedRectangle("R");
-
-    motion = Motion2D.builder()
-        .setStartTick(0)
-        .setEndTick(10)
-        .setStartPosition(new Position2D(0, 0))
-        .setStartDimensions(new Dimensions2D(10, 10))
-        .setStartColor(new Color(255, 255, 255))
-        .build();
-    populatedRectangle.addMotion(motion);
 
     shapes = new LinkedList<>();
     shapes.add(populatedRectangle);
@@ -64,9 +63,9 @@ public final class BasicEasyAnimatorTest {
 
   @Test
   public void constructorModifyList() {
-    AnimatedShape2D rectangleCopy = (AnimatedShape2D)populatedRectangle.clone();
+    AnimatedShape2D rectangleCopy = (AnimatedShape2D) populatedRectangle.clone();
 
-    // Ensure that changes to provided list don't cause changes in internal cs3500.animator.model list
+    // Ensure that changes to provided list don't cause changes in internal model list
     shapes.remove(populatedRectangle);
     populatedRectangle.removeMotion(motion);
 

@@ -1,37 +1,29 @@
-package cs3500.animator.model.shapes.attributes;
+package cs3500.animator.model.attributes;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
-import org.junit.Before;
 import org.junit.Test;
 
 /**
  * Tests the functionality of the {@link Dimensions2D} class.
  */
-public final class Dimensions2DTest {
+public class Dimensions2DTest {
 
-  Dimensions2D dimOne;
-  Dimensions2D dimTwo;
-  Dimensions2D dimThree;
-
-  @Before
-  public void setup() {
-    dimOne = new Dimensions2D(1.2, 2);
-    dimTwo = new Dimensions2D(6.7, 5);
-    dimThree = new Dimensions2D(300, 98.8);
-  }
+  private final Dimensions2D dimOne = new Dimensions2D(1.2, 2);
+  private final Dimensions2D dimTwo = new Dimensions2D(6.7, 5);
+  private final Dimensions2D dimThree = new Dimensions2D(300, 98.8);
 
   @Test(expected = IllegalArgumentException.class)
   public void testInvalidWidthLow() {
     // width value is too low
-    Dimensions2D bad = new Dimensions2D(-1, 3);
+    new Dimensions2D(-1, 3);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testInvalidHeightLow() {
     // width value is too high
-    Dimensions2D bad = new Dimensions2D(1, -3);
+    new Dimensions2D(1, -3);
   }
 
   @Test

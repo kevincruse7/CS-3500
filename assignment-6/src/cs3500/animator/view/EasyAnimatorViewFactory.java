@@ -3,7 +3,7 @@ package cs3500.animator.view;
 /**
  * Constructs {@link EasyAnimatorView} objects.
  */
-public final class EasyAnimatorViewFactory {
+public class EasyAnimatorViewFactory {
 
   /**
    * Constructs an {@link EasyAnimatorView} object of the given type.

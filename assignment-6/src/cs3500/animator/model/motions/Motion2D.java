@@ -1,8 +1,8 @@
-package cs3500.animator.model.shapes;
+package cs3500.animator.model.motions;
 
-import cs3500.animator.model.shapes.attributes.Color;
-import cs3500.animator.model.shapes.attributes.Dimensions2D;
-import cs3500.animator.model.shapes.attributes.Position2D;
+import cs3500.animator.model.attributes.Color;
+import cs3500.animator.model.attributes.Dimensions2D;
+import cs3500.animator.model.attributes.Position2D;
 
 import java.util.Objects;
 
@@ -23,7 +23,7 @@ import java.util.Objects;
  *   <li>Starting and ending colors are non-null.</li>
  * </ul>
  */
-public final class Motion2D implements Comparable<Motion2D> {
+public class Motion2D implements Comparable<Motion2D> {
 
   private final int startTick;
   private final int endTick;
@@ -93,13 +93,19 @@ public final class Motion2D implements Comparable<Motion2D> {
       }
 
       Objects.requireNonNull(startPosition, "Starting position is null.");
-      this.endPosition = endPosition == null ? startPosition : endPosition;
+      if (endPosition == null) {
+        endPosition = startPosition;
+      }
 
       Objects.requireNonNull(startDimensions, "Starting dimensions are null.");
-      this.endDimensions = endDimensions == null ? startDimensions : endDimensions;
+      if (endDimensions == null) {
+        endDimensions = startDimensions;
+      }
 
       Objects.requireNonNull(startColor, "Starting color is null.");
-      this.endColor = endColor == null ? startColor : endColor;
+      if (endColor == null) {
+        endColor = startColor;
+      }
 
       return new Motion2D(startTick, endTick, startPosition, endPosition, startDimensions,
           endDimensions, startColor, endColor);
@@ -288,6 +294,15 @@ public final class Motion2D implements Comparable<Motion2D> {
   }
 
   @Override
+  public String toString() {
+    return String.format(
+        "%-4d%-8s%-8s%-12s  %-4d%-8s%-8s%s",
+        startTick, startPosition.toString(), startDimensions.toString(), startColor.toString(),
+        endTick, endPosition.toString(), endDimensions.toString(), endColor.toString()
+    );
+  }
+
+  @Override
   public boolean equals(Object obj) {
     Motion2D other;
 
@@ -311,14 +326,5 @@ public final class Motion2D implements Comparable<Motion2D> {
   public int hashCode() {
     return Objects.hash(startTick, endTick, startPosition, endPosition, startDimensions,
         endDimensions, startColor, endColor);
-  }
-
-  @Override
-  public String toString() {
-    return String.format(
-        "%-4d%-8s%-8s%-12s  %-4d%-8s%-8s%s",
-        startTick, startPosition.toString(), startDimensions.toString(), startColor.toString(),
-        endTick, endPosition.toString(), endDimensions.toString(), endColor.toString()
-    );
   }
 }
