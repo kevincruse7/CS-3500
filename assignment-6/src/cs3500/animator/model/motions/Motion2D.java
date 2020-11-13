@@ -76,8 +76,9 @@ public class Motion2D implements Comparable<Motion2D> {
      * @return Instantiated {@code Motion2D} object
      * @throws NullPointerException     Start or end tick, starting position, starting dimensions,
      *                                  or starting color is null.
-     * @throws IllegalArgumentException Start tick is negative, end tick is non-positive, or start
-     *                                  tick is greater than or equal to end tick.
+     * @throws IllegalArgumentException Start tick is negative, end tick is non-positive, start tick
+     *                                  is greater than end tick, or zero tick motion has mismatched
+     *                                  state.
      */
     public Motion2D build() throws NullPointerException, IllegalArgumentException {
       Objects.requireNonNull(startTick, "Start tick is null.");
@@ -88,8 +89,8 @@ public class Motion2D implements Comparable<Motion2D> {
       if (endTick < 1) {
         throw new IllegalArgumentException("End tick is non-positive");
       }
-      if (startTick >= endTick) {
-        throw new IllegalArgumentException("Start tick is greater than or equal to end tick.");
+      if (startTick > endTick) {
+        throw new IllegalArgumentException("Start tick is greater than end tick.");
       }
 
       Objects.requireNonNull(startPosition, "Starting position is null.");
@@ -105,6 +106,14 @@ public class Motion2D implements Comparable<Motion2D> {
       Objects.requireNonNull(startColor, "Starting color is null.");
       if (endColor == null) {
         endColor = startColor;
+      }
+
+      // TODO: Test zero tick motions.
+      if (startTick.equals(endTick)
+          && (!startPosition.equals(endPosition)
+          || !startDimensions.equals(endDimensions)
+          || !startColor.equals(endColor))) {
+        throw new IllegalArgumentException("Zero tick motion has mismatched state.");
       }
 
       return new Motion2D(startTick, endTick, startPosition, endPosition, startDimensions,

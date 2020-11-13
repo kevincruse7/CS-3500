@@ -318,5 +318,5 @@ public class BasicEasyAnimatorTest {
     assertEquals(shapes, populatedModel.getShapes());
   }
 
-  // TODO: Write tests for toString.
+  // TODO: Write tests for toString and new getter methods.
 }

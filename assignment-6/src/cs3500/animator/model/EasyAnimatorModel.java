@@ -1,7 +1,5 @@
 package cs3500.animator.model;
 
-import cs3500.animator.model.shapes.VisitableShape;
-
 /**
  * <p>
  * Model for Easy Animator. Contains a list of animated shapes, each with their own respective

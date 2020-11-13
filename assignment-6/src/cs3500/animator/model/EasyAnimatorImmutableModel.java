@@ -1,6 +1,5 @@
 package cs3500.animator.model;
 
-import cs3500.animator.model.shapes.VisitableShape;
 import java.util.List;
 
 /**
@@ -10,6 +9,34 @@ import java.util.List;
  * @param <Shape> Shape class used by model
  */
 public interface EasyAnimatorImmutableModel<Shape> {
+
+  /**
+   * Returns the leftmost <i>x</i>-coordinate of the animation canvas.
+   *
+   * @return Leftmost <i>x</i>-coordinate of the animation canvas
+   */
+  int getLeftmostX();
+
+  /**
+   * Returns the topmost <i>y</i>-coordinate of the animation canvas.
+   *
+   * @return Topmost <i>y</i>-coordinate of the animation canvas
+   */
+  int getTopmostY();
+
+  /**
+   * Returns the width of the animation canvas.
+   *
+   * @return Width of the animation canvas
+   */
+  int getWidth();
+
+  /**
+   * Returns the height of the animation canvas.
+   *
+   * @return Height of the animation canvas
+   */
+  int getHeight();
 
   /**
    * Returns the tick length of animation represented in model.

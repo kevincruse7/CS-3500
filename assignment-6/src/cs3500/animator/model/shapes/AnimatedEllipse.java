@@ -33,8 +33,7 @@ public class AnimatedEllipse extends AbstractAnimatedShape2D {
   }
 
   @Override
-  public void accept(ShapeVisitor<AnimatedRectangle, AnimatedEllipse> visitor)
-      throws NullPointerException {
+  public void accept(ShapeVisitor<AnimatedRectangle, AnimatedEllipse> visitor) throws Exception {
     Objects.requireNonNull(visitor, "Visitor is null.").visitEllipse(this);
   }
 

@@ -6,13 +6,13 @@ import cs3500.animator.model.shapes.AnimatedRectangle;
 import java.io.IOException;
 
 /**
- * Represents a shape visitor for rendering shapes as SVG entries.
+ * Represents a shape visitor for rendering shapes as strings.
  */
-public class AnimatedShape2DSVGRenderer
+public class AnimatedShape2DTextualRenderer
     implements ShapeRenderer<AnimatedRectangle, AnimatedEllipse> {
 
   /**
-   * Renders the given rectangle as an SVG entry.
+   * Renders the given rectangle as a string.
    *
    * @param rectangle Rectangle to be rendered
    * @throws NullPointerException  Rectangle is null.
@@ -26,7 +26,7 @@ public class AnimatedShape2DSVGRenderer
   }
 
   /**
-   * Renders the given ellipse as an SVG entry.
+   * Redners the given ellipse as a string.
    *
    * @param ellipse Ellipse to be rendered
    * @throws NullPointerException  Ellipse is null.

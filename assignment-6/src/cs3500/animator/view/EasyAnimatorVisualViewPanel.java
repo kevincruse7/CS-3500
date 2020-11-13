@@ -24,18 +24,12 @@ public class EasyAnimatorVisualViewPanel<Rectangle, Ellipse> extends JPanel {
    *
    * @param model         Easy Animator model to be rendered
    * @param shapeRenderer Shape visitor for rendering shapes using Swing framework
-   * @param leftmostX     Relative position of 0 <i>x</i>-coordinate on canvas
-   * @param topmostY      Relative position of 0 <i>y</i>-coordinate on canvas
-   * @param width         Width of canvas
-   * @param height        Height of canvas
    * @throws NullPointerException     Model or renderer is null.
    * @throws IllegalArgumentException Width or height is non-positive.
    */
   public EasyAnimatorVisualViewPanel(
       EasyAnimatorImmutableModel<? extends VisitableShape<Rectangle, Ellipse>> model,
-      ShapeVisitor<Rectangle, Ellipse> shapeRenderer,
-      int leftmostX, int topmostY,
-      int width, int height
+      ShapeVisitor<Rectangle, Ellipse> shapeRenderer
   ) throws NullPointerException, IllegalArgumentException {
 
   }

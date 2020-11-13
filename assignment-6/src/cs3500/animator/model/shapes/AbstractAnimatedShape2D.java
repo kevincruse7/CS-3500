@@ -124,6 +124,7 @@ public abstract class AbstractAnimatedShape2D implements AnimatedShape2D {
     return name;
   }
 
+  // TODO: May need to keep shapes visible after their motions have ended.
   @Override
   public Position2D getPosition(int tick) throws IllegalStateException, IllegalArgumentException {
     checkMotionIntegrity();

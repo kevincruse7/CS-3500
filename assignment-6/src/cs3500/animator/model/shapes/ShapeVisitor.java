@@ -12,15 +12,17 @@ public interface ShapeVisitor<Rectangle, Ellipse> {
    * Visits the given rectangle.
    *
    * @param rectangle Rectangle to be visited
-   * @throws NullPointerException Rectangle is null.
+   * @throws Exception An exception was thrown, the type and nature of which is determined by the
+   *                   implementing class.
    */
-  void visitRectangle(Rectangle rectangle) throws NullPointerException;
+  void visitRectangle(Rectangle rectangle) throws Exception;
 
   /**
    * Visits the given ellipse.
    *
    * @param ellipse Ellipse to be visited
-   * @throws NullPointerException Ellipse is null.
+   * @throws Exception An exception was thrown, the type and nature of which is determined by the
+   *                   implementing class.
    */
-  void visitEllipse(Ellipse ellipse) throws NullPointerException;
+  void visitEllipse(Ellipse ellipse) throws Exception;
 }

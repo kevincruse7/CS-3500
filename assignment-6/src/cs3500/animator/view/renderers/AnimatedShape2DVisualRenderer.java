@@ -2,7 +2,6 @@ package cs3500.animator.view.renderers;
 
 import cs3500.animator.model.shapes.AnimatedEllipse;
 import cs3500.animator.model.shapes.AnimatedRectangle;
-import cs3500.animator.model.shapes.ShapeVisitor;
 
 import java.awt.Graphics2D;
 
@@ -10,25 +9,42 @@ import java.awt.Graphics2D;
  * Represents a shape visitor for visually rendering shapes using the Swing framework.
  */
 public class AnimatedShape2DVisualRenderer
-    implements ShapeVisitor<AnimatedRectangle, AnimatedEllipse> {
+    implements ShapeRenderer<AnimatedRectangle, AnimatedEllipse> {
 
   /**
-   * Instantiates an {@code AnimatedShape2DVisualRenderer} object with the given graphics object.
+   * Renders the given rectangle onto a {@link Graphics2D} object.
    *
-   * @param graphics Graphics object to render shapes to
-   * @throws NullPointerException Graphics object is null.
+   * @param rectangle Rectangle to be rendered
+   * @throws NullPointerException  Rectangle is null.
+   * @throws IllegalStateException Graphics object is null.
    */
-  public AnimatedShape2DVisualRenderer(Graphics2D graphics) throws NullPointerException {
+  @Override
+  public void visitRectangle(AnimatedRectangle rectangle)
+      throws NullPointerException, IllegalStateException {
 
   }
 
+  /**
+   * Renders the given ellipse onto a {@link Graphics2D} object.
+   *
+   * @param ellipse Ellipse to be rendered
+   * @throws NullPointerException  Ellipse is null.
+   * @throws IllegalStateException Graphics object is null.
+   */
   @Override
-  public void visitRectangle(AnimatedRectangle rectangle) {
+  public void visitEllipse(AnimatedEllipse ellipse)
+      throws NullPointerException, IllegalStateException {
 
   }
 
+  /**
+   * Sets the {@link Graphics2D} object.
+   *
+   * @param output {@link Graphics2D} object to draw to
+   * @throws IllegalArgumentException Object is not a {@link Graphics2D} object.
+   */
   @Override
-  public void visitEllipse(AnimatedEllipse animatedEllipse) {
+  public void setOutput(Object output) throws IllegalArgumentException {
 
   }
 }
