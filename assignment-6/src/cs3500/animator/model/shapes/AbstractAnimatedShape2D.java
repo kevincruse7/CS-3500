@@ -20,6 +20,11 @@ public abstract class AbstractAnimatedShape2D implements AnimatedShape2D {
   protected final String name;
   protected Map<Integer, Motion2D> motions;  // Map to associate ticks with motions
 
+  private int startTick;
+  private int endTick;
+
+  private boolean integrityUnverified = true;  // Only run integrity check if state has changed
+
   /**
    * Instantiates an {@code AbstractAnimatedShape2D} object with the given name and tick-motion
    * map.
@@ -64,6 +69,7 @@ public abstract class AbstractAnimatedShape2D implements AnimatedShape2D {
       motions.put(i, motion);
     }
     motions.putIfAbsent(motion.getEndTick(), motion);
+    integrityUnverified = true;
   }
 
   @Override
@@ -81,6 +87,7 @@ public abstract class AbstractAnimatedShape2D implements AnimatedShape2D {
       motions.remove(i);
     }
     motions.remove(motion.getEndTick(), motion);
+    integrityUnverified = true;
   }
 
   // Ensures that motions are consistent (motions exist, no gaps, no implicit teleportation)
@@ -117,6 +124,15 @@ public abstract class AbstractAnimatedShape2D implements AnimatedShape2D {
     } else if (motionsArray.length == 0) {
       throw new IllegalStateException("Motion set is empty.");
     }
+
+    startTick = Integer.MAX_VALUE;
+    endTick = 0;
+    for (int integer : motions.keySet()) {
+      startTick = Math.min(startTick, integer);
+      endTick = Math.max(endTick, integer);
+    }
+
+    integrityUnverified = false;
   }
 
   @Override
@@ -127,7 +143,9 @@ public abstract class AbstractAnimatedShape2D implements AnimatedShape2D {
   // TODO: May need to keep shapes visible after their motions have ended.
   @Override
   public Position2D getPosition(int tick) throws IllegalStateException, IllegalArgumentException {
-    checkMotionIntegrity();
+    if (integrityUnverified) {
+      checkMotionIntegrity();
+    }
 
     Motion2D motion = motions.get(tick);
     if (motion == null) {
@@ -140,7 +158,9 @@ public abstract class AbstractAnimatedShape2D implements AnimatedShape2D {
   @Override
   public Dimensions2D getDimensions(int tick)
       throws IllegalStateException, IllegalArgumentException {
-    checkMotionIntegrity();
+    if (integrityUnverified) {
+      checkMotionIntegrity();
+    }
 
     Motion2D motion = motions.get(tick);
     if (motion == null) {
@@ -152,7 +172,9 @@ public abstract class AbstractAnimatedShape2D implements AnimatedShape2D {
 
   @Override
   public Color getColor(int tick) throws IllegalStateException, IllegalArgumentException {
-    checkMotionIntegrity();
+    if (integrityUnverified) {
+      checkMotionIntegrity();
+    }
 
     Motion2D motion = motions.get(tick);
     if (motion == null) {
@@ -164,11 +186,8 @@ public abstract class AbstractAnimatedShape2D implements AnimatedShape2D {
 
   @Override
   public int getStartTick() throws IllegalStateException {
-    checkMotionIntegrity();
-
-    int startTick = Integer.MAX_VALUE;
-    for (int integer : motions.keySet()) {
-      startTick = Math.min(startTick, integer);
+    if (integrityUnverified) {
+      checkMotionIntegrity();
     }
 
     return startTick;
@@ -176,11 +195,8 @@ public abstract class AbstractAnimatedShape2D implements AnimatedShape2D {
 
   @Override
   public int getEndTick() throws IllegalStateException {
-    checkMotionIntegrity();
-
-    int endTick = 0;
-    for (int integer : motions.keySet()) {
-      endTick = Math.max(endTick, integer);
+    if (integrityUnverified) {
+      checkMotionIntegrity();
     }
 
     return endTick;

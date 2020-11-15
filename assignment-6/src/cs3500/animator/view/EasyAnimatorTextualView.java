@@ -21,14 +21,17 @@ public class EasyAnimatorTextualView<Rectangle, Ellipse>
    * @param shapeRenderer Shape visitor used to render shapes
    * @throws NullPointerException Shape renderer is null.
    */
-  public EasyAnimatorTextualView(ShapeRenderer<Rectangle, Ellipse> shapeRenderer)
+  public EasyAnimatorTextualView(ShapeRenderer<Rectangle, Ellipse, Appendable> shapeRenderer)
       throws NullPointerException {
 
   }
 
   @Override
-  public void render(EasyAnimatorImmutableModel<? extends VisitableShape<Rectangle, Ellipse>> model,
-      int tickDelay) throws NullPointerException, IllegalArgumentException, IOException {
+  public void render(
+      EasyAnimatorImmutableModel<? extends VisitableShape<Rectangle, Ellipse>> model,
+      Appendable output,
+      int tickDelay
+  ) throws NullPointerException, IllegalArgumentException, IOException {
 
   }
 }

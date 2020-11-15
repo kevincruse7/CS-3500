@@ -24,14 +24,17 @@ public class EasyAnimatorSVGView<Rectangle, Ellipse>
    * @param shapeRenderer Shape visitor used to render shapes
    * @throws NullPointerException Shape renderer is null.
    */
-  public EasyAnimatorSVGView(ShapeRenderer<Rectangle, Ellipse> shapeRenderer)
+  public EasyAnimatorSVGView(ShapeRenderer<Rectangle, Ellipse, Appendable> shapeRenderer)
       throws NullPointerException {
 
   }
 
   @Override
-  public void render(EasyAnimatorImmutableModel<? extends VisitableShape<Rectangle, Ellipse>> model,
-      int tickDelay) throws NullPointerException, IllegalArgumentException, IOException {
+  public void render(
+      EasyAnimatorImmutableModel<? extends VisitableShape<Rectangle, Ellipse>> model,
+      Appendable output,
+      int tickDelay
+  ) throws NullPointerException, IllegalArgumentException, IOException {
 
   }
 }

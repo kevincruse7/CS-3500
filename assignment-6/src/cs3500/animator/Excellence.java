@@ -60,7 +60,7 @@ public class Excellence {
             try {
               input = new FileReader("resources/" + args[i + 1]);
             } catch (FileNotFoundException e) {
-              errorOut(e.getMessage());
+              errorOut("Could not find input file: " + args[i + 1]);
             }
           }
           break;
@@ -69,7 +69,7 @@ public class Excellence {
             try {
               output = new FileWriter("resources/" + args[i + 1]);
             } catch (IOException e) {
-              errorOut(e.getMessage());
+              errorOut("IO exception: " + e.getMessage());
             }
           }
           break;
@@ -91,7 +91,7 @@ public class Excellence {
               }
               tickDelay = 1000 / tickRate;
             } catch (NumberFormatException e) {
-              errorOut(e.getMessage());
+              errorOut("Speed argument must be a positive integer");
             }
           }
           break;
@@ -119,7 +119,7 @@ public class Excellence {
     }
 
     try {
-      Objects.requireNonNull(view).render(model, tickDelay);
+      Objects.requireNonNull(view).render(model, output, tickDelay);
     } catch (IOException e) {
       errorOut(e.getMessage());
     }

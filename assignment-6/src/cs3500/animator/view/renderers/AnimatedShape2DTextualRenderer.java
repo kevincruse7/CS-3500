@@ -9,7 +9,7 @@ import java.io.IOException;
  * Represents a shape visitor for rendering shapes as strings.
  */
 public class AnimatedShape2DTextualRenderer
-    implements ShapeRenderer<AnimatedRectangle, AnimatedEllipse> {
+    implements ShapeRenderer<AnimatedRectangle, AnimatedEllipse, Appendable> {
 
   /**
    * Renders the given rectangle as a string.
@@ -43,10 +43,20 @@ public class AnimatedShape2DTextualRenderer
    * Sets the output appendable.
    *
    * @param output Appendable to send output to
-   * @throws IllegalArgumentException Object is not an appendable.
+   * @throws NullPointerException Output appendable is null.
    */
   @Override
-  public void setOutput(Object output) throws IllegalArgumentException {
+  public void setOutput(Appendable output) throws IllegalArgumentException {
 
+  }
+
+  @Override
+  public void resetTick() {
+
+  }
+
+  @Override
+  public int nextTick() {
+    return 0;
   }
 }
