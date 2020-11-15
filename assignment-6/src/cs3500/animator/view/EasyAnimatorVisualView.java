@@ -59,7 +59,8 @@ public class EasyAnimatorVisualView<Rectangle, Ellipse> extends JFrame
     JPanel panel = new EasyAnimatorVisualViewPanel<>(model, shapeRenderer, timer);
     JScrollPane scrollPane = new JScrollPane(panel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
         JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-    scrollPane.setPreferredSize(new Dimension(960, 720));
+    scrollPane.setPreferredSize(new Dimension(Math.min(model.getWidth() + 18, 960),
+        Math.min(model.getHeight() + 18, 720)));
 
     setLayout(new FlowLayout());
     setResizable(false);

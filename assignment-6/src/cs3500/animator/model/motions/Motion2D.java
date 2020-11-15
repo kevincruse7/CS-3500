@@ -86,8 +86,8 @@ public class Motion2D implements Comparable<Motion2D> {
       if (startTick < 0) {
         throw new IllegalArgumentException("Start tick is negative.");
       }
-      if (endTick < 1) {
-        throw new IllegalArgumentException("End tick is non-positive");
+      if (endTick < 0) {
+        throw new IllegalArgumentException("End tick is negative.");
       }
       if (startTick > endTick) {
         throw new IllegalArgumentException("Start tick is greater than end tick.");
