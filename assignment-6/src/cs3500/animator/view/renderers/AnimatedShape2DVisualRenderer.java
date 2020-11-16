@@ -15,7 +15,7 @@ import java.util.Objects;
  * Represents a shape visitor for visually rendering shapes using the Swing framework.
  */
 public class AnimatedShape2DVisualRenderer
-    implements ShapeRenderer<AnimatedRectangle, AnimatedEllipse, Graphics2D> {
+    implements VisualShapeRenderer<AnimatedRectangle, AnimatedEllipse> {
 
   private Graphics2D output;
   private int tick;
@@ -91,7 +91,7 @@ public class AnimatedShape2DVisualRenderer
 
   @Override
   public void resetTick() {
-    tick = 1;
+    tick = 0;
   }
 
   @Override

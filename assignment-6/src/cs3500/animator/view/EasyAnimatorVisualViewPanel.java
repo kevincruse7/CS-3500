@@ -4,7 +4,7 @@ import cs3500.animator.model.EasyAnimatorImmutableModel;
 
 import cs3500.animator.model.shapes.VisitableShape;
 
-import cs3500.animator.view.renderers.ShapeRenderer;
+import cs3500.animator.view.renderers.VisualShapeRenderer;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -24,7 +24,7 @@ import javax.swing.Timer;
 public class EasyAnimatorVisualViewPanel<Rectangle, Ellipse> extends JPanel {
 
   private final EasyAnimatorImmutableModel<? extends VisitableShape<Rectangle, Ellipse>> model;
-  private final ShapeRenderer<Rectangle, Ellipse, Graphics2D> shapeRenderer;
+  private final VisualShapeRenderer<Rectangle, Ellipse> shapeRenderer;
   private final Timer timer;
   private final int numTicks;
 
@@ -39,7 +39,7 @@ public class EasyAnimatorVisualViewPanel<Rectangle, Ellipse> extends JPanel {
    */
   public EasyAnimatorVisualViewPanel(
       EasyAnimatorImmutableModel<? extends VisitableShape<Rectangle, Ellipse>> model,
-      ShapeRenderer<Rectangle, Ellipse, Graphics2D> shapeRenderer,
+      VisualShapeRenderer<Rectangle, Ellipse> shapeRenderer,
       Timer timer
   ) throws NullPointerException {
     super();

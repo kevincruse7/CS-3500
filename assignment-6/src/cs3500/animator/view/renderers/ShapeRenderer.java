@@ -19,16 +19,4 @@ public interface ShapeRenderer<Rectangle, Ellipse, Output>
    * @throws NullPointerException Output object is null.
    */
   void setOutput(Output output) throws NullPointerException;
-
-  /**
-   * Resets the tick count to 1.
-   */
-  void resetTick();
-
-  /**
-   * Increments the tick counter by 1.
-   *
-   * @return New tick count
-   */
-  int nextTick();
 }

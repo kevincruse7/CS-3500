@@ -4,7 +4,7 @@ import cs3500.animator.model.EasyAnimatorImmutableModel;
 
 import cs3500.animator.model.shapes.VisitableShape;
 
-import cs3500.animator.view.renderers.ShapeRenderer;
+import cs3500.animator.view.renderers.VisualShapeRenderer;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -27,7 +27,7 @@ import javax.swing.Timer;
 public class EasyAnimatorVisualView<Rectangle, Ellipse> extends JFrame
     implements EasyAnimatorView<Rectangle, Ellipse> {
 
-  private final ShapeRenderer<Rectangle, Ellipse, Graphics2D> shapeRenderer;
+  private final VisualShapeRenderer<Rectangle, Ellipse> shapeRenderer;
 
   /**
    * Instantiates an {@code EasyAnimatorVisualView} object with the given shape renderer.
@@ -35,7 +35,7 @@ public class EasyAnimatorVisualView<Rectangle, Ellipse> extends JFrame
    * @param shapeRenderer Shape visitor used to render shapes
    * @throws NullPointerException Shape renderer is null.
    */
-  public EasyAnimatorVisualView(ShapeRenderer<Rectangle, Ellipse, Graphics2D> shapeRenderer)
+  public EasyAnimatorVisualView(VisualShapeRenderer<Rectangle, Ellipse> shapeRenderer)
       throws NullPointerException {
     super("Easy Animator");
 

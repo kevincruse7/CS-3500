@@ -14,6 +14,7 @@ import cs3500.animator.util.AnimationReader;
 import cs3500.animator.view.EasyAnimatorView;
 import cs3500.animator.view.EasyAnimatorViewFactory;
 
+import java.io.Closeable;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -122,6 +123,11 @@ public class Excellence {
       Objects.requireNonNull(view).render(model, output, tickDelay);
     } catch (IOException e) {
       errorOut(e.getMessage());
+    }
+
+    try {
+      ((Closeable) output).close();
+    } catch (IOException ignored) {
     }
   }
 }

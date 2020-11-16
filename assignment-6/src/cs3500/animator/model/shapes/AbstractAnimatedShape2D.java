@@ -9,6 +9,7 @@ import cs3500.animator.model.motions.Motion2D;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -153,6 +154,14 @@ public abstract class AbstractAnimatedShape2D implements AnimatedShape2D {
     }
 
     return motion.getPosition(tick);
+  }
+
+  @Override
+  public List<Motion2D> getMotions() {
+    Motion2D[] motionsArray = new HashSet<>(motions.values()).toArray(new Motion2D[0]);
+    Arrays.sort(motionsArray);
+
+    return Arrays.asList(motionsArray);
   }
 
   @Override

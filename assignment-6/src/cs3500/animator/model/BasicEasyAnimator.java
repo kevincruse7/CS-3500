@@ -267,13 +267,14 @@ public class BasicEasyAnimator implements EasyAnimatorModel<AnimatedShape2D, Mot
   @Override
   public String toString() {
     StringBuilder textRep = new StringBuilder();
+    textRep.append(String.format("canvas %d %d %d %d\n", leftmostX, topmostY, width, height));
 
     Iterator<AnimatedShape2D> shapeIter = shapes.iterator();
     if (shapeIter.hasNext()) {
       textRep.append(shapeIter.next());
 
       while (shapeIter.hasNext()) {
-        textRep.append("\n\n").append(shapeIter.next());
+        textRep.append('\n').append(shapeIter.next());
       }
     }
 

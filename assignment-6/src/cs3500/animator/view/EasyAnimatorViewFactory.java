@@ -4,7 +4,6 @@ import cs3500.animator.model.shapes.AnimatedEllipse;
 import cs3500.animator.model.shapes.AnimatedRectangle;
 
 import cs3500.animator.view.renderers.AnimatedShape2DSVGRenderer;
-import cs3500.animator.view.renderers.AnimatedShape2DTextualRenderer;
 import cs3500.animator.view.renderers.AnimatedShape2DVisualRenderer;
 
 import java.util.Objects;
@@ -28,7 +27,7 @@ public class EasyAnimatorViewFactory {
       case "svg":
         return new EasyAnimatorSVGView<>(new AnimatedShape2DSVGRenderer());
       case "text":
-        return new EasyAnimatorTextualView<>(new AnimatedShape2DTextualRenderer());
+        return new EasyAnimatorTextualView<>();
       case "visual":
         return new EasyAnimatorVisualView<>(new AnimatedShape2DVisualRenderer());
       default:

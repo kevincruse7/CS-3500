@@ -6,6 +6,8 @@ import cs3500.animator.model.attributes.Position2D;
 
 import cs3500.animator.model.motions.Motion2D;
 
+import java.util.List;
+
 /**
  * <p>
  * Represents an animated 2D shape. A shape has a name and a set of motions, or state transitions. A
@@ -48,6 +50,13 @@ public interface AnimatedShape2D
    * @return Name of shape
    */
   String getName();
+
+  /**
+   * Returns the list of motions associated with shape.
+   *
+   * @return List of motions associated with shape
+   */
+  List<Motion2D> getMotions();
 
   /**
    * Retrieves position of shape at the given tick.
