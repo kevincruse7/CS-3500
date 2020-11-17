@@ -2,20 +2,21 @@ package cs3500.animator.model;
 
 import static org.junit.Assert.assertEquals;
 
+import cs3500.animator.model.motions.Motion2D;
+
 import cs3500.animator.model.shapes.AnimatedEllipse;
 import cs3500.animator.model.shapes.AnimatedRectangle;
 import cs3500.animator.model.shapes.AnimatedShape2D;
-import cs3500.animator.model.motions.Motion2D;
 
 import cs3500.animator.model.attributes.Color;
 import cs3500.animator.model.attributes.Dimensions2D;
 import cs3500.animator.model.attributes.Position2D;
 
-import org.junit.Before;
-import org.junit.Test;
-
 import java.util.LinkedList;
 import java.util.List;
+
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * Tester class for {@link BasicEasyAnimator}.
@@ -318,5 +319,39 @@ public class BasicEasyAnimatorTest {
     assertEquals(shapes, populatedModel.getShapes());
   }
 
-  // TODO: Write tests for toString and new getter methods.
+  @Test
+  public void builder() {
+    EasyAnimatorModel<AnimatedShape2D, Motion2D> builderModel = BasicEasyAnimator.builder()
+        .setBounds(0, 0, 1, 1)
+        .declareShape("PR", "rectangle")
+        .declareShape("E", "ellipse")
+        .declareShape("R", "rectangle")
+        .addMotion("PR",
+            0, 0, 0, 10, 10, 255, 255, 255,
+            10, 0, 0, 10, 10, 255, 255, 255
+        )
+        .build();
+
+    assertEquals(populatedModel.getLeftmostX(), builderModel.getLeftmostX());
+    assertEquals(populatedModel.getTopmostY(), builderModel.getTopmostY());
+    assertEquals(populatedModel.getWidth(), builderModel.getWidth());
+    assertEquals(populatedModel.getHeight(), builderModel.getHeight());
+    assertEquals(populatedModel.getShapes(), builderModel.getShapes());
+  }
+
+  @Test
+  public void testToString() {
+    assertEquals(
+        "canvas 0 0 1 1",
+        emptyModel.toString()
+    );
+    assertEquals(
+        "canvas 0 0 1 1\n"
+        + "shape PR rectangle\n"
+        + "motion PR 0   0   0   10  10  255 255 255   10  0   0   10  10  255 255 255\n"
+        + "shape E ellipse\n"
+        + "shape R rectangle",
+        populatedModel.toString()
+    );
+  }
 }

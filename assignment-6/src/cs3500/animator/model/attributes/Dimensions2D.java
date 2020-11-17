@@ -8,9 +8,9 @@ import java.util.Objects;
 public class Dimensions2D {
 
   /**
-   * Allowed double error tolerance when comparing two dimensions
+   * Allowed double error tolerance when comparing two dimensions.
    */
-  public static final double delta = 0.001;
+  public static final double DELTA = 0.001;
 
   private final double width;
   private final double height;
@@ -64,8 +64,8 @@ public class Dimensions2D {
       return false;
     }
 
-    return Math.abs(width - other.width) < delta
-        && Math.abs(height - other.height) < delta;
+    return Math.abs(width - other.width) < DELTA
+        && Math.abs(height - other.height) < DELTA;
   }
 
   @Override

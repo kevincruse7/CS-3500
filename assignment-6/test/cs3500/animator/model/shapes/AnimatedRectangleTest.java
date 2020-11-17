@@ -11,6 +11,23 @@ import org.junit.Test;
 public class AnimatedRectangleTest extends AbstractAnimatedShape2DTest {
 
   @Test
+  public void testToString() {
+    assertEquals("shape R rectangle", emptyRectangle.toString());
+    assertEquals(
+        "shape R1 rectangle\n"
+            + "motion R1 0   0   0   10  10  255 255 255   10  10  10  20  20  0   0   0",
+        rectangleOneMotion.toString()
+    );
+    assertEquals(
+        "shape R3 rectangle\n"
+        + "motion R3 0   0   0   10  10  255 255 255   10  10  10  20  20  0   0   0\n"
+        + "motion R3 10  10  10  20  20  0   0   0     20  0   0   10  10  255 255 255\n"
+        + "motion R3 20  0   0   10  10  255 255 255   30  0   0   10  10  255 255 255",
+        rectangleThreeMotions.toString()
+    );
+  }
+
+  @Test
   public void testEqualsReflexivity() {
     assertEquals(emptyRectangle, emptyRectangle);
   }

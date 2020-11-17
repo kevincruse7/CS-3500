@@ -52,9 +52,9 @@ public interface AnimatedShape2D
   String getName();
 
   /**
-   * Returns the list of motions associated with shape.
+   * Returns a sorted list of motions associated with shape.
    *
-   * @return List of motions associated with shape
+   * @return Sorted list of motions associated with shape
    */
   List<Motion2D> getMotions();
 

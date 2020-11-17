@@ -3,10 +3,14 @@ package cs3500.animator.model.shapes;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
-import cs3500.animator.model.motions.Motion2D;
 import cs3500.animator.model.attributes.Color;
 import cs3500.animator.model.attributes.Dimensions2D;
 import cs3500.animator.model.attributes.Position2D;
+
+import cs3500.animator.model.motions.Motion2D;
+
+import java.util.Arrays;
+import java.util.Collections;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -184,6 +188,15 @@ public abstract class AbstractAnimatedShape2DTest {
     assertEquals(new Position2D(8, 8), rectangleThreeMotions.getPosition(12));
     assertEquals(new Position2D(0, 0), rectangleThreeMotions.getPosition(20));
     assertEquals(new Position2D(0, 0), rectangleThreeMotions.getPosition(30));
+  }
+
+  @Test
+  public void getMotions() {
+    assertEquals(0, emptyEllipse.getMotions().size());
+    assertEquals(0, emptyRectangle.getMotions().size());
+
+    assertEquals(Collections.singletonList(motion1), rectangleOneMotion.getMotions());
+    assertEquals(Arrays.asList(motion1, motion2, motion3), rectangleThreeMotions.getMotions());
   }
 
   @Test(expected = IllegalStateException.class)

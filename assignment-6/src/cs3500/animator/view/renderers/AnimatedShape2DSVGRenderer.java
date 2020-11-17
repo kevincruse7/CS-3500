@@ -3,6 +3,7 @@ package cs3500.animator.view.renderers;
 import cs3500.animator.model.attributes.Color;
 import cs3500.animator.model.attributes.Dimensions2D;
 import cs3500.animator.model.attributes.Position2D;
+
 import cs3500.animator.model.motions.Motion2D;
 
 import cs3500.animator.model.shapes.AnimatedEllipse;
@@ -13,7 +14,8 @@ import java.io.IOException;
 import java.util.Objects;
 
 /**
- * Represents a shape visitor for rendering shapes as SVG entries.
+ * Represents a shape visitor for rendering shapes as SVG entries as defined by {@link
+ * SVGShapeRenderer}.
  */
 public class AnimatedShape2DSVGRenderer
     implements SVGShapeRenderer<AnimatedRectangle, AnimatedEllipse> {
@@ -34,12 +36,13 @@ public class AnimatedShape2DSVGRenderer
       throws NullPointerException, IllegalStateException, IOException {
     Objects.requireNonNull(rectangle, "Rectangle is null.");
     if (output == null) {
-      throw new IllegalArgumentException("Output appendable is null.");
+      throw new IllegalStateException("Output appendable is null.");
     }
     if (tickDelay == -1) {
-      throw new IllegalArgumentException("Tick delay is not set.");
+      throw new IllegalStateException("Tick delay is not set.");
     }
 
+    // Write the rect tag to the appendable with the initial shape state
     Position2D startPosition = rectangle.getPosition(rectangle.getStartTick());
     Dimensions2D startDimensions = rectangle.getDimensions(rectangle.getStartTick());
     Color startColor = rectangle.getColor(rectangle.getStartTick());
@@ -52,8 +55,10 @@ public class AnimatedShape2DSVGRenderer
         startColor.getRed(), startColor.getGreen(), startColor.getBlue()
     ));
 
+    // Write animate tags for each component of each motion, if there is change
     boolean firstRun = true;
     for (Motion2D motion : rectangle.getMotions()) {
+      // Make the rectangle visible when its start tick is reached
       if (firstRun) {
         output.append(String.format(
             "<animate attributeType=\"xml\" attributeName=\"visibility\" begin=\"%dms\" "
@@ -72,7 +77,8 @@ public class AnimatedShape2DSVGRenderer
       startColor = motion.getColor(motion.getStartTick());
       Color endColor = motion.getColor(motion.getEndTick());
 
-      if (Math.abs(startPosition.getX() - endPosition.getX()) >= Position2D.delta) {
+      // If x-coordinate changes in this motion, write an animate tag for it
+      if (Math.abs(startPosition.getX() - endPosition.getX()) >= Position2D.DELTA) {
         output.append(String.format("<animate attributeType=\"xml\" attributeName=\"x\" "
                 + "begin=\"%dms\" dur=\"%dms\" from=\"%d\" to=\"%d\" fill=\"freeze\"/>\n",
             motion.getStartTick() * tickDelay,
@@ -81,7 +87,8 @@ public class AnimatedShape2DSVGRenderer
             (int) (endPosition.getX() + 0.5)
         ));
       }
-      if (Math.abs(startPosition.getY() - endPosition.getY()) >= Position2D.delta) {
+      // If y-coordinate changes in this motion, write an animate tag for it
+      if (Math.abs(startPosition.getY() - endPosition.getY()) >= Position2D.DELTA) {
         output.append(String.format("<animate attributeType=\"xml\" attributeName=\"y\" "
                 + "begin=\"%dms\" dur=\"%dms\" from=\"%d\" to=\"%d\" fill=\"freeze\"/>\n",
             motion.getStartTick() * tickDelay,
@@ -91,7 +98,8 @@ public class AnimatedShape2DSVGRenderer
         ));
       }
 
-      if (Math.abs(startDimensions.getWidth() - endDimensions.getWidth()) >= Dimensions2D.delta) {
+      // If width changes in this motion, write an animate tag for it
+      if (Math.abs(startDimensions.getWidth() - endDimensions.getWidth()) >= Dimensions2D.DELTA) {
         output.append(String.format("<animate attributeType=\"xml\" attributeName=\"width\" "
                 + "begin=\"%dms\" dur=\"%dms\" from=\"%d\" to=\"%d\" fill=\"freeze\"/>\n",
             motion.getStartTick() * tickDelay,
@@ -100,7 +108,8 @@ public class AnimatedShape2DSVGRenderer
             (int) (endDimensions.getWidth() + 0.5)
         ));
       }
-      if (Math.abs(startDimensions.getHeight() - endDimensions.getHeight()) >= Dimensions2D.delta) {
+      // If height changes in this motion, write an animate tag for it
+      if (Math.abs(startDimensions.getHeight() - endDimensions.getHeight()) >= Dimensions2D.DELTA) {
         output.append(String.format("<animate attributeType=\"xml\" attributeName=\"height\" "
                 + "begin=\"%dms\" dur=\"%dms\" from=\"%d\" to=\"%d\" fill=\"freeze\"/>\n",
             motion.getStartTick() * tickDelay,
@@ -110,6 +119,7 @@ public class AnimatedShape2DSVGRenderer
         ));
       }
 
+      // If color changes in this motion, write an animate tag for it
       if (!startColor.equals(endColor)) {
         output.append(String.format("<animate attributeType=\"xml\" attributeName=\"fill\" "
                 + "begin=\"%dms\" dur=\"%dms\" from=\"rgb(%d,%d,%d)\" to=\"rgb(%d,%d,%d)\" "
@@ -138,12 +148,17 @@ public class AnimatedShape2DSVGRenderer
       throws NullPointerException, IllegalStateException, IOException {
     Objects.requireNonNull(ellipse, "Ellipse is null.");
     if (output == null) {
-      throw new IllegalArgumentException("Output appendable is null.");
+      throw new IllegalStateException("Output appendable is null.");
     }
     if (tickDelay == -1) {
-      throw new IllegalArgumentException("Tick delay is not set.");
+      throw new IllegalStateException("Tick delay is not set.");
     }
 
+    // NOTE: We decided against abstracting out the common code between visitEllipse and
+    // visitRectangle because their differences, like in attribute names and radius calculations,
+    // were non-trivial, in that an abstraction would be overly-complex and would harm readability.
+
+    // Write the ellipse tag to the appendable with the initial shape state
     Position2D startPosition = ellipse.getPosition(ellipse.getStartTick());
     Dimensions2D startDimensions = ellipse.getDimensions(ellipse.getStartTick());
     Color startColor = ellipse.getColor(ellipse.getStartTick());
@@ -157,8 +172,10 @@ public class AnimatedShape2DSVGRenderer
         startColor.getRed(), startColor.getGreen(), startColor.getBlue()
     ));
 
+    // Write animate tags for each component of each motion, if there is change
     boolean firstRun = true;
     for (Motion2D motion : ellipse.getMotions()) {
+      // Make the ellipse visible when its start tick is reached
       if (firstRun) {
         output.append(String.format(
             "<animate attributeType=\"xml\" attributeName=\"visibility\" begin=\"%dms\" "
@@ -177,7 +194,8 @@ public class AnimatedShape2DSVGRenderer
       startColor = motion.getColor(motion.getStartTick());
       Color endColor = motion.getColor(motion.getEndTick());
 
-      if (Math.abs(startPosition.getX() - endPosition.getX()) >= Position2D.delta) {
+      // If x-coordinate changes in this motion, write an animate tag for it
+      if (Math.abs(startPosition.getX() - endPosition.getX()) >= Position2D.DELTA) {
         output.append(String.format("<animate attributeType=\"xml\" attributeName=\"cx\" "
                 + "begin=\"%dms\" dur=\"%dms\" from=\"%d\" to=\"%d\" fill=\"freeze\"/>\n",
             motion.getStartTick() * tickDelay,
@@ -186,7 +204,8 @@ public class AnimatedShape2DSVGRenderer
             (int) (endPosition.getX() + endDimensions.getWidth() / 2 + 0.5)
         ));
       }
-      if (Math.abs(startPosition.getY() - endPosition.getY()) >= Position2D.delta) {
+      // If y-coordinate changes in this motion, write an animate tag for it
+      if (Math.abs(startPosition.getY() - endPosition.getY()) >= Position2D.DELTA) {
         output.append(String.format("<animate attributeType=\"xml\" attributeName=\"cy\" "
                 + "begin=\"%dms\" dur=\"%dms\" from=\"%d\" to=\"%d\" fill=\"freeze\"/>\n",
             motion.getStartTick() * tickDelay,
@@ -196,7 +215,8 @@ public class AnimatedShape2DSVGRenderer
         ));
       }
 
-      if (Math.abs(startDimensions.getWidth() - endDimensions.getWidth()) >= Dimensions2D.delta) {
+      // If width changes in this motion, write an animate tag for it
+      if (Math.abs(startDimensions.getWidth() - endDimensions.getWidth()) >= Dimensions2D.DELTA) {
         output.append(String.format("<animate attributeType=\"xml\" attributeName=\"rx\" "
                 + "begin=\"%dms\" dur=\"%dms\" from=\"%d\" to=\"%d\" fill=\"freeze\"/>\n",
             motion.getStartTick() * tickDelay,
@@ -205,7 +225,8 @@ public class AnimatedShape2DSVGRenderer
             (int) (endDimensions.getWidth() / 2 + 0.5)
         ));
       }
-      if (Math.abs(startDimensions.getHeight() - endDimensions.getHeight()) >= Dimensions2D.delta) {
+      // If height changes in this motion, write an animate tag for it
+      if (Math.abs(startDimensions.getHeight() - endDimensions.getHeight()) >= Dimensions2D.DELTA) {
         output.append(String.format("<animate attributeType=\"xml\" attributeName=\"ry\" "
                 + "begin=\"%dms\" dur=\"%dms\" from=\"%d\" to=\"%d\" fill=\"freeze\"/>\n",
             motion.getStartTick() * tickDelay,
@@ -215,6 +236,7 @@ public class AnimatedShape2DSVGRenderer
         ));
       }
 
+      // If color changes in this motion, write an animate tag for it
       if (!startColor.equals(endColor)) {
         output.append(String.format("<animate attributeType=\"xml\" attributeName=\"fill\" "
                 + "begin=\"%dms\" dur=\"%dms\" from=\"rgb(%d,%d,%d)\" to=\"rgb(%d,%d,%d)\" "

@@ -50,6 +50,6 @@ public class AnimatedRectangle extends AbstractAnimatedShape2D {
 
   @Override
   public String toString() {
-    return "shape " + name + " rectangle\n" + super.toString();
+    return "shape " + name + " rectangle" + super.toString();
   }
 }

@@ -59,7 +59,7 @@ public class Excellence {
         case "-in":
           if (input == null) {
             try {
-              input = new FileReader("resources/" + args[i + 1]);
+              input = new FileReader(args[i + 1]);
             } catch (FileNotFoundException e) {
               errorOut("Could not find input file: " + args[i + 1]);
             }
@@ -68,7 +68,7 @@ public class Excellence {
         case "-out":
           if (output == null) {
             try {
-              output = new FileWriter("resources/" + args[i + 1]);
+              output = new FileWriter(args[i + 1]);
             } catch (IOException e) {
               errorOut("IO exception: " + e.getMessage());
             }

@@ -108,7 +108,7 @@ public class Motion2D implements Comparable<Motion2D> {
         endColor = startColor;
       }
 
-      // TODO: Test zero tick motions.
+      // Ensure starting and ending states of zero tick motion are the same
       if (startTick.equals(endTick)
           && (!startPosition.equals(endPosition)
           || !startDimensions.equals(endDimensions)

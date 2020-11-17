@@ -1,7 +1,7 @@
 package cs3500.animator.view.renderers;
 
 /**
- * Represents a shape visitor for visually rendering shapes into SVG entries.
+ * Represents a shape visitor for rendering shapes into SVG entries.
  *
  * @param <Rectangle> Rectangle class used by implementation
  * @param <Ellipse>   Ellipse class used by implementation

@@ -7,7 +7,7 @@ import cs3500.animator.model.shapes.VisitableShape;
 import java.io.IOException;
 
 /**
- * View for Easy Animator. Allows users to render animations at a specified tick rate.
+ * View for Easy Animator. Allows users to render animations with a specified tick delay.
  *
  * @param <Rectangle> Rectangle class used by implementation
  * @param <Ellipse>   Ellipse class used by implementation

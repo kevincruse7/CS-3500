@@ -8,7 +8,7 @@ import cs3500.animator.view.renderers.VisualShapeRenderer;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Graphics2D;
+import java.awt.Toolkit;
 
 import java.util.Objects;
 
@@ -54,21 +54,25 @@ public class EasyAnimatorVisualView<Rectangle, Ellipse> extends JFrame
     }
 
     shapeRenderer.resetTick();
-    Timer timer = new Timer(tickDelay, actionEvent -> repaint());
-    timer.setCoalesce(false);
+    Timer timer = new Timer(tickDelay, actionEvent -> {
+      repaint();
+      Toolkit.getDefaultToolkit().sync();
+    });
     JPanel panel = new EasyAnimatorVisualViewPanel<>(model, shapeRenderer, timer);
+
     JScrollPane scrollPane = new JScrollPane(panel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
         JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
     scrollPane.setPreferredSize(new Dimension(Math.min(model.getWidth() + 18, 960),
         Math.min(model.getHeight() + 18, 720)));
 
-    setLayout(new FlowLayout());
-    setResizable(false);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    setResizable(false);
+
+    setLayout(new FlowLayout());
     add(scrollPane);
     pack();
-    setVisible(true);
 
+    setVisible(true);
     timer.start();
   }
 }

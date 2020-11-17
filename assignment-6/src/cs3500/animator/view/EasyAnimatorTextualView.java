@@ -5,7 +5,6 @@ import cs3500.animator.model.EasyAnimatorImmutableModel;
 import cs3500.animator.model.shapes.VisitableShape;
 
 import java.io.IOException;
-import java.io.StringReader;
 
 import java.util.Objects;
 import java.util.Scanner;
@@ -27,14 +26,19 @@ public class EasyAnimatorTextualView<Rectangle, Ellipse>
     if (tickDelay <= 0) {
       throw new IllegalArgumentException("Tick delay is non-positive.");
     }
+    Scanner modelStringScanner = new Scanner(model.toString());
 
-    Scanner modelStringScanner = new Scanner(new StringReader(model.toString()));
+    // Write out canvas dimensions
     output.append(modelStringScanner.nextLine()).append('\n');
+
+    // Write out shapes
     while (modelStringScanner.hasNext()) {
       String firstWordOfLine = modelStringScanner.next();
       if (firstWordOfLine.equals("shape")) {
-        output.append(String.format("%s %s\n", firstWordOfLine, modelStringScanner.nextLine()));
+        // Write out shape declaration line
+        output.append(firstWordOfLine).append(modelStringScanner.nextLine()).append('\n');
       } else {
+        // Write out motion declaration line with ticks replaced by seconds
         output.append(String.format("%s %s %.2f %s %s %s %s %s %s %s %.2f %s %s %s %s %s %s %s\n",
             firstWordOfLine, modelStringScanner.next(),
             modelStringScanner.nextInt() * tickDelay / 1000.0, modelStringScanner.next(),

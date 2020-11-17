@@ -11,6 +11,11 @@ import org.junit.Test;
 public class AnimatedEllipseTest extends AbstractAnimatedShape2DTest {
 
   @Test
+  public void testToString() {
+    assertEquals("shape E ellipse", emptyEllipse.toString());
+  }
+
+  @Test
   public void testEqualsReflexivity() {
     assertEquals(emptyEllipse, emptyEllipse);
   }

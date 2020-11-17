@@ -50,6 +50,6 @@ public class AnimatedEllipse extends AbstractAnimatedShape2D {
 
   @Override
   public String toString() {
-    return "shape " + name + " ellipse\n" + super.toString();
+    return "shape " + name + " ellipse" + super.toString();
   }
 }

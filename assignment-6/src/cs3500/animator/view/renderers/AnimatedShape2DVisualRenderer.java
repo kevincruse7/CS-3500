@@ -34,6 +34,7 @@ public class AnimatedShape2DVisualRenderer
 
     int tickCopy = tick;
     if (tickCopy >= rectangle.getStartTick()) {
+      // If current tick is greater than rectangle's end tick, freeze rectangle to end state
       int endTick = rectangle.getEndTick();
       if (tickCopy > endTick) {
         tickCopy = endTick;
@@ -63,6 +64,7 @@ public class AnimatedShape2DVisualRenderer
 
     int tickCopy = tick;
     if (tickCopy >= ellipse.getStartTick()) {
+      // If current tick is greater than ellipse's end tick, freeze ellipse to end state
       int endTick = ellipse.getEndTick();
       if (tickCopy > endTick) {
         tickCopy = endTick;

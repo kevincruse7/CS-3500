@@ -1,5 +1,10 @@
 package cs3500.animator.util;
 
+/**
+ * Represents a general model builder.
+ *
+ * @param <Doc> Main model interface
+ */
 public interface AnimationBuilder<Doc> {
 
   /**

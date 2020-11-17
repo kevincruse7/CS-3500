@@ -12,7 +12,6 @@ import cs3500.animator.model.motions.Motion2D;
 
 import cs3500.animator.util.AnimationBuilder;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -267,15 +266,10 @@ public class BasicEasyAnimator implements EasyAnimatorModel<AnimatedShape2D, Mot
   @Override
   public String toString() {
     StringBuilder textRep = new StringBuilder();
-    textRep.append(String.format("canvas %d %d %d %d\n", leftmostX, topmostY, width, height));
+    textRep.append(String.format("canvas %d %d %d %d", leftmostX, topmostY, width, height));
 
-    Iterator<AnimatedShape2D> shapeIter = shapes.iterator();
-    if (shapeIter.hasNext()) {
-      textRep.append(shapeIter.next());
-
-      while (shapeIter.hasNext()) {
-        textRep.append('\n').append(shapeIter.next());
-      }
+    for (AnimatedShape2D shape : shapes) {
+      textRep.append('\n').append(shape);
     }
 
     return textRep.toString();

@@ -8,9 +8,9 @@ import java.util.Objects;
 public class Position2D {
 
   /**
-   * Allowed double error tolerance when comparing two positions
+   * Allowed double error tolerance when comparing two positions.
    */
-  public static final double delta = 0.001;
+  public static final double DELTA = 0.001;
 
   private final double x;
   private final double y;
@@ -59,8 +59,8 @@ public class Position2D {
       return false;
     }
 
-    return Math.abs(x - other.x) < delta
-        && Math.abs(y - other.y) < delta;
+    return Math.abs(x - other.x) < DELTA
+        && Math.abs(y - other.y) < DELTA;
   }
 
   @Override
