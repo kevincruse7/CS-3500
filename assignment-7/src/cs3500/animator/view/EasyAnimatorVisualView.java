@@ -7,18 +7,18 @@ import cs3500.animator.model.shapes.VisitableShape;
 import cs3500.animator.view.renderers.VisualShapeRenderer;
 
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Toolkit;
 
 import java.util.Objects;
 
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.Timer;
 
 /**
- * Textual view for Easy Animator as defined by {@link EasyAnimatorView}. Allows users to render
+ * Visual view for Easy Animator as defined by {@link EasyAnimatorView}. Allows users to render
  * animations using the Swing framework at a specified tick rate.
  *
  * @param <Rectangle> Rectangle class used by implementation
@@ -27,7 +27,12 @@ import javax.swing.Timer;
 public class EasyAnimatorVisualView<Rectangle, Ellipse> extends JFrame
     implements EasyAnimatorView<Rectangle, Ellipse> {
 
-  private final VisualShapeRenderer<Rectangle, Ellipse> shapeRenderer;
+  protected final Timer timer = new Timer(0, actionEvent -> {
+    repaint();
+    Toolkit.getDefaultToolkit().sync();
+  });
+
+  protected final VisualShapeRenderer<Rectangle, Ellipse> shapeRenderer;
 
   /**
    * Instantiates an {@code EasyAnimatorVisualView} object with the given shape renderer.
@@ -54,10 +59,7 @@ public class EasyAnimatorVisualView<Rectangle, Ellipse> extends JFrame
     }
 
     shapeRenderer.resetTick();
-    Timer timer = new Timer(tickDelay, actionEvent -> {
-      repaint();
-      Toolkit.getDefaultToolkit().sync();
-    });
+    timer.setDelay(tickDelay);
     JPanel panel = new EasyAnimatorVisualViewPanel<>(model, shapeRenderer, timer);
 
     JScrollPane scrollPane = new JScrollPane(panel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
@@ -68,7 +70,7 @@ public class EasyAnimatorVisualView<Rectangle, Ellipse> extends JFrame
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setResizable(false);
 
-    setLayout(new FlowLayout());
+    setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
     add(scrollPane);
     pack();
 

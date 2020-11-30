@@ -22,4 +22,11 @@ public interface VisualShapeRenderer<Rectangle, Ellipse>
    * @return New tick count
    */
   int nextTick();
+
+  /**
+   * Returns the current tick count.
+   *
+   * @return Current tick count
+   */
+  int getTick();
 }

@@ -1,6 +1,8 @@
 package cs3500.animator.generator;
 
+import java.io.FileWriter;
 import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
@@ -19,8 +21,7 @@ public class Generator {
    * @throws NullPointerException Output appendable is null.
    */
   public Generator(Appendable output) throws NullPointerException {
-    Objects.requireNonNull(output);
-    this.output = output;
+    this.output = Objects.requireNonNull(output, "Output appendable is null.");
   }
 
   /**
@@ -204,5 +205,11 @@ public class Generator {
       default:
         return "error";
     }
+  }
+
+  public static void main(String[] args) throws IOException {
+    FileWriter writer = new FileWriter("examples/bubble-sort.txt");
+    new Generator(writer).generateBubbleSort();
+    writer.close();
   }
 }

@@ -100,4 +100,9 @@ public class AnimatedShape2DVisualRenderer
   public int nextTick() {
     return ++tick;
   }
+
+  @Override
+  public int getTick() {
+    return tick;
+  }
 }
