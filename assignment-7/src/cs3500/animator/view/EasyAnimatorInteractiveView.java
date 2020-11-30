@@ -6,12 +6,17 @@ import cs3500.animator.model.shapes.VisitableShape;
 
 import cs3500.animator.view.renderers.VisualShapeRenderer;
 
+import java.awt.Component;
+import java.awt.Toolkit;
+
 import java.awt.event.ActionListener;
 
 import java.util.Objects;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.SwingUtilities;
@@ -24,11 +29,17 @@ import javax.swing.SwingUtilities;
  * @param <Ellipse>   Ellipse class used by implementation
  */
 public class EasyAnimatorInteractiveView<Rectangle, Ellipse>
-    extends EasyAnimatorVisualView<Rectangle, Ellipse> {
+    extends EasyAnimatorVisualView<Rectangle, Ellipse> implements InteractiveFeatures {
 
-  private InteractiveFeatures featureListener;
-  private ActionListener looper;
+  private InteractiveFeatures featureListener;  // View controller to be used
+
+  // Play/pause button must be modified whenever the timer is started or stopped
   private JButton playPause;
+
+  private int numTicks;  // Total length of animation
+  private ActionListener nonLooper;  // Timer listener that does not loop animation
+  private ActionListener looper;  // Timer listener that loops animation
+  private boolean isLooping;  // Is the timer listener currently a looper or non-looper
 
   /**
    * Instantiates an {@code EasyAnimatorInteractiveView} object with the given shape renderer.
@@ -58,36 +69,78 @@ public class EasyAnimatorInteractiveView<Rectangle, Ellipse>
       Appendable ignored,
       int tickDelay
   ) throws NullPointerException, IllegalArgumentException, IllegalStateException {
+    // Set up main animation panel
     super.render(model, ignored, tickDelay);
-    Objects.requireNonNull(featureListener, "Feature listener is null.");
-    looper = actionEvent -> {
-      if (shapeRenderer.getTick() >= model.getNumTicks()) {
-        shapeRenderer.resetTick();
-      }
-    };
 
+    // If no view controller was specified, use itself
+    if (featureListener == null) {
+      featureListener = this;
+    }
+
+    // Main interaction panel
     JPanel controlPanel = new JPanel();
+
+    // Basic animation controls
     playPause = new JButton("Pause");
     JButton restart = new JButton("Restart");
     JCheckBox looping = new JCheckBox("Looping");
-    JSlider ticksPerSecond = new JSlider(JSlider.HORIZONTAL, 1, 1000, 1);
 
+    // Set up TPS slider in its own panel
+    JPanel sliderPanel = new JPanel();
+    sliderPanel.setLayout(new BoxLayout(sliderPanel, BoxLayout.Y_AXIS));
+    JLabel sliderLabel = new JLabel("Ticks Per Second", JLabel.CENTER);
+    sliderLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+    JSlider ticksPerSecond = new JSlider(JSlider.HORIZONTAL, 1, 1000, 1000 / tickDelay);
+    ticksPerSecond.setLabelTable(ticksPerSecond.createStandardLabels(999));
+    ticksPerSecond.setPaintLabels(true);
+    ticksPerSecond.setMinorTickSpacing(99);
+    ticksPerSecond.setPaintTicks(true);
+    sliderPanel.add(sliderLabel);
+    sliderPanel.add(ticksPerSecond);
+
+    // Set up interface control listeners
     playPause.addActionListener(actionEvent -> featureListener.togglePlayPause());
     restart.addActionListener(actionEvent -> featureListener.restart());
     looping.addActionListener(actionEvent -> featureListener.toggleLooping());
-    ticksPerSecond.addChangeListener(changeEvent -> {
-      JSlider source = (JSlider) changeEvent.getSource();
-      if (!source.getValueIsAdjusting()) {
-        featureListener.setDelay(1000 / source.getValue());
-      }
-    });
+    ticksPerSecond.addChangeListener(changeEvent -> featureListener.setDelay(
+        1000 / ((JSlider) changeEvent.getSource()).getValue()
+    ));
 
+    // Add controls to main panel
     controlPanel.add(playPause);
     controlPanel.add(restart);
+    controlPanel.add(sliderPanel);
     controlPanel.add(looping);
-    controlPanel.add(ticksPerSecond);
+
+    // Initialize timer listeners
+    numTicks = model.getNumTicks();
+    nonLooper = actionEvent -> {
+      repaint();
+      Toolkit.getDefaultToolkit().sync();
+
+      if (shapeRenderer.nextTick() >= numTicks) {
+        timer.stop();
+        playPause.setText("Play");
+      }
+    };
+    looper = actionEvent -> {
+      repaint();
+      Toolkit.getDefaultToolkit().sync();
+
+      if (shapeRenderer.nextTick() >= numTicks) {
+        shapeRenderer.resetTick();
+      }
+    };
+    isLooping = false;
 
     SwingUtilities.invokeLater(() -> {
+      // Swap out default listener for our non-looper
+      timer.stop();
+      timer.removeActionListener(timer.getActionListeners()[0]);
+      timer.addActionListener(nonLooper);
+      timer.start();
+
+      // Add our control panel to the main interface
       add(controlPanel);
       pack();
     });
@@ -105,6 +158,7 @@ public class EasyAnimatorInteractiveView<Rectangle, Ellipse>
    *
    * @throws IllegalStateException Animation has not yet loaded.
    */
+  @Override
   public void togglePlayPause() throws IllegalStateException {
     checkIfLoaded();
 
@@ -112,8 +166,13 @@ public class EasyAnimatorInteractiveView<Rectangle, Ellipse>
       timer.stop();
       playPause.setText("Play");
     } else {
+      if (shapeRenderer.getTick() >= numTicks) {
+        // If animation has ended, restart
+        restart();
+      } else {
+        playPause.setText("Pause");
+      }
       timer.start();
-      playPause.setText("Pause");
     }
   }
 
@@ -122,10 +181,18 @@ public class EasyAnimatorInteractiveView<Rectangle, Ellipse>
    *
    * @throws IllegalStateException Animation has not yet loaded.
    */
+  @Override
   public void restart() throws IllegalStateException {
     checkIfLoaded();
 
+    // Stop animation
+    timer.stop();
+    playPause.setText("Play");
+
+    // Rewind animation to beginning and render first frame
     shapeRenderer.resetTick();
+    repaint();
+    Toolkit.getDefaultToolkit().sync();
   }
 
   /**
@@ -133,14 +200,23 @@ public class EasyAnimatorInteractiveView<Rectangle, Ellipse>
    *
    * @throws IllegalStateException Animation has not yet loaded.
    */
+  @Override
   public void toggleLooping() throws IllegalStateException {
     checkIfLoaded();
 
-    if (timer.getActionListeners().length == 1) {
-      timer.addActionListener(looper);
-    } else {
+    // Stop animation, swap out timer listener for the other one, and resume
+    timer.stop();
+    if (isLooping) {
       timer.removeActionListener(looper);
+      timer.addActionListener(nonLooper);
+    } else {
+      timer.removeActionListener(nonLooper);
+      timer.addActionListener(looper);
     }
+    timer.start();
+    playPause.setText("Pause");
+
+    isLooping = !isLooping;
   }
 
   /**
@@ -150,6 +226,7 @@ public class EasyAnimatorInteractiveView<Rectangle, Ellipse>
    * @throws IllegalArgumentException Tick delay is non-positive.
    * @throws IllegalStateException    Animation has not yet loaded.
    */
+  @Override
   public void setDelay(int delay) throws IllegalArgumentException, IllegalStateException {
     if (delay <= 0) {
       throw new IllegalArgumentException("Tick delay is non-positive.");

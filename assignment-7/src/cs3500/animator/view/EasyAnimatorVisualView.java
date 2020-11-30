@@ -27,10 +27,8 @@ import javax.swing.Timer;
 public class EasyAnimatorVisualView<Rectangle, Ellipse> extends JFrame
     implements EasyAnimatorView<Rectangle, Ellipse> {
 
-  protected final Timer timer = new Timer(0, actionEvent -> {
-    repaint();
-    Toolkit.getDefaultToolkit().sync();
-  });
+  // Timer used to indicate tick changes
+  protected final Timer timer = new Timer(0, null);
 
   protected final VisualShapeRenderer<Rectangle, Ellipse> shapeRenderer;
 
@@ -58,22 +56,40 @@ public class EasyAnimatorVisualView<Rectangle, Ellipse> extends JFrame
       throw new IllegalArgumentException("Tick delay is non-positive.");
     }
 
+    // Set up shape renderer and timer
     shapeRenderer.resetTick();
+    timer.setCoalesce(false);
     timer.setDelay(tickDelay);
-    JPanel panel = new EasyAnimatorVisualViewPanel<>(model, shapeRenderer, timer);
 
+    // Tell timer to repaint and update the shape renderer every tick
+    int numTicks = model.getNumTicks();
+    timer.addActionListener(actionEvent -> {
+      repaint();
+      Toolkit.getDefaultToolkit().sync();
+
+      // Stop the timer if the animation is over
+      if (shapeRenderer.nextTick() >= numTicks) {
+        timer.stop();
+      }
+    });
+
+    // Main interface panel
+    JPanel panel = new EasyAnimatorVisualViewPanel<>(model, shapeRenderer);
+
+    // Wrap main panel in a scroll pane
     JScrollPane scrollPane = new JScrollPane(panel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
         JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
     scrollPane.setPreferredSize(new Dimension(Math.min(model.getWidth() + 18, 960),
         Math.min(model.getHeight() + 18, 720)));
 
+    // Set up frame
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setResizable(false);
-
     setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
     add(scrollPane);
     pack();
 
+    // Show the interface and start the timer
     setVisible(true);
     timer.start();
   }

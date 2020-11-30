@@ -14,6 +14,8 @@ public class EasyAnimatorViewFactoryTest {
     assertTrue(EasyAnimatorViewFactory.create("svg") instanceof EasyAnimatorSVGView);
     assertTrue(EasyAnimatorViewFactory.create("text") instanceof EasyAnimatorTextualView);
     assertTrue(EasyAnimatorViewFactory.create("visual") instanceof EasyAnimatorVisualView);
+    assertTrue(EasyAnimatorViewFactory.create("interactive")
+        instanceof EasyAnimatorInteractiveView);
   }
 
   @Test(expected = NullPointerException.class)

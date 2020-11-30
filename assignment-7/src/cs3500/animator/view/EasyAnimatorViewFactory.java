@@ -30,6 +30,8 @@ public class EasyAnimatorViewFactory {
         return new EasyAnimatorTextualView<>();
       case "visual":
         return new EasyAnimatorVisualView<>(new AnimatedShape2DVisualRenderer());
+      case "interactive":
+        return new EasyAnimatorInteractiveView<>(new AnimatedShape2DVisualRenderer());
       default:
         throw new IllegalArgumentException("View type does not match any supported types.");
     }

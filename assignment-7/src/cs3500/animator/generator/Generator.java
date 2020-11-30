@@ -40,8 +40,10 @@ public class Generator {
     ArrayList<Integer> rTwo = new ArrayList<>(Arrays.asList(2, (int) ((Math.random() + .1) * 200)));
     ArrayList<Integer> rThree = new ArrayList<>(Arrays.asList(
         3, (int) ((Math.random() + .1) * 200)));
-    ArrayList<Integer> rFour = new ArrayList<>(Arrays.asList(4, (int) ((Math.random() + .1) * 200)));
-    ArrayList<Integer> rFive = new ArrayList<>(Arrays.asList(5, (int) ((Math.random() + .1) * 200)));
+    ArrayList<Integer> rFour = new ArrayList<>(
+        Arrays.asList(4, (int) ((Math.random() + .1) * 200)));
+    ArrayList<Integer> rFive = new ArrayList<>(
+        Arrays.asList(5, (int) ((Math.random() + .1) * 200)));
     // puts them all into one list
     ArrayList<ArrayList<Integer>> rectangleList = new ArrayList<>(
         Arrays.asList(rOne, rTwo, rThree, rFour, rFive));
@@ -84,8 +86,10 @@ public class Generator {
     output.append("canvas 0 0 1000 1000").append("\n");
     // adds each shape and it's starting position
     for (ArrayList<Integer> item : list) {
-      output.append("shape R").append(String.valueOf(item.get(0))).append(" rectangle").append("\n");
-      output.append("motion R").append(String.valueOf(item.get(0))).append(" ").append(String.valueOf(t))
+      output.append("shape R").append(String.valueOf(item.get(0))).append(" rectangle")
+          .append("\n");
+      output.append("motion R").append(String.valueOf(item.get(0))).append(" ")
+          .append(String.valueOf(t))
           .append(" ").append(String.valueOf(x)).append(" ")
           .append(String.valueOf(y - (item.get(1) / 2))).append(" ").append(String.valueOf(w))
           .append(" ").append(String.valueOf(item.get(1))).append(" ").append(String.valueOf(rgb))
@@ -93,16 +97,17 @@ public class Generator {
           .append(" ").append(String.valueOf(t)).append(" ").append(String.valueOf(x)).append(" ")
           .append(String.valueOf(y - (item.get(1) / 2))).append(" ").append(String.valueOf(w))
           .append(" ").append(String.valueOf(item.get(1))).append(" ").append(String.valueOf(rgb))
-          .append(" ").append(String.valueOf(rgb)).append(" ").append(String.valueOf(rgb)).append("\n");
+          .append(" ").append(String.valueOf(rgb)).append(" ").append(String.valueOf(rgb))
+          .append("\n");
       // changes x value accordingly
       x += 200;
     }
   }
 
 
-   // Edits the appendable to create lines that translate to movements when read as a file that
-   // accurately show two rectangles switching positions. The two rectangles will be the index
-   // given, and the rectangle directly to the right of it.
+  // Edits the appendable to create lines that translate to movements when read as a file that
+  // accurately show two rectangles switching positions. The two rectangles will be the index
+  // given, and the rectangle directly to the right of it.
   private void bubbleSortSwitch(ArrayList<ArrayList<Integer>> list, int index, int curTick)
       throws IOException {
     // In a switch, there are six motions, three for each shape involved
