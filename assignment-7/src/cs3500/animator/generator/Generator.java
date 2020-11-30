@@ -32,16 +32,16 @@ public class Generator {
    */
   public void generateBubbleSort() throws IOException {
 
-    int curTick = 1;
+    int curTick = 0;
 
     // creating the rectangles that will be labeled (as shown by the first item in the list)
     // and they will each have a random height (as shown by the second item in the list)
-    ArrayList<Integer> rOne = new ArrayList<>(Arrays.asList(1, (int) ((Math.random() + .1) * 20)));
-    ArrayList<Integer> rTwo = new ArrayList<>(Arrays.asList(2, (int) ((Math.random() + .1) * 20)));
+    ArrayList<Integer> rOne = new ArrayList<>(Arrays.asList(1, (int) ((Math.random() + .1) * 200)));
+    ArrayList<Integer> rTwo = new ArrayList<>(Arrays.asList(2, (int) ((Math.random() + .1) * 200)));
     ArrayList<Integer> rThree = new ArrayList<>(Arrays.asList(
-        3, (int) ((Math.random() + .1) * 20)));
-    ArrayList<Integer> rFour = new ArrayList<>(Arrays.asList(4, (int) ((Math.random() + .1) * 20)));
-    ArrayList<Integer> rFive = new ArrayList<>(Arrays.asList(5, (int) ((Math.random() + .1) * 20)));
+        3, (int) ((Math.random() + .1) * 200)));
+    ArrayList<Integer> rFour = new ArrayList<>(Arrays.asList(4, (int) ((Math.random() + .1) * 200)));
+    ArrayList<Integer> rFive = new ArrayList<>(Arrays.asList(5, (int) ((Math.random() + .1) * 200)));
     // puts them all into one list
     ArrayList<ArrayList<Integer>> rectangleList = new ArrayList<>(
         Arrays.asList(rOne, rTwo, rThree, rFour, rFive));
@@ -75,17 +75,17 @@ public class Generator {
   private void setUpBubbleSort(ArrayList<ArrayList<Integer>> list) throws IOException {
     // some values that will be helpful in setting up shape's starting positions
     int x = 0;
-    int y = 50;
+    int y = 500;
     int t = 0;
-    int w = 10;
-    int rgb = 255;
+    int w = 100;
+    int rgb = 0;
 
     // creates canvas
-    output.append("canvas 0 0 100 100");
+    output.append("canvas 0 0 1000 1000").append("\n");
     // adds each shape and it's starting position
     for (ArrayList<Integer> item : list) {
-      output.append("shape R").append(String.valueOf(item.get(0))).append(" rectangle");
-      output.append("motion R").append(String.valueOf(item.get(0))).append(String.valueOf(t))
+      output.append("shape R").append(String.valueOf(item.get(0))).append(" rectangle").append("\n");
+      output.append("motion R").append(String.valueOf(item.get(0))).append(" ").append(String.valueOf(t))
           .append(" ").append(String.valueOf(x)).append(" ")
           .append(String.valueOf(y - (item.get(1) / 2))).append(" ").append(String.valueOf(w))
           .append(" ").append(String.valueOf(item.get(1))).append(" ").append(String.valueOf(rgb))
@@ -93,9 +93,9 @@ public class Generator {
           .append(" ").append(String.valueOf(t)).append(" ").append(String.valueOf(x)).append(" ")
           .append(String.valueOf(y - (item.get(1) / 2))).append(" ").append(String.valueOf(w))
           .append(" ").append(String.valueOf(item.get(1))).append(" ").append(String.valueOf(rgb))
-          .append(" ").append(String.valueOf(rgb)).append(" ").append(String.valueOf(rgb));
+          .append(" ").append(String.valueOf(rgb)).append(" ").append(String.valueOf(rgb)).append("\n");
       // changes x value accordingly
-      x += 20;
+      x += 200;
     }
   }
 
@@ -115,13 +115,13 @@ public class Generator {
         .append(String.valueOf(curTick)).append(" ")
         .append(getRestingPosition(list.get(index), index)).append(" ")
         .append(String.valueOf(firstMoveEndTick)).append(" ")
-        .append(getUpwardPosition(list.get(index), index));
+        .append(getUpwardPosition(list.get(index), index)).append("\n");
     // right shape first move
     output.append("motion R").append(String.valueOf(list.get(index + 1).get(0))).append(" ")
         .append(String.valueOf(curTick)).append(" ")
         .append(getRestingPosition(list.get(index + 1), index + 1)).append(" ")
         .append(String.valueOf(firstMoveEndTick)).append(" ")
-        .append(getDownwardPosition(list.get(index + 1), index + 1));
+        .append(getDownwardPosition(list.get(index + 1), index + 1)).append("\n");
 
     int secondMoveEndTick = curTick + 6;
     // left shape second move
@@ -129,13 +129,13 @@ public class Generator {
         .append(String.valueOf(firstMoveEndTick)).append(" ")
         .append(getUpwardPosition(list.get(index), index)).append(" ")
         .append(String.valueOf(secondMoveEndTick)).append(" ")
-        .append(getUpwardPosition(list.get(index), index + 1));
+        .append(getUpwardPosition(list.get(index), index + 1)).append("\n");
     // right shape second move
     output.append("motion R").append(String.valueOf(list.get(index + 1).get(0))).append(" ")
         .append(String.valueOf(firstMoveEndTick)).append(" ")
         .append(getDownwardPosition(list.get(index + 1), index + 1)).append(" ")
         .append(String.valueOf(secondMoveEndTick)).append(" ")
-        .append(getDownwardPosition(list.get(index + 1), index));
+        .append(getDownwardPosition(list.get(index + 1), index)).append("\n");
 
     int thirdMoveEndTick = curTick + 10;
     // left shape third move
@@ -143,29 +143,39 @@ public class Generator {
         .append(String.valueOf(secondMoveEndTick)).append(" ")
         .append(getUpwardPosition(list.get(index), index + 1)).append(" ")
         .append(String.valueOf(thirdMoveEndTick)).append(" ")
-        .append(getRestingPosition(list.get(index), index + 1));
+        .append(getRestingPosition(list.get(index), index + 1)).append("\n");
     // right shape third move
     output.append("motion R").append(String.valueOf(list.get(index + 1).get(0))).append(" ")
         .append(String.valueOf(secondMoveEndTick)).append(" ")
         .append(getDownwardPosition(list.get(index + 1), index)).append(" ")
         .append(String.valueOf(thirdMoveEndTick)).append(" ")
-        .append(getRestingPosition(list.get(index + 1), index));
+        .append(getRestingPosition(list.get(index + 1), index)).append("\n");
+
+    // now, we must give placeholder motions for the shapes that are NOT being switched
+    for (int i = 0; i < list.size(); i++) {
+      if (i != index && i != (index + 1)) {
+        output.append("motion R").append(String.valueOf(list.get(i).get(0))).append(" ")
+            .append(String.valueOf(curTick)).append(" ").append(getRestingPosition(list.get(i), i))
+            .append(" ").append(String.valueOf(curTick + 10)).append(" ")
+            .append(getRestingPosition(list.get(i), i)).append("\n");
+      }
+    }
 
   }
 
   // gets the position of a shape that is at the resting position at a given index
   private String getRestingPosition(ArrayList<Integer> shape, int index) {
     switch (index) {
+      case 0:
+        return "0 " + (500 - (shape.get(1) / 2)) + " 100 " + shape.get(1) + " 0 0 0";
       case 1:
-        return "0 " + (50 - (shape.get(1) / 2)) + " 10 " + shape.get(1) + " 255 255 255";
+        return "200 " + (500 - (shape.get(1) / 2)) + " 100 " + shape.get(1) + " 0 0 0";
       case 2:
-        return "20 " + (50 - (shape.get(1) / 2)) + " 10 " + shape.get(1) + " 255 255 255";
+        return "400 " + (500 - (shape.get(1) / 2)) + " 100 " + shape.get(1) + " 0 0 0";
       case 3:
-        return "40 " + (50 - (shape.get(1) / 2)) + " 10 " + shape.get(1) + " 255 255 255";
+        return "600 " + (500 - (shape.get(1) / 2)) + " 100 " + shape.get(1) + " 0 0 0";
       case 4:
-        return "60 " + (50 - (shape.get(1) / 2)) + " 10 " + shape.get(1) + " 255 255 255";
-      case 5:
-        return "80 " + (50 - (shape.get(1) / 2)) + " 10 " + shape.get(1) + " 255 255 255";
+        return "800 " + (500 - (shape.get(1) / 2)) + " 100 " + shape.get(1) + " 0 0 0";
       default:
         return "error";
     }
@@ -174,16 +184,16 @@ public class Generator {
   // gets the position of a shape that is above the resting position at a given index
   private String getUpwardPosition(ArrayList<Integer> shape, int index) {
     switch (index) {
+      case 0:
+        return "0 " + (200 - (shape.get(1) / 2)) + " 100 " + shape.get(1) + " 0 0 0";
       case 1:
-        return "0 " + (20 - (shape.get(1) / 2)) + " 10 " + shape.get(1) + " 255 255 255";
+        return "200 " + (200 - (shape.get(1) / 2)) + " 100 " + shape.get(1) + " 0 0 0";
       case 2:
-        return "20 " + (20 - (shape.get(1) / 2)) + " 10 " + shape.get(1) + " 255 255 255";
+        return "400 " + (200 - (shape.get(1) / 2)) + " 100 " + shape.get(1) + " 0 0 0";
       case 3:
-        return "40 " + (20 - (shape.get(1) / 2)) + " 10 " + shape.get(1) + " 255 255 255";
+        return "600 " + (200 - (shape.get(1) / 2)) + " 100 " + shape.get(1) + " 0 0 0";
       case 4:
-        return "60 " + (20 - (shape.get(1) / 2)) + " 10 " + shape.get(1) + " 255 255 255";
-      case 5:
-        return "80 " + (20 - (shape.get(1) / 2)) + " 10 " + shape.get(1) + " 255 255 255";
+        return "800 " + (200 - (shape.get(1) / 2)) + " 100 " + shape.get(1) + " 0 0 0";
       default:
         return "error";
     }
@@ -192,16 +202,16 @@ public class Generator {
   // gets the position of a shape that is below the resting position at a given index
   private String getDownwardPosition(ArrayList<Integer> shape, int index) {
     switch (index) {
+      case 0:
+        return "0 " + (800 - (shape.get(1) / 2)) + " 100 " + shape.get(1) + " 0 0 0";
       case 1:
-        return "0 " + (80 - (shape.get(1) / 2)) + " 10 " + shape.get(1) + " 255 255 255";
+        return "200 " + (800 - (shape.get(1) / 2)) + " 100 " + shape.get(1) + " 0 0 0";
       case 2:
-        return "20 " + (80 - (shape.get(1) / 2)) + " 10 " + shape.get(1) + " 255 255 255";
+        return "400 " + (800 - (shape.get(1) / 2)) + " 100 " + shape.get(1) + " 0 0 0";
       case 3:
-        return "40 " + (80 - (shape.get(1) / 2)) + " 10 " + shape.get(1) + " 255 255 255";
+        return "600 " + (800 - (shape.get(1) / 2)) + " 100 " + shape.get(1) + " 0 0 0";
       case 4:
-        return "60 " + (80 - (shape.get(1) / 2)) + " 10 " + shape.get(1) + " 255 255 255";
-      case 5:
-        return "80 " + (80 - (shape.get(1) / 2)) + " 10 " + shape.get(1) + " 255 255 255";
+        return "800 " + (800 - (shape.get(1) / 2)) + " 100 " + shape.get(1) + " 0 0 0";
       default:
         return "error";
     }
