@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.Random;
 
 /**
  * Programmatically generates an Easy Animator input file.
@@ -13,6 +14,7 @@ import java.util.Objects;
 public class Generator {
 
   private final Appendable output;
+  private final Random random;
 
   /**
    * Instantiates a {@code Generator} object with the given output appendable.
@@ -22,6 +24,20 @@ public class Generator {
    */
   public Generator(Appendable output) throws NullPointerException {
     this.output = Objects.requireNonNull(output, "Output appendable is null.");
+    this.random = new Random();
+  }
+
+  /**
+   * Instantiates a {@code Generator} object with the given output appendable and given random
+   * Random.
+   *
+   * @param output Appendable to send output to
+   * @param random Random to be used to make rectangle sizes
+   * @throws NullPointerException Output appendable is null.
+   */
+  public Generator(Appendable output, Random random) throws NullPointerException {
+    this.output = Objects.requireNonNull(output, "Output appendable is null.");
+    this.random = Objects.requireNonNull(random, "Random is null");
   }
 
   /**
@@ -36,14 +52,14 @@ public class Generator {
 
     // creating the rectangles that will be labeled (as shown by the first item in the list)
     // and they will each have a random height (as shown by the second item in the list)
-    ArrayList<Integer> rOne = new ArrayList<>(Arrays.asList(1, (int) ((Math.random() + .1) * 200)));
-    ArrayList<Integer> rTwo = new ArrayList<>(Arrays.asList(2, (int) ((Math.random() + .1) * 200)));
+    ArrayList<Integer> rOne = new ArrayList<>(Arrays.asList(1, (int) ((random.nextDouble() + .1) * 200)));
+    ArrayList<Integer> rTwo = new ArrayList<>(Arrays.asList(2, (int) ((random.nextDouble() + .1) * 200)));
     ArrayList<Integer> rThree = new ArrayList<>(Arrays.asList(
-        3, (int) ((Math.random() + .1) * 200)));
+        3, (int) ((random.nextDouble() + .1) * 200)));
     ArrayList<Integer> rFour = new ArrayList<>(
-        Arrays.asList(4, (int) ((Math.random() + .1) * 200)));
+        Arrays.asList(4, (int) ((random.nextDouble() + .1) * 200)));
     ArrayList<Integer> rFive = new ArrayList<>(
-        Arrays.asList(5, (int) ((Math.random() + .1) * 200)));
+        Arrays.asList(5, (int) ((random.nextDouble() + .1) * 200)));
     // puts them all into one list
     ArrayList<ArrayList<Integer>> rectangleList = new ArrayList<>(
         Arrays.asList(rOne, rTwo, rThree, rFour, rFive));
