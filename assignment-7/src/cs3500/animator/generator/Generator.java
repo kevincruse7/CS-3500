@@ -52,8 +52,10 @@ public class Generator {
 
     // creating the rectangles that will be labeled (as shown by the first item in the list)
     // and they will each have a random height (as shown by the second item in the list)
-    ArrayList<Integer> rOne = new ArrayList<>(Arrays.asList(1, (int) ((random.nextDouble() + .1) * 200)));
-    ArrayList<Integer> rTwo = new ArrayList<>(Arrays.asList(2, (int) ((random.nextDouble() + .1) * 200)));
+    ArrayList<Integer> rOne = new ArrayList<>(
+        Arrays.asList(1, (int) ((random.nextDouble() + .1) * 200)));
+    ArrayList<Integer> rTwo = new ArrayList<>(
+        Arrays.asList(2, (int) ((random.nextDouble() + .1) * 200)));
     ArrayList<Integer> rThree = new ArrayList<>(Arrays.asList(
         3, (int) ((random.nextDouble() + .1) * 200)));
     ArrayList<Integer> rFour = new ArrayList<>(

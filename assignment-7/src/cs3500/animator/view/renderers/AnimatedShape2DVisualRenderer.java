@@ -24,7 +24,7 @@ public class AnimatedShape2DVisualRenderer
    * Renders the given rectangle onto a graphics object.
    *
    * @param rectangle Rectangle to be rendered
-   * @throws NullPointerException  Rectangle or graphics object is null.
+   * @throws NullPointerException Rectangle or graphics object is null.
    */
   @Override
   public void visitRectangle(AnimatedRectangle rectangle)
@@ -54,7 +54,7 @@ public class AnimatedShape2DVisualRenderer
    * Renders the given ellipse onto a graphics object.
    *
    * @param ellipse Ellipse to be rendered
-   * @throws NullPointerException  Ellipse or graphics object is null.
+   * @throws NullPointerException Ellipse or graphics object is null.
    */
   @Override
   public void visitEllipse(AnimatedEllipse ellipse)

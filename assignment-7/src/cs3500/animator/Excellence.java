@@ -1,5 +1,7 @@
 package cs3500.animator;
 
+import cs3500.animator.controller.EasyAnimatorController;
+
 import cs3500.animator.model.BasicEasyAnimator;
 import cs3500.animator.model.EasyAnimatorModel;
 
@@ -9,7 +11,7 @@ import cs3500.animator.model.shapes.AnimatedEllipse;
 import cs3500.animator.model.shapes.AnimatedRectangle;
 import cs3500.animator.model.shapes.AnimatedShape2D;
 
-import cs3500.animator.util.AnimationReader;
+import cs3500.animator.util.AnimationBuilder;
 
 import cs3500.animator.view.EasyAnimatorView;
 import cs3500.animator.view.EasyAnimatorViewFactory;
@@ -19,8 +21,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-
-import java.util.Objects;
 
 import javax.swing.JOptionPane;
 
@@ -42,89 +42,91 @@ public class Excellence {
    * @param args Command line arguments
    */
   public static void main(String[] args) {
-    EasyAnimatorView<AnimatedRectangle, AnimatedEllipse> view = null;
+    // Declare and initialize user input variables
     Readable input = null;
     Appendable output = null;
-    int tickDelay = -1;
+    String viewType = null;
+    int tickRate = -1;
 
     // Reads in pairs of arguments, throws errors at invalid arguments or invalid pairings
     for (int i = 0; i < args.length; i += 2) {
-      String flag = args[i];
-
       if (i + 1 >= args.length) {
-        errorOut("Invalid argument-parameter matching");
+        errorOut("Arguments are not properly paired.");
       }
 
-      switch (flag) {
+      switch (args[i]) {
         case "-in":
-          if (input == null) {
-            try {
-              input = new FileReader(args[i + 1]);
-            } catch (FileNotFoundException e) {
-              errorOut("Could not find input file: " + args[i + 1]);
-            }
+          // Set input file
+          try {
+            input = new FileReader(args[i + 1]);
+          } catch (FileNotFoundException e) {
+            errorOut("Could not find input file: " + args[i + 1]);
           }
           break;
         case "-out":
-          if (output == null) {
-            try {
-              output = new FileWriter(args[i + 1]);
-            } catch (IOException e) {
-              errorOut("IO exception: " + e.getMessage());
-            }
+          // Set output file
+          try {
+            output = new FileWriter(args[i + 1]);
+          } catch (IOException e) {
+            errorOut("IO exception: " + e.getMessage());
           }
           break;
         case "-view":
-          if (view == null) {
-            try {
-              view = EasyAnimatorViewFactory.create(args[i + 1]);
-            } catch (IllegalArgumentException e) {
-              errorOut(e.getMessage());
-            }
-          }
+          // Set view type
+          viewType = args[i + 1];
           break;
         case "-speed":
-          if (tickDelay == -1) {
-            try {
-              int tickRate = Integer.parseInt(args[i + 1]);
-              if (tickRate <= 0) {
-                errorOut("Non-positive tick rate");
-              }
-              tickDelay = 1000 / tickRate;
-            } catch (NumberFormatException e) {
-              errorOut("Speed argument must be a positive integer");
-            }
+          // Set tick rate
+          try {
+            tickRate = Integer.parseInt(args[i + 1]);
+          } catch (NumberFormatException e) {
+            errorOut("Speed argument is not a positive integer: " + args[i + 1]);
+          }
+          if (tickRate <= 0) {
+            errorOut("Non-positive tick rate: " + tickRate);
           }
           break;
         default:
-          errorOut("Invalid argument type");
+          errorOut("Invalid argument type: " + args[i + 1]);
       }
     }
 
-    if (input == null || view == null) {
-      errorOut("Missing required parameters");
+    // Input and view type must be specified
+    if (input == null || viewType == null) {
+      errorOut("Missing required parameters.");
     }
 
+    // Default output is System.out, default tick rate is 1 tick per second
     if (output == null) {
       output = System.out;
     }
-    if (tickDelay == -1) {
-      tickDelay = 1000;
+    if (tickRate == -1) {
+      tickRate = 1;
     }
 
-    EasyAnimatorModel<AnimatedShape2D, Motion2D> model = null;
+    // Declare controller, model builder, and view variables
+    EasyAnimatorController<AnimatedRectangle, AnimatedEllipse> controller;
+    AnimationBuilder<EasyAnimatorModel<AnimatedShape2D, Motion2D>> builder;
+    EasyAnimatorView<AnimatedRectangle, AnimatedEllipse> view;
+
+    // Initialize MVC variables
+    controller = new EasyAnimatorController<>(input, output);
+    builder = BasicEasyAnimator.builder();
+    view = null;
     try {
-      model = AnimationReader.parseFile(input, BasicEasyAnimator.builder());
-    } catch (IllegalStateException e) {
-      errorOut(e.getMessage());
+      view = EasyAnimatorViewFactory.create(viewType);
+    } catch (IllegalArgumentException e) {
+      errorOut("Invalid view type: " + viewType);
     }
 
+    // Run the animation
     try {
-      Objects.requireNonNull(view).render(model, output, tickDelay);
+      controller.run(builder, view, tickRate);
     } catch (IOException e) {
-      errorOut(e.getMessage());
+      errorOut("Rendering failed: " + e.getMessage());
     }
 
+    // Close the output appendable, if supported
     try {
       ((Closeable) output).close();
     } catch (IOException ignored) {
