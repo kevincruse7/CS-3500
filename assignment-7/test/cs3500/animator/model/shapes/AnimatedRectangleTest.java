@@ -20,9 +20,9 @@ public class AnimatedRectangleTest extends AbstractAnimatedShape2DTest {
     );
     assertEquals(
         "shape R3 rectangle\n"
-        + "motion R3 0   0   0   10  10  255 255 255   10  10  10  20  20  0   0   0\n"
-        + "motion R3 10  10  10  20  20  0   0   0     20  0   0   10  10  255 255 255\n"
-        + "motion R3 20  0   0   10  10  255 255 255   30  0   0   10  10  255 255 255",
+            + "motion R3 0   0   0   10  10  255 255 255   10  10  10  20  20  0   0   0\n"
+            + "motion R3 10  10  10  20  20  0   0   0     20  0   0   10  10  255 255 255\n"
+            + "motion R3 20  0   0   10  10  255 255 255   30  0   0   10  10  255 255 255",
         rectangleThreeMotions.toString()
     );
   }

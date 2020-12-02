@@ -13,7 +13,6 @@ import java.awt.Graphics2D;
 import java.util.Objects;
 
 import javax.swing.JPanel;
-import javax.swing.Timer;
 
 /**
  * Specialized Easy Animator JPanel for rendering shapes using the Swing framework.

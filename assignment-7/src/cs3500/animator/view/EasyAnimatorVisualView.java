@@ -79,7 +79,7 @@ public class EasyAnimatorVisualView<Rectangle, Ellipse> extends JFrame
     // Wrap main panel in a scroll pane
     JScrollPane scrollPane = new JScrollPane(panel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
         JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-    scrollPane.setPreferredSize(new Dimension(Math.min(model.getWidth() + 18, 960),
+    scrollPane.setPreferredSize(new Dimension(Math.min(model.getWidth() + 18, 1024),
         Math.min(model.getHeight() + 18, 720)));
 
     // Set up frame

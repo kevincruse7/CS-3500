@@ -1,8 +1,11 @@
 package cs3500.animator.generator;
 
 import static org.junit.Assert.assertEquals;
+
 import java.io.IOException;
+
 import java.util.Random;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -22,17 +25,17 @@ public class GeneratorTest {
     generator = new Generator(output, random);
   }
 
-  @Test (expected = NullPointerException.class)
+  @Test(expected = NullPointerException.class)
   public void testNullRandom() {
     Generator badGen = new Generator(output, null);
   }
 
-  @Test (expected = NullPointerException.class)
+  @Test(expected = NullPointerException.class)
   public void testNullAppendOne() {
     Generator badGen = new Generator(null);
   }
 
-  @Test (expected = NullPointerException.class)
+  @Test(expected = NullPointerException.class)
   public void testNullAppendTwo() {
     Generator badGen = new Generator(null, random);
   }

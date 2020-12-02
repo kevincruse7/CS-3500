@@ -347,10 +347,10 @@ public class BasicEasyAnimatorTest {
     );
     assertEquals(
         "canvas 0 0 1 1\n"
-        + "shape PR rectangle\n"
-        + "motion PR 0   0   0   10  10  255 255 255   10  0   0   10  10  255 255 255\n"
-        + "shape E ellipse\n"
-        + "shape R rectangle",
+            + "shape PR rectangle\n"
+            + "motion PR 0   0   0   10  10  255 255 255   10  0   0   10  10  255 255 255\n"
+            + "shape E ellipse\n"
+            + "shape R rectangle",
         populatedModel.toString()
     );
   }
