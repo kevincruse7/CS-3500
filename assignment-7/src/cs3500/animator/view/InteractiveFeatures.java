@@ -1,7 +1,7 @@
 package cs3500.animator.view;
 
 /**
- * Listener interface for classes using {@link EasyAnimatorInteractiveView}/
+ * Listener interface for classes using {@link EasyAnimatorInteractiveView}.
  */
 public interface InteractiveFeatures {
 
