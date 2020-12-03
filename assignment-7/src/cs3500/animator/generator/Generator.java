@@ -240,6 +240,12 @@ public class Generator {
     }
   }
 
+  /**
+   * Generates a bubble sort animation description.
+   *
+   * @param args Command line arguments
+   * @throws IOException FileWriter fails.
+   */
   public static void main(String[] args) throws IOException {
     FileWriter writer = new FileWriter("examples/bubble-sort.txt");
     new Generator(writer).generateBubbleSort();

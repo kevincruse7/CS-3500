@@ -27,10 +27,10 @@ import javax.swing.Timer;
 public class EasyAnimatorVisualView<Rectangle, Ellipse> extends JFrame
     implements EasyAnimatorView<Rectangle, Ellipse> {
 
-  // Timer used to indicate tick changes
-  protected final Timer timer = new Timer(0, null);
-
   protected final VisualShapeRenderer<Rectangle, Ellipse> shapeRenderer;
+
+  // Timer used to indicate tick changes
+  protected Timer timer;
 
   /**
    * Instantiates an {@code EasyAnimatorVisualView} object with the given shape renderer.
@@ -56,14 +56,18 @@ public class EasyAnimatorVisualView<Rectangle, Ellipse> extends JFrame
       throw new IllegalArgumentException("Tick delay is non-positive.");
     }
 
-    // Set up shape renderer and timer
+    // Set up shape renderer
     shapeRenderer.resetTick();
-    timer.setCoalesce(false);
-    timer.setDelay(tickDelay);
 
-    // Tell timer to repaint and update the shape renderer every tick
+    // Stop old timer, if there is one
+    if (timer != null) {
+      timer.stop();
+    }
+
+    // Set up new timer
     int numTicks = model.getNumTicks();
-    timer.addActionListener(actionEvent -> {
+    timer = new Timer(tickDelay, actionEvent -> {
+      // Repaint and update the shape renderer every tick
       repaint();
       Toolkit.getDefaultToolkit().sync();
 
@@ -72,6 +76,7 @@ public class EasyAnimatorVisualView<Rectangle, Ellipse> extends JFrame
         timer.stop();
       }
     });
+    timer.setCoalesce(false);
 
     // Main interface panel
     JPanel panel = new EasyAnimatorVisualViewPanel<>(model, shapeRenderer);

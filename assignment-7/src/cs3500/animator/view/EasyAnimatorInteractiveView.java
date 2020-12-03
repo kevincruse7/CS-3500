@@ -33,7 +33,8 @@ public class EasyAnimatorInteractiveView<Rectangle, Ellipse>
 
   private InteractiveFeatures featureListener;  // View controller to be used
 
-  // Play/pause button must be modified whenever the timer is started or stopped
+  // Play/pause button must be modified whenever the timer is started or stopped, so a reference is
+  // kept
   private JButton playPause;
 
   private int numTicks;  // Total length of animation
@@ -45,8 +46,7 @@ public class EasyAnimatorInteractiveView<Rectangle, Ellipse>
    * Instantiates an {@code EasyAnimatorInteractiveView} object with the given shape renderer.
    *
    * @param shapeRenderer Shape visitor used to render shapes
-   * @throws NullPointerException  Shape renderer is null.
-   * @throws IllegalStateException Feature listener is null.
+   * @throws NullPointerException Shape renderer is null.
    */
   public EasyAnimatorInteractiveView(VisualShapeRenderer<Rectangle, Ellipse> shapeRenderer)
       throws NullPointerException {
@@ -68,7 +68,7 @@ public class EasyAnimatorInteractiveView<Rectangle, Ellipse>
       EasyAnimatorImmutableModel<? extends VisitableShape<Rectangle, Ellipse>> model,
       Appendable ignored,
       int tickDelay
-  ) throws NullPointerException, IllegalArgumentException, IllegalStateException {
+  ) throws NullPointerException, IllegalArgumentException {
     // Set up main animation panel
     super.render(model, ignored, tickDelay);
 

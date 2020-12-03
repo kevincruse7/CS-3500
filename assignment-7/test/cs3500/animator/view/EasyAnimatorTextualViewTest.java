@@ -23,10 +23,10 @@ import org.junit.Test;
  */
 public class EasyAnimatorTextualViewTest {
 
-  private static final EasyAnimatorImmutableModel<AnimatedShape2D> model =
+  private static final EasyAnimatorImmutableModel<AnimatedShape2D> MODEL =
       AnimationReader.parseFile(
           new InputStreamReader(
-              EasyAnimatorSVGViewTest.class.getResourceAsStream("smalldemo.txt")
+              EasyAnimatorSVGViewTest.class.getResourceAsStream("/smalldemo.txt")
           ),
           BasicEasyAnimator.builder()
       );
@@ -42,7 +42,7 @@ public class EasyAnimatorTextualViewTest {
 
   @Test
   public void render() throws IOException {
-    view.render(model, output, 10);
+    view.render(MODEL, output, 10);
     assertEquals(
         "canvas 200 70 360 360\n"
             + "shape R rectangle\n"
@@ -68,18 +68,18 @@ public class EasyAnimatorTextualViewTest {
 
   @Test(expected = NullPointerException.class)
   public void renderNullOutput() throws IOException {
-    view.render(model, null, 10);
+    view.render(MODEL, null, 10);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void renderNonPositiveTickDelay() throws IOException {
-    view.render(model, output, 0);
+    view.render(MODEL, output, 0);
   }
 
   @Test(expected = IOException.class)
   public void renderBadOutput() throws IOException {
     view.render(
-        model,
+        MODEL,
         new Appendable() {
           @Override
           public Appendable append(CharSequence charSequence) throws IOException {

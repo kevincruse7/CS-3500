@@ -22,10 +22,10 @@ import org.junit.Test;
  */
 public class EasyAnimatorSVGViewTest {
 
-  private static final EasyAnimatorImmutableModel<AnimatedShape2D> model =
+  private static final EasyAnimatorImmutableModel<AnimatedShape2D> MODEL =
       AnimationReader.parseFile(
           new InputStreamReader(
-              EasyAnimatorSVGViewTest.class.getResourceAsStream("smalldemo.txt")
+              EasyAnimatorSVGViewTest.class.getResourceAsStream("/smalldemo.txt")
           ),
           BasicEasyAnimator.builder()
       );
@@ -46,7 +46,7 @@ public class EasyAnimatorSVGViewTest {
 
   @Test
   public void render() throws IOException {
-    view.render(model, output, 10);
+    view.render(MODEL, output, 10);
     assertEquals(
         "<svg viewBox=\"200 70 360 360\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n"
             + "<rect id=\"R\" x=\"200\" y=\"200\" width=\"50\" height=\"100\" "
@@ -89,18 +89,18 @@ public class EasyAnimatorSVGViewTest {
 
   @Test(expected = NullPointerException.class)
   public void renderNullOutput() throws IOException {
-    view.render(model, null, 10);
+    view.render(MODEL, null, 10);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void renderNonPositiveTickDelay() throws IOException {
-    view.render(model, output, 0);
+    view.render(MODEL, output, 0);
   }
 
   @Test(expected = IOException.class)
   public void renderBadOutput() throws IOException {
     view.render(
-        model,
+        MODEL,
         new Appendable() {
           @Override
           public Appendable append(CharSequence charSequence) throws IOException {
