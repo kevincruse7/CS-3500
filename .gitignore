@@ -1,6 +1,7 @@
-# IntelliJ project files
+# Project files
 .idea/
 docs/
+META-INF/
 out/
 *.iml
 *.zip
