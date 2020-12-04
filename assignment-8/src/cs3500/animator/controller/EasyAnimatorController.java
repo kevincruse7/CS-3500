@@ -24,7 +24,7 @@ import java.util.Objects;
  */
 public class EasyAnimatorController<Rectangle, Ellipse> implements InteractiveFeatures {
 
-  private final Readable input;  // Input readable to read animation description from
+  protected final Readable input;  // Input readable to read animation description from
   private final Appendable output;  // Output appendable to send animation output to, if supported
 
   // Interactive view to manage user interaction with, if supported

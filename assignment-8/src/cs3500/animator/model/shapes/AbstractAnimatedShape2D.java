@@ -21,6 +21,7 @@ public abstract class AbstractAnimatedShape2D implements AnimatedShape2D {
   protected final String name;
   protected Map<Integer, Motion2D> motions;  // Map to associate ticks with motions
 
+  private Motion2D[] motionsArray;
   private int startTick;
   private int endTick;
 
@@ -94,7 +95,7 @@ public abstract class AbstractAnimatedShape2D implements AnimatedShape2D {
   // Ensures that motions are consistent (motions exist, no gaps, no implicit teleportation)
   private void checkMotionIntegrity() throws IllegalStateException {
     // Get map values, convert to set to remove duplicates, and convert to array to be sorted
-    Motion2D[] motionsArray = new HashSet<>(motions.values()).toArray(new Motion2D[0]);
+    motionsArray = new HashSet<>(motions.values()).toArray(new Motion2D[0]);
     Arrays.sort(motionsArray);
 
     // Ensure that at least one motion is present
@@ -157,9 +158,9 @@ public abstract class AbstractAnimatedShape2D implements AnimatedShape2D {
 
   @Override
   public List<Motion2D> getMotions() {
-    // Get map values, convert to set to remove duplicates, and convert to array to be sorted
-    Motion2D[] motionsArray = new HashSet<>(motions.values()).toArray(new Motion2D[0]);
-    Arrays.sort(motionsArray);
+    if (integrityUnverified) {
+      checkMotionIntegrity();
+    }
 
     return Arrays.asList(motionsArray);
   }

@@ -1,5 +1,9 @@
 package cs3500.animator.provider.model;
 
+import cs3500.animator.adapters.model.attributes.ModelColor;
+import cs3500.animator.adapters.model.attributes.ModelDimen;
+import cs3500.animator.adapters.model.attributes.ModelPosn;
+
 /**
  * Represents a model object's motion. A motion is defined as a change in object position,
  * dimension, or color. The change can happen to none or any combinations of the aforementioned

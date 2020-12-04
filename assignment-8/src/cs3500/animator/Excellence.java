@@ -1,5 +1,6 @@
 package cs3500.animator;
 
+import cs3500.animator.adapters.controller.ControllerAdapter;
 import cs3500.animator.controller.EasyAnimatorController;
 
 import cs3500.animator.model.BasicEasyAnimator;
@@ -105,23 +106,29 @@ public class Excellence {
     }
 
     // Declare controller, model builder, and view variables
-    EasyAnimatorController<AnimatedRectangle, AnimatedEllipse> controller;
+    ControllerAdapter controller;
     AnimationBuilder<EasyAnimatorModel<AnimatedShape2D, Motion2D>> builder;
     EasyAnimatorView<AnimatedRectangle, AnimatedEllipse> view;
 
     // Initialize MVC variables
-    controller = new EasyAnimatorController<>(input, output);
+    controller = new ControllerAdapter(input, output);
     builder = BasicEasyAnimator.builder();
     view = null;
     try {
-      view = EasyAnimatorViewFactory.create(viewType);
+      if (!"provider".equals(viewType)) {
+        view = EasyAnimatorViewFactory.create(viewType);
+      }
     } catch (IllegalArgumentException e) {
       errorOut("Invalid view type: " + viewType);
     }
 
     // Run the animation
     try {
-      controller.run(builder, view, tickRate);
+      if (!"provider".equals(viewType)) {
+        controller.run(builder, view, tickRate);
+      } else {
+        controller.run(builder, tickRate);
+      }
     } catch (IOException e) {
       errorOut("Rendering failed: " + e.getMessage());
     }

@@ -1,5 +1,8 @@
 package cs3500.animator.provider.model;
 
+import cs3500.animator.adapters.model.attributes.ModelDimen;
+import cs3500.animator.adapters.model.attributes.ModelPosn;
+
 /**
  * Represents the model's working area by position and dimension.
  */

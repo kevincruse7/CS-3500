@@ -1,11 +1,12 @@
 package cs3500.animator.provider.view;
 
+import cs3500.animator.adapters.model.attributes.ModelColor;
+import cs3500.animator.adapters.model.attributes.ModelDimen;
+import cs3500.animator.adapters.model.attributes.ModelPosn;
+
 import cs3500.animator.provider.model.IAnimatorModel;
 import cs3500.animator.provider.model.IModelCanvas;
 import cs3500.animator.provider.model.IModelMotion;
-import cs3500.animator.provider.model.ModelColor;
-import cs3500.animator.provider.model.ModelDimen;
-import cs3500.animator.provider.model.ModelPosn;
 
 import java.io.IOException;
 

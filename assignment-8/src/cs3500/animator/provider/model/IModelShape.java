@@ -1,6 +1,6 @@
 package cs3500.animator.provider.model;
 
-import cs3500.animator.provider.model.ModelShapeCreator.ShapeType;
+import cs3500.animator.adapters.model.shapes.ModelShapeCreator.ShapeType;
 
 /**
  * Represents a model's shape, an object with differing type representing that object's structure.
