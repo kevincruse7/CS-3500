@@ -50,8 +50,8 @@ public class EasyAnimatorController<Rectangle, Ellipse> implements InteractiveFe
    * @param builder  Builder object for motion class
    * @param view     View object for animation
    * @param tickRate How fast to render the animation in ticks per second
-   * @param <Shape>  Shape class used by model
-   * @param <Motion> Motion class used by model
+   * @param <Shape>     Shape class used by model
+   * @param <Motion>    Motion class used by model
    * @throws NullPointerException     Builder or view is null; output appendable is null when view
    *                                  requires non-null appendable.
    * @throws IllegalArgumentException Tick rate is non-positive.
@@ -69,7 +69,7 @@ public class EasyAnimatorController<Rectangle, Ellipse> implements InteractiveFe
     }
 
     // Build the model using the given model builder
-    EasyAnimatorModel<Shape, Motion> model;
+    EasyAnimatorModel<? extends VisitableShape<Rectangle, Ellipse>, ?> model;
     try {
       model = AnimationReader.parseFile(input, builder);
     } catch (IllegalStateException e) {

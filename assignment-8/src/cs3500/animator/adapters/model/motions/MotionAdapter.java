@@ -10,22 +10,31 @@ import cs3500.animator.provider.model.IModelMotion;
 
 import java.util.Objects;
 
+/**
+ * Class adapts our motion implementation to provider's.
+ */
 public class MotionAdapter implements IModelMotion {
 
-  private final Motion2D delegate;
+  private final Motion2D delegate;  // Motion delegate to interface with
 
+  /**
+   * Instantiates a {@code MotionAdapter} object with the given delegate.
+   *
+   * @param delegate Motion delegate to use
+   * @throws NullPointerException Delegate is null.
+   */
   public MotionAdapter(Motion2D delegate) throws NullPointerException {
-    this.delegate = Objects.requireNonNull(delegate);
+    this.delegate = Objects.requireNonNull(delegate, "Delegate is null.");
   }
 
   @Override
   public boolean precedes(IModelMotion that) {
-    throw new UnsupportedOperationException();
+    throw new UnsupportedOperationException("Operation is unused by this adapter");
   }
 
   @Override
   public boolean follows(IModelMotion that) {
-    throw new UnsupportedOperationException();
+    throw new UnsupportedOperationException("Operation is unused by this adapter");
   }
 
   @Override

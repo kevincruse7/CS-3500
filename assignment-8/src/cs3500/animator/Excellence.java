@@ -1,6 +1,8 @@
 package cs3500.animator;
 
 import cs3500.animator.adapters.controller.ControllerAdapter;
+
+import cs3500.animator.adapters.model.ModelAdapter;
 import cs3500.animator.controller.EasyAnimatorController;
 
 import cs3500.animator.model.BasicEasyAnimator;
@@ -12,8 +14,11 @@ import cs3500.animator.model.shapes.AnimatedEllipse;
 import cs3500.animator.model.shapes.AnimatedRectangle;
 import cs3500.animator.model.shapes.AnimatedShape2D;
 
+import cs3500.animator.provider.view.AnimatorTextualView;
+
 import cs3500.animator.util.AnimationBuilder;
 
+import cs3500.animator.util.AnimationReader;
 import cs3500.animator.view.EasyAnimatorView;
 import cs3500.animator.view.EasyAnimatorViewFactory;
 
@@ -46,7 +51,7 @@ public class Excellence {
     // Declare and initialize user input variables
     Readable input = null;
     Appendable output = null;
-    String viewType = null;
+    String viewType = "";
     int tickRate = -1;
 
     // Reads in pairs of arguments, throws errors at invalid arguments or invalid pairings
@@ -93,7 +98,7 @@ public class Excellence {
     }
 
     // Input and view type must be specified
-    if (input == null || viewType == null) {
+    if (input == null || viewType.equals("")) {
       errorOut("Missing required parameters.");
     }
 
@@ -105,32 +110,42 @@ public class Excellence {
       tickRate = 1;
     }
 
-    // Declare controller, model builder, and view variables
-    ControllerAdapter controller;
-    AnimationBuilder<EasyAnimatorModel<AnimatedShape2D, Motion2D>> builder;
-    EasyAnimatorView<AnimatedRectangle, AnimatedEllipse> view;
+    // Declare model builder, view, and controller variables
+    AnimationBuilder<EasyAnimatorModel<AnimatedShape2D, Motion2D>> builder
+        = BasicEasyAnimator.builder();
+    EasyAnimatorView<AnimatedRectangle, AnimatedEllipse> view = null;
+    EasyAnimatorController<AnimatedRectangle, AnimatedEllipse> controller;
 
-    // Initialize MVC variables
-    controller = new ControllerAdapter(input, output);
-    builder = BasicEasyAnimator.builder();
-    view = null;
-    try {
-      if (!"provider".equals(viewType)) {
-        view = EasyAnimatorViewFactory.create(viewType);
+    if (viewType.equals("provider-text")) {
+      // Run the provider's textual view if requested
+      try {
+        new AnimatorTextualView(
+            new ModelAdapter(AnimationReader.parseFile(input, builder)),
+            output,
+            tickRate
+        ).render();
+      } catch (IOException e) {
+        errorOut("Rendering failed: " + e.getMessage());
       }
-    } catch (IllegalArgumentException e) {
-      errorOut("Invalid view type: " + viewType);
-    }
-
-    // Run the animation
-    try {
-      if (!"provider".equals(viewType)) {
-        controller.run(builder, view, tickRate);
+    } else {
+      // Otherwise, use a controller to run the requested view
+      if (viewType.equals("provider")) {
+        controller = new ControllerAdapter(input, output);
       } else {
-        controller.run(builder, tickRate);
+        try {
+          view = EasyAnimatorViewFactory.create(viewType);
+        } catch (IllegalArgumentException e) {
+          errorOut("Invalid view type: " + viewType);
+        }
+        controller = new EasyAnimatorController<>(input, output);
       }
-    } catch (IOException e) {
-      errorOut("Rendering failed: " + e.getMessage());
+
+      // Run the animation
+      try {
+        controller.run(builder, view, tickRate);
+      } catch (IOException e) {
+        errorOut("Rendering failed: " + e.getMessage());
+      }
     }
 
     // Close the output appendable, if supported
