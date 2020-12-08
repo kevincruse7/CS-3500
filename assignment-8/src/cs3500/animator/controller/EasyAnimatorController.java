@@ -69,7 +69,7 @@ public class EasyAnimatorController<Rectangle, Ellipse> implements InteractiveFe
     }
 
     // Build the model using the given model builder
-    EasyAnimatorModel<? extends VisitableShape<Rectangle, Ellipse>, ?> model;
+    EasyAnimatorModel<Shape, Motion> model;
     try {
       model = AnimationReader.parseFile(input, builder);
     } catch (IllegalStateException e) {
