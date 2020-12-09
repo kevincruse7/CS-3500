@@ -6,6 +6,7 @@ import cs3500.animator.model.attributes.Position2D;
 
 import cs3500.animator.model.motions.Motion2D;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -158,10 +159,11 @@ public abstract class AbstractAnimatedShape2D implements AnimatedShape2D {
 
   @Override
   public List<Motion2D> getMotions() {
-    if (integrityUnverified) {
+    if (motions.size() == 0) {
+      return new ArrayList<>();
+    } else if (integrityUnverified) {
       checkMotionIntegrity();
     }
-
     return Arrays.asList(motionsArray);
   }
 

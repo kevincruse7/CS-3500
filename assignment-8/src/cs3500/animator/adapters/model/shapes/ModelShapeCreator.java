@@ -9,5 +9,7 @@ public class ModelShapeCreator {
   /**
    * Enumeration represents the different possible shape types for Easy Animator.
    */
-  public enum ShapeType {RECTANGLE, ELLIPSE}
+  public enum ShapeType {
+    RECTANGLE, ELLIPSE
+  }
 }
