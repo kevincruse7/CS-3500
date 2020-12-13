@@ -7,10 +7,11 @@ import cs3500.animator.model.shapes.ShapeVisitor;
  *
  * @param <Rectangle> Rectangle class used by implementation
  * @param <Ellipse>   Ellipse class used by implementation
+ * @param <Cross>     Cross class used by implementation
  * @param <Output>    Output class used by implementation
  */
-public interface ShapeRenderer<Rectangle, Ellipse, Output>
-    extends ShapeVisitor<Rectangle, Ellipse> {
+public interface ShapeRenderer<Rectangle, Ellipse, Cross, Output>
+    extends ShapeVisitor<Rectangle, Ellipse, Cross> {
 
   /**
    * Sets the output object, the type of which is determined by the implementing class.

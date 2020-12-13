@@ -4,6 +4,8 @@ import cs3500.animator.model.attributes.Color;
 import cs3500.animator.model.attributes.Dimensions2D;
 import cs3500.animator.model.attributes.Position2D;
 
+import cs3500.animator.model.shapes.AnimatedCross;
+import cs3500.animator.model.shapes.AnimatedCross.CrossRenderData;
 import cs3500.animator.model.shapes.AnimatedEllipse;
 import cs3500.animator.model.shapes.AnimatedRectangle;
 
@@ -15,16 +17,64 @@ import java.util.Objects;
  * Represents a shape visitor for visually rendering shapes using the Swing framework.
  */
 public class AnimatedShape2DVisualRenderer
-    implements VisualShapeRenderer<AnimatedRectangle, AnimatedEllipse> {
+    implements VisualShapeRenderer<AnimatedRectangle, AnimatedEllipse, AnimatedCross> {
 
   private Graphics2D output;
+  private RenderType renderType;
   private int tick;
+
+  /**
+   * Instantiates an {@code AnimatedShape2DVisualRenderer} with default values.
+   */
+  public AnimatedShape2DVisualRenderer() {
+    this.output = null;
+    this.renderType = RenderType.FILL;
+    this.tick = 0;
+  }
+
+  /**
+   * Renders the given cross onto a graphics object.
+   *
+   * @param cross Cross to be rendered
+   * @throws NullPointerException Cross, graphics object, or render type is null.
+   */
+  @Override
+  public void visitCross(AnimatedCross cross) {
+    Objects.requireNonNull(cross, "Cross is null.");
+    Objects.requireNonNull(output, "Graphics object is null.");
+
+    int tickCopy = tick;
+    if (tickCopy >= cross.getStartTick()) {
+      // If current tick is greater than cross' end tick, freeze cross to end state
+      int endTick = cross.getEndTick();
+      if (tickCopy > endTick) {
+        tickCopy = endTick;
+      }
+
+      Color color = cross.getColor(tickCopy);
+      CrossRenderData renderData = cross.getRenderData(tickCopy);
+
+      output.setColor(new java.awt.Color(color.getRed(), color.getGreen(), color.getBlue()));
+
+      switch (renderType) {
+        case FILL:
+          output.fillPolygon(renderData.getXPoints(), renderData.getYPoints(),
+              CrossRenderData.NUM_POINTS);
+          break;
+        case OUTLINE:
+          output.drawPolygon(renderData.getXPoints(), renderData.getYPoints(),
+              CrossRenderData.NUM_POINTS);
+        default:
+          throw new NullPointerException("Render type is null.");
+      }
+    }
+  }
 
   /**
    * Renders the given rectangle onto a graphics object.
    *
    * @param rectangle Rectangle to be rendered
-   * @throws NullPointerException Rectangle or graphics object is null.
+   * @throws NullPointerException Rectangle, graphics object, or render type is null.
    */
   @Override
   public void visitRectangle(AnimatedRectangle rectangle)
@@ -45,8 +95,19 @@ public class AnimatedShape2DVisualRenderer
       Dimensions2D dimensions = rectangle.getDimensions(tickCopy);
 
       output.setColor(new java.awt.Color(color.getRed(), color.getGreen(), color.getBlue()));
-      output.fillRect((int) (position.getX() + 0.5), (int) (position.getY() + 0.5),
-          (int) (dimensions.getWidth() + 0.5), (int) (dimensions.getHeight() + 0.5));
+
+      switch (renderType) {
+        case FILL:
+          output.fillRect((int) (position.getX() + 0.5), (int) (position.getY() + 0.5),
+              (int) (dimensions.getWidth() + 0.5), (int) (dimensions.getHeight() + 0.5));
+          break;
+        case OUTLINE:
+          output.drawRect((int) (position.getX() + 0.5), (int) (position.getY() + 0.5),
+              (int) (dimensions.getWidth() + 0.5), (int) (dimensions.getHeight() + 0.5));
+          break;
+        default:
+          throw new NullPointerException("Render type is null.");
+      }
     }
   }
 
@@ -75,9 +136,25 @@ public class AnimatedShape2DVisualRenderer
       Dimensions2D dimensions = ellipse.getDimensions(tickCopy);
 
       output.setColor(new java.awt.Color(color.getRed(), color.getGreen(), color.getBlue()));
-      output.fillOval((int) (position.getX() + 0.5), (int) (position.getY() + 0.5),
-          (int) (dimensions.getWidth() + 0.5), (int) (dimensions.getHeight() + 0.5));
+
+      switch (renderType) {
+        case FILL:
+          output.fillOval((int) (position.getX() + 0.5), (int) (position.getY() + 0.5),
+              (int) (dimensions.getWidth() + 0.5), (int) (dimensions.getHeight() + 0.5));
+          break;
+        case OUTLINE:
+          output.drawOval((int) (position.getX() + 0.5), (int) (position.getY() + 0.5),
+              (int) (dimensions.getWidth() + 0.5), (int) (dimensions.getHeight() + 0.5));
+          break;
+        default:
+          throw new NullPointerException("Render type is null.");
+      }
     }
+  }
+
+  @Override
+  public void setRenderType(RenderType type) {
+    this.renderType = Objects.requireNonNull(type, "Render type is null.");
   }
 
   /**

@@ -21,6 +21,11 @@ public interface InteractiveFeatures {
   void toggleLooping();
 
   /**
+   * Toggles drawing the shapes as outlines in the animation.
+   */
+  void toggleOutline();
+
+  /**
    * Sets the animation tick delay to the specified value.
    *
    * @param delay Tick delay of animation in milliseconds

@@ -26,7 +26,7 @@ public abstract class AbstractAnimatedShape2D implements AnimatedShape2D {
   private int startTick;
   private int endTick;
 
-  private boolean integrityUnverified = true;  // Only run integrity check if state has changed
+  protected boolean integrityUnverified = true;  // Only run integrity check if state has changed
 
   /**
    * Instantiates an {@code AbstractAnimatedShape2D} object with the given name and tick-motion
@@ -94,7 +94,7 @@ public abstract class AbstractAnimatedShape2D implements AnimatedShape2D {
   }
 
   // Ensures that motions are consistent (motions exist, no gaps, no implicit teleportation)
-  private void checkMotionIntegrity() throws IllegalStateException {
+  protected void checkMotionIntegrity() throws IllegalStateException {
     // Get map values, convert to set to remove duplicates, and convert to array to be sorted
     motionsArray = new HashSet<>(motions.values()).toArray(new Motion2D[0]);
     Arrays.sort(motionsArray);
@@ -161,9 +161,12 @@ public abstract class AbstractAnimatedShape2D implements AnimatedShape2D {
   public List<Motion2D> getMotions() {
     if (motions.size() == 0) {
       return new ArrayList<>();
-    } else if (integrityUnverified) {
+    }
+
+    if (integrityUnverified) {
       checkMotionIntegrity();
     }
+
     return Arrays.asList(motionsArray);
   }
 
@@ -227,6 +230,11 @@ public abstract class AbstractAnimatedShape2D implements AnimatedShape2D {
     return false;
   }
 
+  // Double dispatch implementation of cross equality
+  protected boolean sameCross(AnimatedCross other) {
+    return false;
+  }
+
   @Override
   public Object clone() {
     AbstractAnimatedShape2D clone = null;
@@ -252,10 +260,7 @@ public abstract class AbstractAnimatedShape2D implements AnimatedShape2D {
 
   @Override
   public boolean equals(Object obj) {
-    if (obj instanceof AbstractAnimatedShape2D) {
-      return sameShape((AbstractAnimatedShape2D) obj);
-    }
-    return false;
+    return obj instanceof AbstractAnimatedShape2D && sameShape((AbstractAnimatedShape2D) obj);
   }
 
   @Override

@@ -23,11 +23,12 @@ import javax.swing.Timer;
  *
  * @param <Rectangle> Rectangle class used by implementation
  * @param <Ellipse>   Ellipse class used by implementation
+ * @param <Cross>     Cross class used by implementation
  */
-public class EasyAnimatorVisualView<Rectangle, Ellipse> extends JFrame
-    implements EasyAnimatorView<Rectangle, Ellipse> {
+public class EasyAnimatorVisualView<Rectangle, Ellipse, Cross> extends JFrame
+    implements EasyAnimatorView<Rectangle, Ellipse, Cross> {
 
-  protected final VisualShapeRenderer<Rectangle, Ellipse> shapeRenderer;
+  protected final VisualShapeRenderer<Rectangle, Ellipse, Cross> shapeRenderer;
 
   // Timer used to indicate tick changes
   protected Timer timer;
@@ -38,7 +39,7 @@ public class EasyAnimatorVisualView<Rectangle, Ellipse> extends JFrame
    * @param shapeRenderer Shape visitor used to render shapes
    * @throws NullPointerException Shape renderer is null.
    */
-  public EasyAnimatorVisualView(VisualShapeRenderer<Rectangle, Ellipse> shapeRenderer)
+  public EasyAnimatorVisualView(VisualShapeRenderer<Rectangle, Ellipse, Cross> shapeRenderer)
       throws NullPointerException {
     super("Easy Animator");
 
@@ -47,7 +48,7 @@ public class EasyAnimatorVisualView<Rectangle, Ellipse> extends JFrame
 
   @Override
   public void render(
-      EasyAnimatorImmutableModel<? extends VisitableShape<Rectangle, Ellipse>> model,
+      EasyAnimatorImmutableModel<? extends VisitableShape<Rectangle, Ellipse, Cross>> model,
       Appendable ignored,
       int tickDelay
   ) throws NullPointerException, IllegalArgumentException {

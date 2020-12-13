@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import cs3500.animator.model.BasicEasyAnimator;
 import cs3500.animator.model.EasyAnimatorImmutableModel;
 
+import cs3500.animator.model.shapes.AnimatedCross;
 import cs3500.animator.model.shapes.AnimatedEllipse;
 import cs3500.animator.model.shapes.AnimatedRectangle;
 import cs3500.animator.model.shapes.AnimatedShape2D;
@@ -31,7 +32,7 @@ public class EasyAnimatorSVGViewTest {
       );
 
   private Appendable output;
-  private EasyAnimatorView<AnimatedRectangle, AnimatedEllipse> view;
+  private EasyAnimatorView<AnimatedRectangle, AnimatedEllipse, AnimatedCross> view;
 
   @Before
   public void setUp() {

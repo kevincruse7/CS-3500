@@ -4,6 +4,7 @@ import cs3500.animator.model.attributes.Color;
 import cs3500.animator.model.attributes.Dimensions2D;
 import cs3500.animator.model.attributes.Position2D;
 
+import cs3500.animator.model.shapes.AnimatedCross;
 import cs3500.animator.model.shapes.AnimatedEllipse;
 import cs3500.animator.model.shapes.AnimatedRectangle;
 import cs3500.animator.model.shapes.AnimatedShape2D;
@@ -117,6 +118,9 @@ public class BasicEasyAnimator implements EasyAnimatorModel<AnimatedShape2D, Mot
           break;
         case "ellipse":
           shape = new AnimatedEllipse(name);
+          break;
+        case "cross":
+          shape = new AnimatedCross(name);
           break;
         default:
           throw new IllegalArgumentException("Shape type is invalid.");

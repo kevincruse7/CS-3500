@@ -19,11 +19,13 @@ import javax.swing.JPanel;
  *
  * @param <Rectangle> Rectangle class used by implementation
  * @param <Ellipse>   Ellipse class used by implementation
+ * @param <Cross>     Cross class used by implementation
  */
-public class EasyAnimatorVisualViewPanel<Rectangle, Ellipse> extends JPanel {
+public class EasyAnimatorVisualViewPanel<Rectangle, Ellipse, Cross> extends JPanel {
 
-  private final EasyAnimatorImmutableModel<? extends VisitableShape<Rectangle, Ellipse>> model;
-  private final VisualShapeRenderer<Rectangle, Ellipse> shapeRenderer;
+  private final EasyAnimatorImmutableModel<? extends VisitableShape<Rectangle, Ellipse, Cross>>
+      model;
+  private final VisualShapeRenderer<Rectangle, Ellipse, Cross> shapeRenderer;
 
   /**
    * Instantiates an {@code EasyAnimatorVisualViewPanel} object with the given model and shape
@@ -34,8 +36,8 @@ public class EasyAnimatorVisualViewPanel<Rectangle, Ellipse> extends JPanel {
    * @throws NullPointerException Model or renderer is null.
    */
   public EasyAnimatorVisualViewPanel(
-      EasyAnimatorImmutableModel<? extends VisitableShape<Rectangle, Ellipse>> model,
-      VisualShapeRenderer<Rectangle, Ellipse> shapeRenderer
+      EasyAnimatorImmutableModel<? extends VisitableShape<Rectangle, Ellipse, Cross>> model,
+      VisualShapeRenderer<Rectangle, Ellipse, Cross> shapeRenderer
   ) throws NullPointerException {
     super();
 
@@ -56,7 +58,7 @@ public class EasyAnimatorVisualViewPanel<Rectangle, Ellipse> extends JPanel {
     shapeRenderer.setOutput(graphics2D);
 
     // Cycle through model's shapes and render each of them
-    for (VisitableShape<Rectangle, Ellipse> shape : model.getShapes()) {
+    for (VisitableShape<Rectangle, Ellipse, Cross> shape : model.getShapes()) {
       try {
         shape.accept(shapeRenderer);
       } catch (Exception ignored) {

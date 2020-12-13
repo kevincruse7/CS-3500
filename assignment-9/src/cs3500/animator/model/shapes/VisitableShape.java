@@ -5,8 +5,9 @@ package cs3500.animator.model.shapes;
  *
  * @param <Rectangle> Rectangle class used by implementation
  * @param <Ellipse>   Ellipse class used by implementation
+ * @param <Cross>     Cross class used by implementation
  */
-public interface VisitableShape<Rectangle, Ellipse> {
+public interface VisitableShape<Rectangle, Ellipse, Cross> {
 
   /**
    * Accepts the given shape visitor and directs it to the corresponding visit method.
@@ -15,5 +16,5 @@ public interface VisitableShape<Rectangle, Ellipse> {
    * @throws Exception An exception was thrown, the type and nature of which is determined by the
    *                   implementing class.
    */
-  void accept(ShapeVisitor<Rectangle, Ellipse> visitor) throws Exception;
+  void accept(ShapeVisitor<Rectangle, Ellipse, Cross> visitor) throws Exception;
 }

@@ -8,6 +8,7 @@ import cs3500.animator.model.EasyAnimatorModel;
 
 import cs3500.animator.model.motions.Motion2D;
 
+import cs3500.animator.model.shapes.AnimatedCross;
 import cs3500.animator.model.shapes.AnimatedEllipse;
 import cs3500.animator.model.shapes.AnimatedRectangle;
 import cs3500.animator.model.shapes.AnimatedShape2D;
@@ -34,15 +35,15 @@ import org.junit.Test;
  */
 public class EasyAnimatorControllerTest {
 
-  private static final EasyAnimatorView<AnimatedRectangle, AnimatedEllipse> SVG_VIEW
+  private static final EasyAnimatorView<AnimatedRectangle, AnimatedEllipse, AnimatedCross> SVG_VIEW
       = EasyAnimatorViewFactory.create("svg");
-  private static final EasyAnimatorView<AnimatedRectangle, AnimatedEllipse> TEXTUAL_VIEW
-      = EasyAnimatorViewFactory.create("text");
+  private static final EasyAnimatorView<AnimatedRectangle, AnimatedEllipse, AnimatedCross>
+      TEXTUAL_VIEW = EasyAnimatorViewFactory.create("text");
   private static final int TICK_RATE = 100;
 
   // Mock interactive view for testing interactive functionality of controller
   private static class MockInteractiveView
-      extends EasyAnimatorInteractiveView<AnimatedRectangle, AnimatedEllipse> {
+      extends EasyAnimatorInteractiveView<AnimatedRectangle, AnimatedEllipse, AnimatedCross> {
 
     private final StringBuilder log;
 
@@ -59,8 +60,8 @@ public class EasyAnimatorControllerTest {
 
     @Override
     public void render(
-        EasyAnimatorImmutableModel<? extends VisitableShape<AnimatedRectangle, AnimatedEllipse>>
-            model,
+        EasyAnimatorImmutableModel<? extends VisitableShape<AnimatedRectangle, AnimatedEllipse,
+            AnimatedCross>> model,
         Appendable ignored,
         int tickDelay
     ) {
@@ -94,7 +95,7 @@ public class EasyAnimatorControllerTest {
 
   private Readable input;
   private Appendable output;
-  private EasyAnimatorController<AnimatedRectangle, AnimatedEllipse> controller;
+  private EasyAnimatorController<AnimatedRectangle, AnimatedEllipse, AnimatedCross> controller;
   private AnimationBuilder<EasyAnimatorModel<AnimatedShape2D, Motion2D>> builder;
 
   @Before

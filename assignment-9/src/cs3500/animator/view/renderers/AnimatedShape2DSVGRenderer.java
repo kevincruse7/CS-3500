@@ -6,6 +6,8 @@ import cs3500.animator.model.attributes.Position2D;
 
 import cs3500.animator.model.motions.Motion2D;
 
+import cs3500.animator.model.shapes.AnimatedCross;
+import cs3500.animator.model.shapes.AnimatedCross.CrossRenderData;
 import cs3500.animator.model.shapes.AnimatedEllipse;
 import cs3500.animator.model.shapes.AnimatedRectangle;
 
@@ -18,10 +20,98 @@ import java.util.Objects;
  * SVGShapeRenderer}.
  */
 public class AnimatedShape2DSVGRenderer
-    implements SVGShapeRenderer<AnimatedRectangle, AnimatedEllipse> {
+    implements SVGShapeRenderer<AnimatedRectangle, AnimatedEllipse, AnimatedCross> {
 
   private Appendable output;
   private int tickDelay = -1;
+
+  // Appends all of the points of a cross to output for rendering as a polygon
+  private void appendCrossPoints(CrossRenderData renderData) throws IOException {
+    int[] xPoints = renderData.getXPoints();
+    int[] yPoints = renderData.getYPoints();
+
+    output.append(String.format("\"%d,%d", xPoints[0], yPoints[0]));
+    for (int i = 1; i < CrossRenderData.NUM_POINTS; i++) {
+      output.append(String.format(" %d,%d", xPoints[i], yPoints[i]));
+    }
+    output.append("\"");
+  }
+
+  /**
+   * Renders the given cross as an SVG entry.
+   *
+   * @param cross Cross to be rendered
+   * @throws NullPointerException  Cross is null.
+   * @throws IllegalStateException Output appendable is null or tick delay is not set.
+   * @throws IOException           Output appendable failed.
+   */
+  @Override
+  public void visitCross(AnimatedCross cross)
+      throws NullPointerException, IllegalStateException, IOException {
+    Objects.requireNonNull(cross, "Cross is null.");
+    if (output == null) {
+      throw new IllegalStateException("Output appendable is null.");
+    }
+    if (tickDelay == -1) {
+      throw new IllegalStateException("Tick delay is not set.");
+    }
+
+    // Write the polygon tag to the appendable with the initial shape state
+    Color startColor = cross.getColor(cross.getStartTick());
+    CrossRenderData startRenderData = cross.getRenderData(cross.getStartTick());
+    output.append(String.format(
+        "<polygon id=\"%s\" fill=\"rgb(%d,%d,%d)\" visibility=\"hidden\" points=",
+        cross.getName(), startColor.getRed(), startColor.getGreen(), startColor.getBlue()
+    ));
+    appendCrossPoints(startRenderData);
+    output.append(">\n");
+
+    // Write animate tags for each component of each motion, if there is change
+    boolean firstRun = true;
+    for (Motion2D motion : cross.getMotions()) {
+      // Make the rectangle visible when its start tick is reached
+      if (firstRun) {
+        output.append(String.format(
+            "<animate attributeType=\"xml\" attributeName=\"visibility\" begin=\"%dms\" "
+                + "dur=\"1ms\" from=\"hidden\" to=\"visible\" fill=\"freeze\"/>\n",
+            motion.getStartTick() * tickDelay
+        ));
+        firstRun = false;
+      }
+
+      startColor = cross.getColor(motion.getStartTick());
+      Color endColor = cross.getColor(motion.getEndTick());
+
+      startRenderData = cross.getRenderData(motion.getStartTick());
+      CrossRenderData endRenderData = cross.getRenderData(motion.getEndTick());
+
+      // If color changes in this motion, write an animate tag for it
+      if (!startColor.equals(endColor)) {
+        output.append(String.format("<animate attributeType=\"xml\" attributeName=\"fill\" "
+                + "begin=\"%dms\" dur=\"%dms\" from=\"rgb(%d,%d,%d)\" to=\"rgb(%d,%d,%d)\" "
+                + "fill=\"freeze\"/>\n",
+            motion.getStartTick() * tickDelay,
+            (motion.getEndTick() - motion.getStartTick()) * tickDelay,
+            startColor.getRed(), startColor.getGreen(), startColor.getBlue(),
+            endColor.getRed(), endColor.getGreen(), endColor.getBlue()
+        ));
+      }
+      // If render data changes in this motion, write an animate tag for it
+      if (!startRenderData.equals(endRenderData)) {
+        output.append(String.format("<animate attributeType=\"xml\" attributeName=\"points\" "
+                + "begin=\"%dms\" dur=\"%dms\" fill=\"freeze\" from=",
+            motion.getStartTick() * tickDelay,
+            (motion.getEndTick() - motion.getStartTick()) * tickDelay
+        ));
+        appendCrossPoints(startRenderData);
+        output.append(" to=");
+        appendCrossPoints(endRenderData);
+        output.append("/>\n");
+      }
+    }
+
+    output.append("</polygon>\n");
+  }
 
   /**
    * Renders the given rectangle as an SVG entry.

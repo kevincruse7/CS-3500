@@ -33,7 +33,8 @@ public class AnimatedRectangle extends AbstractAnimatedShape2D {
   }
 
   @Override
-  public void accept(ShapeVisitor<AnimatedRectangle, AnimatedEllipse> visitor) throws Exception {
+  public void accept(ShapeVisitor<AnimatedRectangle, AnimatedEllipse, AnimatedCross> visitor)
+      throws Exception {
     Objects.requireNonNull(visitor, "Visitor is null.").visitRectangle(this);
   }
 

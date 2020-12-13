@@ -16,11 +16,12 @@ import java.util.Objects;
  *
  * @param <Rectangle> Rectangle class used by implementation
  * @param <Ellipse>   Ellipse class used by implementation
+ * @param <Cross>     Cross class used by implementation
  */
-public class EasyAnimatorSVGView<Rectangle, Ellipse>
-    implements EasyAnimatorView<Rectangle, Ellipse> {
+public class EasyAnimatorSVGView<Rectangle, Ellipse, Cross>
+    implements EasyAnimatorView<Rectangle, Ellipse, Cross> {
 
-  private final SVGShapeRenderer<Rectangle, Ellipse> shapeRenderer;
+  private final SVGShapeRenderer<Rectangle, Ellipse, Cross> shapeRenderer;
 
   /**
    * Instantiates an {@code EasyAnimatorSVGView} object with the given shape renderer.
@@ -28,14 +29,14 @@ public class EasyAnimatorSVGView<Rectangle, Ellipse>
    * @param shapeRenderer Shape visitor used to render shapes
    * @throws NullPointerException Shape renderer is null.
    */
-  public EasyAnimatorSVGView(SVGShapeRenderer<Rectangle, Ellipse> shapeRenderer)
+  public EasyAnimatorSVGView(SVGShapeRenderer<Rectangle, Ellipse, Cross> shapeRenderer)
       throws NullPointerException {
     this.shapeRenderer = Objects.requireNonNull(shapeRenderer, "Shape renderer is null.");
   }
 
   @Override
   public void render(
-      EasyAnimatorImmutableModel<? extends VisitableShape<Rectangle, Ellipse>> model,
+      EasyAnimatorImmutableModel<? extends VisitableShape<Rectangle, Ellipse, Cross>> model,
       Appendable output,
       int tickDelay
   ) throws NullPointerException, IllegalArgumentException, IOException {
@@ -51,7 +52,7 @@ public class EasyAnimatorSVGView<Rectangle, Ellipse>
 
     shapeRenderer.setOutput(output);
     shapeRenderer.setTickDelay(tickDelay);
-    for (VisitableShape<Rectangle, Ellipse> shape : model.getShapes()) {
+    for (VisitableShape<Rectangle, Ellipse, Cross> shape : model.getShapes()) {
       try {
         shape.accept(shapeRenderer);
       } catch (IOException e) {

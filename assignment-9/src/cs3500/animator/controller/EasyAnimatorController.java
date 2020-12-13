@@ -21,14 +21,15 @@ import java.util.Objects;
  *
  * @param <Rectangle> Rectangle class used by model
  * @param <Ellipse>   Ellipse class used by model
+ * @param <Cross>     Cross class used by model
  */
-public class EasyAnimatorController<Rectangle, Ellipse> implements InteractiveFeatures {
+public class EasyAnimatorController<Rectangle, Ellipse, Cross> implements InteractiveFeatures {
 
   protected final Readable input;  // Input readable to read animation description from
   private final Appendable output;  // Output appendable to send animation output to, if supported
 
   // Interactive view to manage user interaction with, if supported
-  private EasyAnimatorInteractiveView<Rectangle, Ellipse> interactiveView;
+  private EasyAnimatorInteractiveView<Rectangle, Ellipse, Cross> interactiveView;
 
   /**
    * Instantiates an {@code EasyAnimatorController} object with the provided input readable and
@@ -50,16 +51,16 @@ public class EasyAnimatorController<Rectangle, Ellipse> implements InteractiveFe
    * @param builder  Builder object for motion class
    * @param view     View object for animation
    * @param tickRate How fast to render the animation in ticks per second
-   * @param <Shape>     Shape class used by model
-   * @param <Motion>    Motion class used by model
+   * @param <Shape>  Shape class used by model
+   * @param <Motion> Motion class used by model
    * @throws NullPointerException     Builder or view is null; output appendable is null when view
    *                                  requires non-null appendable.
    * @throws IllegalArgumentException Tick rate is non-positive.
    * @throws IOException              Input readable or output appendable fails.
    */
-  public <Shape extends VisitableShape<Rectangle, Ellipse>, Motion> void run(
+  public <Shape extends VisitableShape<Rectangle, Ellipse, Cross>, Motion> void run(
       AnimationBuilder<EasyAnimatorModel<Shape, Motion>> builder,
-      EasyAnimatorView<Rectangle, Ellipse> view,
+      EasyAnimatorView<Rectangle, Ellipse, Cross> view,
       int tickRate
   ) throws NullPointerException, IllegalArgumentException, IOException {
     Objects.requireNonNull(builder, "Builder is null.");
@@ -78,7 +79,7 @@ public class EasyAnimatorController<Rectangle, Ellipse> implements InteractiveFe
 
     // If view is interactive, save reference of it for user interaction handling
     if (view instanceof EasyAnimatorInteractiveView) {
-      interactiveView = (EasyAnimatorInteractiveView<Rectangle, Ellipse>) view;
+      interactiveView = (EasyAnimatorInteractiveView<Rectangle, Ellipse, Cross>) view;
       interactiveView.setFeatureListener(this);
     } else {
       interactiveView = null;
@@ -126,6 +127,17 @@ public class EasyAnimatorController<Rectangle, Ellipse> implements InteractiveFe
   public void toggleLooping() throws UnsupportedOperationException {
     checkInteractiveView();
     interactiveView.toggleLooping();
+  }
+
+  /**
+   * Toggles drawing the shapes as outlines in the animation.
+   *
+   * @throws UnsupportedOperationException View is not interactive.
+   */
+  @Override
+  public void toggleOutline() throws UnsupportedOperationException {
+    checkInteractiveView();
+    interactiveView.toggleOutline();
   }
 
   /**

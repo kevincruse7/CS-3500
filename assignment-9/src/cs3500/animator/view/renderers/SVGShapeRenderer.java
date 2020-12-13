@@ -5,9 +5,10 @@ package cs3500.animator.view.renderers;
  *
  * @param <Rectangle> Rectangle class used by implementation
  * @param <Ellipse>   Ellipse class used by implementation
+ * @param <Cross>     Cross class used by implementation
  */
-public interface SVGShapeRenderer<Rectangle, Ellipse>
-    extends ShapeRenderer<Rectangle, Ellipse, Appendable> {
+public interface SVGShapeRenderer<Rectangle, Ellipse, Cross>
+    extends ShapeRenderer<Rectangle, Ellipse, Cross, Appendable> {
 
   /**
    * Sets the tick delay to the given value.

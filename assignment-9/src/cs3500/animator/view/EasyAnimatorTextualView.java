@@ -13,12 +13,12 @@ import java.util.Scanner;
  * Textual view for Easy Animator as defined by {@link EasyAnimatorView}. Allows users to render
  * animations to textual descriptions at a specified tick delay.
  */
-public class EasyAnimatorTextualView<Rectangle, Ellipse>
-    implements EasyAnimatorView<Rectangle, Ellipse> {
+public class EasyAnimatorTextualView<Rectangle, Ellipse, Cross>
+    implements EasyAnimatorView<Rectangle, Ellipse, Cross> {
 
   @Override
   public void render(
-      EasyAnimatorImmutableModel<? extends VisitableShape<Rectangle, Ellipse>> model,
+      EasyAnimatorImmutableModel<? extends VisitableShape<Rectangle, Ellipse, Cross>> model,
       Appendable output,
       int tickDelay
   ) throws NullPointerException, IllegalArgumentException, IOException {

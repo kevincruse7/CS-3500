@@ -5,6 +5,7 @@ import cs3500.animator.model.EasyAnimatorImmutableModel;
 import cs3500.animator.model.shapes.VisitableShape;
 
 import cs3500.animator.view.renderers.VisualShapeRenderer;
+import cs3500.animator.view.renderers.VisualShapeRenderer.RenderType;
 
 import java.awt.Component;
 import java.awt.Toolkit;
@@ -27,15 +28,19 @@ import javax.swing.SwingUtilities;
  *
  * @param <Rectangle> Rectangle class used by implementation
  * @param <Ellipse>   Ellipse class used by implementation
+ * @param <Cross>     Cross class used by implementation
  */
-public class EasyAnimatorInteractiveView<Rectangle, Ellipse>
-    extends EasyAnimatorVisualView<Rectangle, Ellipse> implements InteractiveFeatures {
+public class EasyAnimatorInteractiveView<Rectangle, Ellipse, Cross>
+    extends EasyAnimatorVisualView<Rectangle, Ellipse, Cross> implements InteractiveFeatures {
 
   private InteractiveFeatures featureListener;  // View controller to be used
 
   // Play/pause button must be modified whenever the timer is started or stopped, so a reference is
   // kept
   private JButton playPause;
+
+  // Outline checkbox referred to when toggling outline
+  private JCheckBox outline;
 
   private int numTicks;  // Total length of animation
   private ActionListener nonLooper;  // Timer listener that does not loop animation
@@ -48,7 +53,7 @@ public class EasyAnimatorInteractiveView<Rectangle, Ellipse>
    * @param shapeRenderer Shape visitor used to render shapes
    * @throws NullPointerException Shape renderer is null.
    */
-  public EasyAnimatorInteractiveView(VisualShapeRenderer<Rectangle, Ellipse> shapeRenderer)
+  public EasyAnimatorInteractiveView(VisualShapeRenderer<Rectangle, Ellipse, Cross> shapeRenderer)
       throws NullPointerException {
     super(shapeRenderer);
   }
@@ -65,7 +70,7 @@ public class EasyAnimatorInteractiveView<Rectangle, Ellipse>
 
   @Override
   public void render(
-      EasyAnimatorImmutableModel<? extends VisitableShape<Rectangle, Ellipse>> model,
+      EasyAnimatorImmutableModel<? extends VisitableShape<Rectangle, Ellipse, Cross>> model,
       Appendable ignored,
       int tickDelay
   ) throws NullPointerException, IllegalArgumentException {
@@ -84,6 +89,7 @@ public class EasyAnimatorInteractiveView<Rectangle, Ellipse>
     playPause = new JButton("Pause");
     JButton restart = new JButton("Restart");
     JCheckBox looping = new JCheckBox("Looping");
+    outline = new JCheckBox("Outline");
 
     // Set up TPS slider in its own panel
     JPanel sliderPanel = new JPanel();
@@ -102,6 +108,7 @@ public class EasyAnimatorInteractiveView<Rectangle, Ellipse>
     playPause.addActionListener(actionEvent -> featureListener.togglePlayPause());
     restart.addActionListener(actionEvent -> featureListener.restart());
     looping.addActionListener(actionEvent -> featureListener.toggleLooping());
+    outline.addActionListener(actionEvent -> featureListener.toggleOutline());
     ticksPerSecond.addChangeListener(changeEvent -> featureListener.setDelay(
         1000 / ((JSlider) changeEvent.getSource()).getValue()
     ));
@@ -111,6 +118,7 @@ public class EasyAnimatorInteractiveView<Rectangle, Ellipse>
     controlPanel.add(restart);
     controlPanel.add(sliderPanel);
     controlPanel.add(looping);
+    controlPanel.add(outline);
 
     // Initialize timer listeners
     numTicks = model.getNumTicks();
@@ -169,9 +177,9 @@ public class EasyAnimatorInteractiveView<Rectangle, Ellipse>
       if (shapeRenderer.getTick() >= numTicks) {
         // If animation has ended, restart
         restart();
-      } else {
-        playPause.setText("Pause");
       }
+
+      playPause.setText("Pause");
       timer.start();
     }
   }
@@ -217,6 +225,27 @@ public class EasyAnimatorInteractiveView<Rectangle, Ellipse>
     playPause.setText("Pause");
 
     isLooping = !isLooping;
+  }
+
+  /**
+   * Toggles drawing the shapes as outlines in the animation.
+   *
+   * @throws IllegalStateException Animation has not yet loaded.
+   */
+  @Override
+  public void toggleOutline() throws IllegalStateException {
+    checkIfLoaded();
+
+    if (outline.isSelected()) {
+      shapeRenderer.setRenderType(RenderType.OUTLINE);
+    } else {
+      shapeRenderer.setRenderType(RenderType.FILL);
+    }
+
+    if (!timer.isRunning()) {
+      repaint();
+      Toolkit.getDefaultToolkit().sync();
+    }
   }
 
   /**

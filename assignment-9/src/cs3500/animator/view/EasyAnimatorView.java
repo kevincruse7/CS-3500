@@ -11,8 +11,9 @@ import java.io.IOException;
  *
  * @param <Rectangle> Rectangle class used by implementation
  * @param <Ellipse>   Ellipse class used by implementation
+ * @param <Cross>     Cross class used by implementation
  */
-public interface EasyAnimatorView<Rectangle, Ellipse> {
+public interface EasyAnimatorView<Rectangle, Ellipse, Cross> {
 
   /**
    * Renders the animation represented by the given model with the given shape renderer at the given
@@ -26,7 +27,7 @@ public interface EasyAnimatorView<Rectangle, Ellipse> {
    * @throws IOException              View is unable to render the model.
    */
   void render(
-      EasyAnimatorImmutableModel<? extends VisitableShape<Rectangle, Ellipse>> model,
+      EasyAnimatorImmutableModel<? extends VisitableShape<Rectangle, Ellipse, Cross>> model,
       Appendable output,
       int tickDelay
   ) throws NullPointerException, IllegalArgumentException, IOException;

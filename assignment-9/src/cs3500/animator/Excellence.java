@@ -7,6 +7,7 @@ import cs3500.animator.model.EasyAnimatorModel;
 
 import cs3500.animator.model.motions.Motion2D;
 
+import cs3500.animator.model.shapes.AnimatedCross;
 import cs3500.animator.model.shapes.AnimatedEllipse;
 import cs3500.animator.model.shapes.AnimatedRectangle;
 import cs3500.animator.model.shapes.AnimatedShape2D;
@@ -105,9 +106,9 @@ public class Excellence {
     }
 
     // Declare controller, model builder, and view variables
-    EasyAnimatorController<AnimatedRectangle, AnimatedEllipse> controller;
+    EasyAnimatorController<AnimatedRectangle, AnimatedEllipse, AnimatedCross> controller;
     AnimationBuilder<EasyAnimatorModel<AnimatedShape2D, Motion2D>> builder;
-    EasyAnimatorView<AnimatedRectangle, AnimatedEllipse> view = null;
+    EasyAnimatorView<AnimatedRectangle, AnimatedEllipse, AnimatedCross> view = null;
 
     // Initialize controller, model builder, and view
     controller = new EasyAnimatorController<>(input, output);

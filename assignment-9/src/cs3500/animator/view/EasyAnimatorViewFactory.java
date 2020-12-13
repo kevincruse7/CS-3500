@@ -1,5 +1,6 @@
 package cs3500.animator.view;
 
+import cs3500.animator.model.shapes.AnimatedCross;
 import cs3500.animator.model.shapes.AnimatedEllipse;
 import cs3500.animator.model.shapes.AnimatedRectangle;
 
@@ -21,8 +22,8 @@ public class EasyAnimatorViewFactory {
    * @throws NullPointerException     View type is null.
    * @throws IllegalArgumentException View type does not match any supported types.
    */
-  public static EasyAnimatorView<AnimatedRectangle, AnimatedEllipse> create(String viewType)
-      throws NullPointerException, IllegalArgumentException {
+  public static EasyAnimatorView<AnimatedRectangle, AnimatedEllipse, AnimatedCross> create(String
+      viewType) throws NullPointerException, IllegalArgumentException {
     switch (Objects.requireNonNull(viewType, "View type is null.")) {
       case "svg":
         return new EasyAnimatorSVGView<>(new AnimatedShape2DSVGRenderer());

@@ -24,7 +24,7 @@ import java.util.List;
  * </ul>
  */
 public interface AnimatedShape2D
-    extends VisitableShape<AnimatedRectangle, AnimatedEllipse>, Cloneable {
+    extends VisitableShape<AnimatedRectangle, AnimatedEllipse, AnimatedCross>, Cloneable {
 
   /**
    * Adds the given motion to shape.

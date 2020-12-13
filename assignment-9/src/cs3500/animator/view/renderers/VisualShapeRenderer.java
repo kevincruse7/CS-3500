@@ -7,9 +7,25 @@ import java.awt.Graphics2D;
  *
  * @param <Rectangle> Rectangle class used by implementation
  * @param <Ellipse>   Ellipse class used by implementation
+ * @param <Cross>     Cross class used by implementation
  */
-public interface VisualShapeRenderer<Rectangle, Ellipse>
-    extends ShapeRenderer<Rectangle, Ellipse, Graphics2D> {
+public interface VisualShapeRenderer<Rectangle, Ellipse, Cross>
+    extends ShapeRenderer<Rectangle, Ellipse, Cross, Graphics2D> {
+
+  /**
+   * Represents the render type for shapes, either being filled or outlined.
+   */
+  enum RenderType {
+    FILL, OUTLINE
+  }
+
+  /**
+   * Sets the render type to the given value.
+   *
+   * @param type Render type to be used
+   * @throws NullPointerException Render type is null.
+   */
+  void setRenderType(RenderType type) throws NullPointerException;
 
   /**
    * Resets the tick count to 0.
