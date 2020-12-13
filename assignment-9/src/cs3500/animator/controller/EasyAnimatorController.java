@@ -141,6 +141,17 @@ public class EasyAnimatorController<Rectangle, Ellipse, Cross> implements Intera
   }
 
   /**
+   * Toggles discrete playback of the animation.
+   *
+   * @throws UnsupportedOperationException View is not interactive.
+   */
+  @Override
+  public void toggleDiscretePlayback() throws UnsupportedOperationException {
+    checkInteractiveView();
+    interactiveView.toggleDiscretePlayback();
+  }
+
+  /**
    * Sets the animation tick delay to the specified value.
    *
    * @param delay Tick delay of animation in milliseconds

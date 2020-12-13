@@ -26,6 +26,11 @@ public interface InteractiveFeatures {
   void toggleOutline();
 
   /**
+   * Toggles discrete playback of the animation.
+   */
+  void toggleDiscretePlayback();
+
+  /**
    * Sets the animation tick delay to the specified value.
    *
    * @param delay Tick delay of animation in milliseconds

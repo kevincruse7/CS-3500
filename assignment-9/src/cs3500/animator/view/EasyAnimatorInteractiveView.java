@@ -5,6 +5,7 @@ import cs3500.animator.model.EasyAnimatorImmutableModel;
 import cs3500.animator.model.shapes.VisitableShape;
 
 import cs3500.animator.view.renderers.VisualShapeRenderer;
+import cs3500.animator.view.renderers.VisualShapeRenderer.PlaybackType;
 import cs3500.animator.view.renderers.VisualShapeRenderer.RenderType;
 
 import java.awt.Component;
@@ -35,12 +36,10 @@ public class EasyAnimatorInteractiveView<Rectangle, Ellipse, Cross>
 
   private InteractiveFeatures featureListener;  // View controller to be used
 
-  // Play/pause button must be modified whenever the timer is started or stopped, so a reference is
-  // kept
+  // UI element references that are needed in multiple methods
   private JButton playPause;
-
-  // Outline checkbox referred to when toggling outline
   private JCheckBox outline;
+  private JCheckBox discrete;
 
   private int numTicks;  // Total length of animation
   private ActionListener nonLooper;  // Timer listener that does not loop animation
@@ -82,6 +81,9 @@ public class EasyAnimatorInteractiveView<Rectangle, Ellipse, Cross>
       featureListener = this;
     }
 
+    // Find discrete ticks in model
+    shapeRenderer.setDiscreteTicks(model);
+
     // Main interaction panel
     JPanel controlPanel = new JPanel();
 
@@ -90,6 +92,7 @@ public class EasyAnimatorInteractiveView<Rectangle, Ellipse, Cross>
     JButton restart = new JButton("Restart");
     JCheckBox looping = new JCheckBox("Looping");
     outline = new JCheckBox("Outline");
+    discrete = new JCheckBox("Discrete Playback");
 
     // Set up TPS slider in its own panel
     JPanel sliderPanel = new JPanel();
@@ -109,6 +112,7 @@ public class EasyAnimatorInteractiveView<Rectangle, Ellipse, Cross>
     restart.addActionListener(actionEvent -> featureListener.restart());
     looping.addActionListener(actionEvent -> featureListener.toggleLooping());
     outline.addActionListener(actionEvent -> featureListener.toggleOutline());
+    discrete.addActionListener(actionEvent -> featureListener.toggleDiscretePlayback());
     ticksPerSecond.addChangeListener(changeEvent -> featureListener.setDelay(
         1000 / ((JSlider) changeEvent.getSource()).getValue()
     ));
@@ -119,6 +123,7 @@ public class EasyAnimatorInteractiveView<Rectangle, Ellipse, Cross>
     controlPanel.add(sliderPanel);
     controlPanel.add(looping);
     controlPanel.add(outline);
+    controlPanel.add(discrete);
 
     // Initialize timer listeners
     numTicks = model.getNumTicks();
@@ -245,6 +250,22 @@ public class EasyAnimatorInteractiveView<Rectangle, Ellipse, Cross>
     if (!timer.isRunning()) {
       repaint();
       Toolkit.getDefaultToolkit().sync();
+    }
+  }
+
+  /**
+   * Toggles discrete playback of the animation.
+   *
+   * @throws IllegalStateException Animation has not yet loaded.
+   */
+  @Override
+  public void toggleDiscretePlayback() throws IllegalStateException {
+    checkIfLoaded();
+
+    if (discrete.isSelected()) {
+      shapeRenderer.setPlaybackType(PlaybackType.DISCRETE);
+    } else {
+      shapeRenderer.setPlaybackType(PlaybackType.CONTINUOUS);
     }
   }
 

@@ -1,16 +1,27 @@
 package cs3500.animator.view.renderers;
 
+import cs3500.animator.model.BasicEasyAnimator;
+import cs3500.animator.model.EasyAnimatorImmutableModel;
+
 import cs3500.animator.model.attributes.Color;
 import cs3500.animator.model.attributes.Dimensions2D;
 import cs3500.animator.model.attributes.Position2D;
+
+import cs3500.animator.model.motions.Motion2D;
 
 import cs3500.animator.model.shapes.AnimatedCross;
 import cs3500.animator.model.shapes.AnimatedCross.CrossRenderData;
 import cs3500.animator.model.shapes.AnimatedEllipse;
 import cs3500.animator.model.shapes.AnimatedRectangle;
+import cs3500.animator.model.shapes.AnimatedShape2D;
+import cs3500.animator.model.shapes.VisitableShape;
 
 import java.awt.Graphics2D;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -20,6 +31,9 @@ public class AnimatedShape2DVisualRenderer
     implements VisualShapeRenderer<AnimatedRectangle, AnimatedEllipse, AnimatedCross> {
 
   private Graphics2D output;
+  private PlaybackType playbackType;
+  private List<Integer> discreteTicks;
+  private Iterator<Integer> discreteTickIterator;
   private RenderType renderType;
   private int tick;
 
@@ -28,6 +42,8 @@ public class AnimatedShape2DVisualRenderer
    */
   public AnimatedShape2DVisualRenderer() {
     this.output = null;
+    this.playbackType = PlaybackType.CONTINUOUS;
+    this.discreteTicks = null;
     this.renderType = RenderType.FILL;
     this.tick = 0;
   }
@@ -36,7 +52,7 @@ public class AnimatedShape2DVisualRenderer
    * Renders the given cross onto a graphics object.
    *
    * @param cross Cross to be rendered
-   * @throws NullPointerException Cross, graphics object, or render type is null.
+   * @throws NullPointerException Cross or graphics object is null.
    */
   @Override
   public void visitCross(AnimatedCross cross) {
@@ -64,8 +80,6 @@ public class AnimatedShape2DVisualRenderer
         case OUTLINE:
           output.drawPolygon(renderData.getXPoints(), renderData.getYPoints(),
               CrossRenderData.NUM_POINTS);
-        default:
-          throw new NullPointerException("Render type is null.");
       }
     }
   }
@@ -74,7 +88,7 @@ public class AnimatedShape2DVisualRenderer
    * Renders the given rectangle onto a graphics object.
    *
    * @param rectangle Rectangle to be rendered
-   * @throws NullPointerException Rectangle, graphics object, or render type is null.
+   * @throws NullPointerException Rectangle or graphics object is null.
    */
   @Override
   public void visitRectangle(AnimatedRectangle rectangle)
@@ -104,9 +118,6 @@ public class AnimatedShape2DVisualRenderer
         case OUTLINE:
           output.drawRect((int) (position.getX() + 0.5), (int) (position.getY() + 0.5),
               (int) (dimensions.getWidth() + 0.5), (int) (dimensions.getHeight() + 0.5));
-          break;
-        default:
-          throw new NullPointerException("Render type is null.");
       }
     }
   }
@@ -145,15 +156,46 @@ public class AnimatedShape2DVisualRenderer
         case OUTLINE:
           output.drawOval((int) (position.getX() + 0.5), (int) (position.getY() + 0.5),
               (int) (dimensions.getWidth() + 0.5), (int) (dimensions.getHeight() + 0.5));
-          break;
-        default:
-          throw new NullPointerException("Render type is null.");
       }
     }
   }
 
   @Override
-  public void setRenderType(RenderType type) {
+  public void setPlaybackType(PlaybackType type) throws NullPointerException {
+    this.playbackType = Objects.requireNonNull(type, "Playback type is null.");
+  }
+
+  @Override
+  public void setDiscreteTicks(EasyAnimatorImmutableModel<?
+      extends VisitableShape<AnimatedRectangle, AnimatedEllipse, AnimatedCross>> model)
+      throws NullPointerException, IllegalArgumentException {
+    EasyAnimatorImmutableModel<AnimatedShape2D> castModel;
+    try {
+       castModel = (BasicEasyAnimator) Objects.requireNonNull(model, "Model is null.");
+    } catch (ClassCastException e) {
+      throw new IllegalArgumentException("Model is of invalid type.");
+    }
+
+    // Find all unique discrete ticks in model
+    List<Integer> discreteTicks = new ArrayList<>();
+    for (AnimatedShape2D shape : castModel.getShapes()) {
+      for (Motion2D motion : shape.getMotions()) {
+        if (!discreteTicks.contains(motion.getStartTick())) {
+          discreteTicks.add(motion.getStartTick());
+        }
+        if (!discreteTicks.contains(motion.getEndTick())) {
+          discreteTicks.add(motion.getEndTick());
+        }
+      }
+    }
+    Collections.sort(discreteTicks);
+
+    this.discreteTicks = discreteTicks;
+    this.discreteTickIterator = this.discreteTicks.iterator();
+  }
+
+  @Override
+  public void setRenderType(RenderType type) throws NullPointerException {
     this.renderType = Objects.requireNonNull(type, "Render type is null.");
   }
 
@@ -171,11 +213,43 @@ public class AnimatedShape2DVisualRenderer
   @Override
   public void resetTick() {
     tick = 0;
+
+    // Reset iterator if discrete ticks were given
+    if (discreteTicks != null) {
+      discreteTickIterator = discreteTicks.iterator();
+    }
   }
 
   @Override
-  public int nextTick() {
-    return ++tick;
+  public int nextTick() throws IllegalStateException {
+    switch (playbackType) {
+      case CONTINUOUS:
+        tick++;
+        break;
+      case DISCRETE:
+        if (discreteTickIterator == null) {
+          throw new IllegalStateException("Iterator is null.");
+        }
+
+        // Find the next discrete tick
+        int nextTick = 0;
+        if (discreteTickIterator.hasNext()) {
+          nextTick = discreteTickIterator.next();
+          while (discreteTickIterator.hasNext() && nextTick < tick) {
+            nextTick = discreteTickIterator.next();
+          }
+        }
+
+        // If next discrete tick doesn't exist, animation has ended, so progress tick by one to end.
+        // Otherwise, set tick to next tick
+        if (nextTick == 0 || nextTick < tick) {
+          tick++;
+        } else {
+          tick = nextTick;
+        }
+    }
+
+    return tick;
   }
 
   @Override
