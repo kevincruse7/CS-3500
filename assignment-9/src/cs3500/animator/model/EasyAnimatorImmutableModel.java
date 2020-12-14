@@ -52,4 +52,13 @@ public interface EasyAnimatorImmutableModel<Shape> {
    * @return Copy of the list of shapes contained in model
    */
   List<Shape> getShapes();
+
+  /**
+   * Retrieves the tempo factor at the given tick.
+   *
+   * @param tick Tick value to retrieve tempo factor at
+   * @return Tempo factor at the given tick
+   * @throws IllegalArgumentException Tick value is negative.
+   */
+  double getTempo(int tick) throws IllegalArgumentException;
 }

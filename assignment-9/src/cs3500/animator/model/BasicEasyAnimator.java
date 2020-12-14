@@ -13,69 +13,16 @@ import cs3500.animator.model.motions.Motion2D;
 
 import cs3500.animator.util.AnimationBuilder;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
  * Basic implementation of an Easy Animator model as defined by {@link EasyAnimatorModel}.
  */
 public class BasicEasyAnimator implements EasyAnimatorModel<AnimatedShape2D, Motion2D> {
-
-  private final List<AnimatedShape2D> shapes;  // List of shapes present in this animator
-
-  private final int leftmostX;  // Leftmost x-coordinate of the animation canvas
-  private final int topmostY;   // Rightmost y-coordinate of the animation canvas
-  private final int width;      // Width of the animation canvas
-  private final int height;     // Height of the animation canvas
-
-  /**
-   * Instantiates a {@code BasicEasyAnimator} object with the given shape list, leftmost
-   * <i>x</i>-coordinate, topmost <i>y</i>-coordinate, width, and height.
-   *
-   * @param shapes    Shape list to initialize this model
-   * @param leftmostX Leftmost <i>x</i>-coordinate of the animation canvas
-   * @param topmostY  Topmost <i>y</i>-coordinate of the animation canvas
-   * @param width     Width of the animation canvas
-   * @param height    Height of the animation canvas
-   * @throws NullPointerException     Shape list is null.
-   * @throws IllegalArgumentException Width or height is non-positive.
-   */
-  public BasicEasyAnimator(List<AnimatedShape2D> shapes, int leftmostX, int topmostY, int width,
-      int height) throws NullPointerException, IllegalArgumentException {
-    Objects.requireNonNull(shapes, "Null shape list.");
-    if (width <= 0 || height <= 0) {
-      throw new IllegalArgumentException("Width or height is non-positive.");
-    }
-
-    // Make a deep copy of the given list
-    this.shapes = new LinkedList<>();
-    for (AnimatedShape2D shape : shapes) {
-      this.shapes.add((AnimatedShape2D) shape.clone());
-    }
-
-    this.leftmostX = leftmostX;
-    this.topmostY = topmostY;
-    this.width = width;
-    this.height = height;
-  }
-
-  /**
-   * Instantiates a {@code BasicEasyAnimator} with the given shape list.
-   *
-   * @param shapes Shape list to initialize this animator.
-   * @throws NullPointerException Shape list is null.
-   */
-  public BasicEasyAnimator(List<AnimatedShape2D> shapes) throws NullPointerException {
-    this(shapes, 0, 0, 1, 1);
-  }
-
-  /**
-   * Instantiates a {@code BasicEasyAnimator} object with an empty shape list.
-   */
-  public BasicEasyAnimator() {
-    this(new LinkedList<>());
-  }
 
   /**
    * Builder class for constructing a {@code BasicEasyAnimator} object.
@@ -152,7 +99,26 @@ public class BasicEasyAnimator implements EasyAnimatorModel<AnimatedShape2D, Mot
 
       return this;
     }
+
+    @Override
+    public AnimationBuilder<EasyAnimatorModel<AnimatedShape2D, Motion2D>> setTempo(
+        int startTick,
+        int endTick,
+        double speedFactor
+    ) throws IllegalArgumentException {
+      model.setTempo(startTick, endTick, speedFactor);
+      return this;
+    }
   }
+
+  private final List<AnimatedShape2D> shapes;  // List of shapes present in this animator
+
+  private final int leftmostX;  // Leftmost x-coordinate of the animation canvas
+  private final int topmostY;   // Rightmost y-coordinate of the animation canvas
+  private final int width;      // Width of the animation canvas
+  private final int height;     // Height of the animation canvas
+
+  private final Map<Integer, Double> tempos;
 
   /**
    * Returns a builder object for {@code BasicEasyAnimator}.
@@ -161,6 +127,56 @@ public class BasicEasyAnimator implements EasyAnimatorModel<AnimatedShape2D, Mot
    */
   public static Builder builder() {
     return new Builder();
+  }
+
+  /**
+   * Instantiates a {@code BasicEasyAnimator} object with the given shape list, leftmost
+   * <i>x</i>-coordinate, topmost <i>y</i>-coordinate, width, and height.
+   *
+   * @param shapes    Shape list to initialize this model
+   * @param leftmostX Leftmost <i>x</i>-coordinate of the animation canvas
+   * @param topmostY  Topmost <i>y</i>-coordinate of the animation canvas
+   * @param width     Width of the animation canvas
+   * @param height    Height of the animation canvas
+   * @throws NullPointerException     Shape list is null.
+   * @throws IllegalArgumentException Width or height is non-positive.
+   */
+  public BasicEasyAnimator(List<AnimatedShape2D> shapes, int leftmostX, int topmostY, int width,
+      int height) throws NullPointerException, IllegalArgumentException {
+    Objects.requireNonNull(shapes, "Null shape list.");
+    if (width <= 0 || height <= 0) {
+      throw new IllegalArgumentException("Width or height is non-positive.");
+    }
+
+    // Make a deep copy of the given list
+    this.shapes = new LinkedList<>();
+    for (AnimatedShape2D shape : shapes) {
+      this.shapes.add((AnimatedShape2D) shape.clone());
+    }
+
+    this.leftmostX = leftmostX;
+    this.topmostY = topmostY;
+    this.width = width;
+    this.height = height;
+
+    this.tempos = new HashMap<>();
+  }
+
+  /**
+   * Instantiates a {@code BasicEasyAnimator} with the given shape list.
+   *
+   * @param shapes Shape list to initialize this animator.
+   * @throws NullPointerException Shape list is null.
+   */
+  public BasicEasyAnimator(List<AnimatedShape2D> shapes) throws NullPointerException {
+    this(shapes, 0, 0, 1, 1);
+  }
+
+  /**
+   * Instantiates a {@code BasicEasyAnimator} object with an empty shape list.
+   */
+  public BasicEasyAnimator() {
+    this(new LinkedList<>());
   }
 
   // Returns shape that has given name. Throws a NullPointerException if shape name is null and an
@@ -277,5 +293,35 @@ public class BasicEasyAnimator implements EasyAnimatorModel<AnimatedShape2D, Mot
     }
 
     return textRep.toString();
+  }
+
+  @Override
+  public void setTempo(int startTick, int endTick, double speedFactor)
+      throws IllegalArgumentException {
+    if (startTick < 0) {
+      throw new IllegalArgumentException("Start tick is negative.");
+    }
+    if (endTick < 0) {
+      throw new IllegalArgumentException("End tick is negative.");
+    }
+    if (endTick < startTick) {
+      throw new IllegalArgumentException("End tick is less than start tick.");
+    }
+    if (speedFactor <= 0) {
+      throw new IllegalArgumentException("Speed factor is non-positive.");
+    }
+
+    for (int tick = startTick; tick <= endTick; tick++) {
+      tempos.put(tick, speedFactor);
+    }
+  }
+
+  @Override
+  public double getTempo(int tick) throws IllegalArgumentException {
+    if (tick < 0) {
+      throw new IllegalArgumentException("Tick value is negative.");
+    }
+
+    return tempos.getOrDefault(tick, 1.0);
   }
 }

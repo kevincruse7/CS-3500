@@ -60,4 +60,16 @@ public interface EasyAnimatorModel<Shape, Motion> extends EasyAnimatorImmutableM
    */
   void removeMotion(String shapeName, Motion motion)
       throws NullPointerException, IllegalArgumentException;
+
+  /**
+   * Sets the tempo for the given range of ticks to the given scaling factor. The default tempo is
+   * 1.
+   *
+   * @param startTick   Starting tick of range
+   * @param endTick     Ending tick of range
+   * @param speedFactor Factor by which to scale playback
+   * @throws IllegalArgumentException Start tick or end tick is negative, end tick is less than
+   *                                  start tick, or speed factor is non-positive.
+   */
+  void setTempo(int startTick, int endTick, double speedFactor) throws IllegalArgumentException;
 }

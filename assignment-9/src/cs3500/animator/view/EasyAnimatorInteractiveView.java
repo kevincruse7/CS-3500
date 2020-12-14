@@ -134,6 +134,13 @@ public class EasyAnimatorInteractiveView<Rectangle, Ellipse, Cross>
       if (shapeRenderer.nextTick() >= numTicks) {
         timer.stop();
         playPause.setText("Play");
+      } else {
+        // Set proper tempo
+        double speedFactor = model.getTempo(shapeRenderer.getTick());
+        int newDelay = (int) (1000.0 / ticksPerSecond.getValue() / speedFactor + 0.5);
+        if (timer.getDelay() != newDelay) {
+          timer.setDelay(newDelay);
+        }
       }
     };
     looper = actionEvent -> {
@@ -142,6 +149,13 @@ public class EasyAnimatorInteractiveView<Rectangle, Ellipse, Cross>
 
       if (shapeRenderer.nextTick() >= numTicks) {
         shapeRenderer.resetTick();
+      } else {
+        // Set proper tempo
+        double speedFactor = model.getTempo(shapeRenderer.getTick());
+        int newDelay = (int) (1000.0 / ticksPerSecond.getValue() / speedFactor + 0.5);
+        if (timer.getDelay() != newDelay) {
+          timer.setDelay(newDelay);
+        }
       }
     };
     isLooping = false;

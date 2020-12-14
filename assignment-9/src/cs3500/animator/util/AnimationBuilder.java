@@ -61,4 +61,14 @@ public interface AnimationBuilder<Doc> {
   AnimationBuilder<Doc> addMotion(String name,
       int t1, int x1, int y1, int w1, int h1, int r1, int g1, int b1,
       int t2, int x2, int y2, int w2, int h2, int r2, int g2, int b2);
+
+  /**
+   * Sets a tempo of the given speed factor to the given range.
+   *
+   * @param startTick Starting tick of range
+   * @param endTick Ending tick of range
+   * @param speedFactor Factor by which to scale animation speed
+   * @return This {@link AnimationBuilder}
+   */
+  AnimationBuilder<Doc> setTempo(int startTick, int endTick, double speedFactor);
 }
