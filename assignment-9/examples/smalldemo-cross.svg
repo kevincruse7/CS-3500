@@ -1,0 +1,15 @@
+<svg viewBox="200 70 360 360" version="1.1" xmlns="http://www.w3.org/2000/svg">
+<polygon id="R" fill="rgb(255,0,0)" visibility="hidden" points="200,225 213,225 213,200 237,200 237,225 250,225 250,275 237,275 237,300 213,300 213,275 200,275">
+<animate attributeType="xml" attributeName="visibility" begin="33ms" dur="1ms" from="hidden" to="visible" fill="freeze"/>
+<animate attributeType="xml" attributeName="points" begin="330ms" dur="1320ms" fill="freeze" from="200,225 213,225 213,200 237,200 237,225 250,225 250,275 237,275 237,300 213,300 213,275 200,275" to="300,325 313,325 313,300 337,300 337,325 350,325 350,375 337,375 337,400 313,400 313,375 300,375"/>
+<animate attributeType="xml" attributeName="points" begin="1683ms" dur="627ms" fill="freeze" from="300,325 313,325 313,300 337,300 337,325 350,325 350,375 337,375 337,400 313,400 313,375 300,375" to="300,325 306,325 306,300 319,300 319,325 325,325 325,375 319,375 319,400 306,400 306,375 300,375"/>
+<animate attributeType="xml" attributeName="points" begin="2310ms" dur="990ms" fill="freeze" from="300,325 306,325 306,300 319,300 319,325 325,325 325,375 319,375 319,400 306,400 306,375 300,375" to="200,225 206,225 206,200 219,200 219,225 225,225 225,275 219,275 219,300 206,300 206,275 200,275"/>
+</polygon>
+<ellipse id="C" cx="500" cy="100" rx="60" ry="30" fill="rgb(0,0,255)" visibility="hidden">
+<animate attributeType="xml" attributeName="visibility" begin="198ms" dur="1ms" from="hidden" to="visible" fill="freeze"/>
+<animate attributeType="xml" attributeName="cy" begin="660ms" dur="990ms" from="100" to="280" fill="freeze"/>
+<animate attributeType="xml" attributeName="cy" begin="1650ms" dur="660ms" from="280" to="400" fill="freeze"/>
+<animate attributeType="xml" attributeName="fill" begin="1650ms" dur="660ms" from="rgb(0,0,255)" to="rgb(0,170,85)" fill="freeze"/>
+<animate attributeType="xml" attributeName="fill" begin="2310ms" dur="330ms" from="rgb(0,170,85)" to="rgb(0,255,0)" fill="freeze"/>
+</ellipse>
+</svg>

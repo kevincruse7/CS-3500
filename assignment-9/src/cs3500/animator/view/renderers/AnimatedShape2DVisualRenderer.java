@@ -72,14 +72,12 @@ public class AnimatedShape2DVisualRenderer
 
       output.setColor(new java.awt.Color(color.getRed(), color.getGreen(), color.getBlue()));
 
-      switch (renderType) {
-        case FILL:
-          output.fillPolygon(renderData.getXPoints(), renderData.getYPoints(),
-              CrossRenderData.NUM_POINTS);
-          break;
-        case OUTLINE:
-          output.drawPolygon(renderData.getXPoints(), renderData.getYPoints(),
-              CrossRenderData.NUM_POINTS);
+      if (renderType == RenderType.FILL) {
+        output.fillPolygon(renderData.getXPoints(), renderData.getYPoints(),
+            CrossRenderData.NUM_POINTS);
+      } else {
+        output.drawPolygon(renderData.getXPoints(), renderData.getYPoints(),
+            CrossRenderData.NUM_POINTS);
       }
     }
   }
@@ -110,14 +108,12 @@ public class AnimatedShape2DVisualRenderer
 
       output.setColor(new java.awt.Color(color.getRed(), color.getGreen(), color.getBlue()));
 
-      switch (renderType) {
-        case FILL:
-          output.fillRect((int) (position.getX() + 0.5), (int) (position.getY() + 0.5),
-              (int) (dimensions.getWidth() + 0.5), (int) (dimensions.getHeight() + 0.5));
-          break;
-        case OUTLINE:
-          output.drawRect((int) (position.getX() + 0.5), (int) (position.getY() + 0.5),
-              (int) (dimensions.getWidth() + 0.5), (int) (dimensions.getHeight() + 0.5));
+      if (renderType == RenderType.FILL) {
+        output.fillRect((int) (position.getX() + 0.5), (int) (position.getY() + 0.5),
+            (int) (dimensions.getWidth() + 0.5), (int) (dimensions.getHeight() + 0.5));
+      } else {
+        output.drawRect((int) (position.getX() + 0.5), (int) (position.getY() + 0.5),
+            (int) (dimensions.getWidth() + 0.5), (int) (dimensions.getHeight() + 0.5));
       }
     }
   }
@@ -148,14 +144,12 @@ public class AnimatedShape2DVisualRenderer
 
       output.setColor(new java.awt.Color(color.getRed(), color.getGreen(), color.getBlue()));
 
-      switch (renderType) {
-        case FILL:
-          output.fillOval((int) (position.getX() + 0.5), (int) (position.getY() + 0.5),
-              (int) (dimensions.getWidth() + 0.5), (int) (dimensions.getHeight() + 0.5));
-          break;
-        case OUTLINE:
-          output.drawOval((int) (position.getX() + 0.5), (int) (position.getY() + 0.5),
-              (int) (dimensions.getWidth() + 0.5), (int) (dimensions.getHeight() + 0.5));
+      if (renderType == RenderType.FILL) {
+        output.fillOval((int) (position.getX() + 0.5), (int) (position.getY() + 0.5),
+            (int) (dimensions.getWidth() + 0.5), (int) (dimensions.getHeight() + 0.5));
+      } else {
+        output.drawOval((int) (position.getX() + 0.5), (int) (position.getY() + 0.5),
+            (int) (dimensions.getWidth() + 0.5), (int) (dimensions.getHeight() + 0.5));
       }
     }
   }
@@ -171,7 +165,7 @@ public class AnimatedShape2DVisualRenderer
       throws NullPointerException, IllegalArgumentException {
     EasyAnimatorImmutableModel<AnimatedShape2D> castModel;
     try {
-       castModel = (BasicEasyAnimator) Objects.requireNonNull(model, "Model is null.");
+      castModel = (BasicEasyAnimator) Objects.requireNonNull(model, "Model is null.");
     } catch (ClassCastException e) {
       throw new IllegalArgumentException("Model is of invalid type.");
     }
@@ -222,31 +216,29 @@ public class AnimatedShape2DVisualRenderer
 
   @Override
   public int nextTick() throws IllegalStateException {
-    switch (playbackType) {
-      case CONTINUOUS:
-        tick++;
-        break;
-      case DISCRETE:
-        if (discreteTickIterator == null) {
-          throw new IllegalStateException("Iterator is null.");
-        }
+    if (playbackType == PlaybackType.CONTINUOUS) {
+      tick++;
+    } else {
+      if (discreteTickIterator == null) {
+        throw new IllegalStateException("Iterator is null.");
+      }
 
-        // Find the next discrete tick
-        int nextTick = 0;
-        if (discreteTickIterator.hasNext()) {
+      // Find the next discrete tick
+      int nextTick = 0;
+      if (discreteTickIterator.hasNext()) {
+        nextTick = discreteTickIterator.next();
+        while (discreteTickIterator.hasNext() && nextTick < tick) {
           nextTick = discreteTickIterator.next();
-          while (discreteTickIterator.hasNext() && nextTick < tick) {
-            nextTick = discreteTickIterator.next();
-          }
         }
+      }
 
-        // If next discrete tick doesn't exist, animation has ended, so progress tick by one to end.
-        // Otherwise, set tick to next tick
-        if (nextTick == 0 || nextTick < tick) {
-          tick++;
-        } else {
-          tick = nextTick;
-        }
+      // If next discrete tick doesn't exist, animation has ended, so progress tick by one to end.
+      // Otherwise, set tick to next tick
+      if (nextTick == 0 || nextTick < tick) {
+        tick++;
+      } else {
+        tick = nextTick;
+      }
     }
 
     return tick;
